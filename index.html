@@ -73,10 +73,8 @@
         .pain-box { background-color: #e8f4fd; border-left: 5px solid #b6d4fe; padding: 20px; margin: 30px 0; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
         .pain-box ul { list-style-type: none; padding-left: 0; }
         .pain-box li::before { content: "☑ "; color: #e74c3c; font-weight: bold; }
-<!--        
+        
         .hero-message { font-size: 1.6em; font-weight: bold; color: #2c3e50; text-align: center; margin: 40px 0; line-height: 1.5; }
--->
-	.hero-message { font-size: 1.6em; font-weight: bold; color: #2c3e50; text-align: center; margin: 40px 0; line-height: 1.5; }
         .hero-message span { color: #3498db; border-bottom: 4px solid #f1c40f; }
         
         .prompt-box { background-color: #f4f6f7; border-left: 4px solid #3498db; padding: 15px; margin: 15px 0 30px 0; font-family: 'Consolas', monospace; white-space: pre-wrap; font-size: 0.95em; }
@@ -85,11 +83,21 @@
         .screenshot-grid { display: flex; gap: 20px; margin: 30px 0; flex-wrap: wrap; }
         .screenshot-grid img { flex: 1; min-width: 400px; max-width: 100%; height: auto; border: 1px solid #ddd; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
 
-        /* FAQ */
+        /* FAQ 用アコーディオン */
         details { background-color: #fff; border: 1px solid #ddd; border-radius: 5px; margin-bottom: 12px; padding: 18px; }
         summary { font-weight: bold; cursor: pointer; color: #2c3e50; font-size: 1.1em; list-style: none; position: relative; padding-left: 30px; }
         summary::before { content: "Q."; position: absolute; left: 0; color: #3498db; font-weight: 900; }
         details p { margin: 15px 0 0 0; padding-top: 15px; border-top: 1px dashed #eee; color: #444; }
+
+        /* 利用規約 用アコーディオン（FAQのスタイルを上書き） */
+        details.license-details { background-color: #fafafa; border: 1px solid #ccc; padding: 20px; font-size: 0.85em; margin-bottom: 40px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); margin-top: 30px; }
+        summary.license-summary { font-size: 1.2em; color: #333; padding-left: 5px; border-bottom: 1px solid #ddd; padding-bottom: 10px; margin-bottom: 15px; }
+        summary.license-summary::before { content: "📄 "; position: static; color: inherit; font-weight: normal; }
+        details.license-details p { border-top: none; padding-top: 0; margin: 0 0 10px 0; color: #555; }
+        details.license-details h4 { font-size: 1.15em; color: #444; border-bottom: 1px solid #eee; padding-bottom: 5px; margin-top: 25px; margin-bottom: 15px; }
+        details.license-details strong { display: inline-block; margin-top: 10px; color: #333; }
+        details.license-details ul { margin-top: 5px; margin-bottom: 15px; padding-left: 20px; color: #555; }
+        details.license-details li { margin-bottom: 5px; }
 
         /* その他レイアウト */
         .header-links { text-align: right; margin-bottom: 20px; }
@@ -171,6 +179,7 @@
 
     <h2>インストールガイド</h2>
     <p>はじめにDockerをインストールし、その後でこのDocRをインストールする順序になります。</p>
+    <p>もしあなたがすでにRをインストールしていても、その環境には一切干渉しません。</p>
 
     <h3>ステップ0：Dockerのインストール</h3>
     <p> <a href="https://www.docker.com/products/docker-desktop" target="_blank">Docker Desktopのダウンロードページ</a></p>
@@ -246,6 +255,11 @@ Rのlmerで解析したいのですが、固定効果と変量効果には何を
     </details>
 
     <details>
+        <summary>なぜDocRは既存のR環境と競合しないのですか？</summary>
+        <p>DocRは、あなたのコンピュータのOSに直接Rをインストールするのではなく、「Dockerコンテナ」という独立した隔離空間の中でRを動かすからです。またそれゆえ、ライブラリの依存関係やバージョンの不一致に悩む心配もありません。</p>
+    </details>
+
+    <details>
         <summary>はじめに立ち上がる青いウィンドウは何ですか？</summary>
         <p>バックエンドに使われているDockerのウインドウです。立ち上がった後に閉じていただいても大丈夫です。</p>
     </details>
@@ -262,8 +276,8 @@ Rのlmerで解析したいのですが、固定効果と変量効果には何を
     </details>
 
     <details>
-        <summary>不具合を発見したのですがどうすれば良い？?</summary>
-        <p>どうぞ<a href="https://docs.google.com/forms/d/e/1FAIpQLSdA2CFIqM3h8nqi3Nrt435hap4EHg96t00YKLP6SmPmq-GMVA/viewform?usp=header">報告せフォーム</a>からお知らせください。</p>
+        <summary>不具合を発見したのですがどうすれば良い？</summary>
+        <p>どうぞ<a href="https://docs.google.com/forms/d/e/1FAIpQLSdA2CFIqM3h8nqi3Nrt435hap4EHg96t00YKLP6SmPmq-GMVA/viewform?usp=header">報告フォーム</a>からお知らせください。</p>
     </details>
 
 
@@ -279,11 +293,62 @@ Rのlmerで解析したいのですが、固定効果と変量効果には何を
       </a>
     </div>
 
-    <!-- <iframe width="1001" height="751" src="https://www.youtube.com/embed/IdRvRBS9yvA" title="" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe> -->
 
-<!-- <div class="video-container"> -->
-<!--         <iframe width="560" height="315" src="https://www.youtube.com/embed/IdRvRBS9yvA" title="DocR Demo Video" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe> -->
-<!--     </div> -->
+    <details class="license-details">
+        <summary class="license-summary">利用規約 / Terms of Use</summary>
+        
+        <div style="margin-bottom: 30px;">
+            <h4 style="margin-top: 5px;">Terms of Use (English Version)</h4>
+            <p>Thank you for using "DocR". By downloading or using this software, you agree to the following terms.</p>
+
+            <strong>1. Grant of License</strong>
+            <p>This software is provided free of charge for academic research, educational, and personal use only. This includes non-commercial research activities within private research institutions.</p>
+
+            <strong>2. Prohibitions</strong>
+            <p>Please respect the current format of the software (e.g., locked VBA project). The following actions are strictly prohibited:</p>
+            <ul>
+                <li>Attempting to view, modify, reverse-engineer, or unlock the source code of this software.</li>
+                <li>Redistributing, sublicensing, or selling all or part of this software without prior permission from the developer.</li>
+                <li>Creating and publishing commercial content (including monetized instructional videos, paid seminars, or publications) where the primary content is the operation or utilization of this software.</li>
+                <li>Using the software for commercial purposes (please contact the developer if you wish to do so).</li>
+            </ul>
+
+            <strong>3. Disclaimer of Warranty and Liability</strong>
+            <p>This software is provided "as is", without warranty of any kind, express or implied. In no event shall the developer be liable for any claim, damages, or other liability, including data loss or business interruption, arising from, out of, or in connection with the software or the use or other dealings in the software. Users are responsible for verifying the validity of their analysis results.</p>
+
+            <strong>4. Copyright</strong>
+            <p>All copyrights and intellectual property rights related to this software are retained by the developer (Soyogu Matsushita).</p>
+
+            <p>Date of Enactment: March 17, 2026<br>
+            Applicable Version: DocR v0.8</p>
+        </div>
+
+        <div>
+            <h4>利用規約（日本語版）</h4>
+            <p>本ソフトウェア「DocR」をご利用いただきありがとうございます。本ソフトウェアをダウンロードまたは利用することにより、以下の条項に同意したものとみなされます。</p>
+
+            <strong>1. 利用許諾</strong>
+            <p>本ソフトウェアは、学術研究、教育、および個人利用の目的に限り、無償でご利用いただけます。民間企業の研究所等における非営利目的の研究活動での利用もこれに含まれます。</p>
+
+            <strong>2. 禁止事項</strong>
+            <p>本ソフトウェアの提供形態（VBAプロジェクトの保護など）を尊重し、以下の行為を禁止します。</p>
+            <ul>
+                <li>本ソフトウェアのソースコードの閲覧、改変、リバースエンジニアリング、または保護の解除を試みること。</li>
+                <li>本ソフトウェアの一部または全部を、開発者の許可なく再配布、二次配布、または販売すること。</li>
+                <li>本ソフトウェアの操作方法や活用方法を主たるコンテンツとした、営利目的の講習、解説動画の公開、または出版（広告収益が発生するものを含む）。</li>
+                <li>商用目的での利用（ご希望の場合は別途ご連絡ください）。</li>
+            </ul>
+
+            <strong>3. 免責事項</strong>
+            <p>本ソフトウェアは「現状のまま」提供され、明示または黙示を問わず、いかなる保証も行いません。本ソフトウェアの利用に関連して生じたデータの損失、業務の停止、その他のいかなる損害についても、開発者は一切の責任を負いません。分析結果の妥当性については、利用者自身の責任においてご確認ください。</p>
+
+            <strong>4. 著作権</strong>
+            <p>本ソフトウェアに関するすべての著作権および知的財産権は、開発者（松下戦具）に帰属します。</p>
+
+            <p>制定日：2026年3月17日<br>
+            適用バージョン：DocR v0.8</p>
+        </div>
+    </details>
 
 
     <h2>更新履歴</h2>

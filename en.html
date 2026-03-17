@@ -85,6 +85,16 @@
         summary::before { content: "Q."; position: absolute; left: 0; color: #3498db; font-weight: 900; }
         details p { margin: 15px 0 0 0; padding-top: 15px; border-top: 1px dashed #eee; color: #444; }
 
+        /* 利用規約 用アコーディオン（FAQのスタイルを上書き） */
+        details.license-details { background-color: #fafafa; border: 1px solid #ccc; padding: 20px; font-size: 0.85em; margin-bottom: 40px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); margin-top: 30px; }
+        summary.license-summary { font-size: 1.2em; color: #333; padding-left: 5px; border-bottom: 1px solid #ddd; padding-bottom: 10px; margin-bottom: 15px; }
+        summary.license-summary::before { content: "📄 "; position: static; color: inherit; font-weight: normal; }
+        details.license-details p { border-top: none; padding-top: 0; margin: 0 0 10px 0; color: #555; }
+        details.license-details h4 { font-size: 1.15em; color: #444; border-bottom: 1px solid #eee; padding-bottom: 5px; margin-top: 25px; margin-bottom: 15px; }
+        details.license-details strong { display: inline-block; margin-top: 10px; color: #333; }
+        details.license-details ul { margin-top: 5px; margin-bottom: 15px; padding-left: 20px; color: #555; }
+        details.license-details li { margin-bottom: 5px; }
+
         /* その他レイアウト */
         .header-links { text-align: right; margin-bottom: 20px; }
         .support-box { background-color: #fff3cd; border: 1px solid #ffeeba; padding: 15px; border-radius: 5px; margin: 30px 0; text-align: center; }
@@ -165,6 +175,7 @@
 
     <h2>Installation Guide</h2>
     <p>Please install Docker first, and then install the DocR add-in.</p>
+    <p>Even if you already have R installed, DocR will not interfere with your existing environment.</p>
 
     <h3>Step 0: Install Docker</h3>
     <p> <a href="https://www.docker.com/products/docker-desktop" target="_blank">Docker Desktop Download Page</a></p>
@@ -238,6 +249,12 @@ What does this mean? What is the 'R-hat' in the summary?</div>
         <p>Currently, only the Windows version is available. We are looking for donations to purchase equipment to develop a macOS version!</p>
     </details>
 
+
+    <details>
+        <summary>Why doesn't DocR conflict with my existing R installation?</summary>
+        <p>This is because DocR runs R within an isolated "Docker container" rather than installing it directly on your OS. Consequently, you never have to worry about library dependencies or version conflicts.</p>
+    </details>
+
     <details>
         <summary>What is the blue window that appears upon startup?</summary>
         <p>It is the Docker terminal window used for the backend. You may safely close it once the application has fully launched.</p>
@@ -269,6 +286,62 @@ What does this mean? What is the 'R-hat' in the summary?</div>
         Report Form
       </a>
     </div>
+
+    <details class="license-details">
+        <summary class="license-summary">Terms of Use / 利用規約</summary>
+        
+        <div style="margin-bottom: 30px;">
+            <h4 style="margin-top: 5px;">Terms of Use (English Version)</h4>
+            <p>Thank you for using "DocR". By downloading or using this software, you agree to the following terms.</p>
+
+            <strong>1. Grant of License</strong>
+            <p>This software is provided free of charge for academic research, educational, and personal use only. This includes non-commercial research activities within private research institutions.</p>
+
+            <strong>2. Prohibitions</strong>
+            <p>Please respect the current format of the software (e.g., locked VBA project). The following actions are strictly prohibited:</p>
+            <ul>
+                <li>Attempting to view, modify, reverse-engineer, or unlock the source code of this software.</li>
+                <li>Redistributing, sublicensing, or selling all or part of this software without prior permission from the developer.</li>
+                <li>Creating and publishing commercial content (including monetized instructional videos, paid seminars, or publications) where the primary content is the operation or utilization of this software.</li>
+                <li>Using the software for commercial purposes (please contact the developer if you wish to do so).</li>
+            </ul>
+
+            <strong>3. Disclaimer of Warranty and Liability</strong>
+            <p>This software is provided "as is", without warranty of any kind, express or implied. In no event shall the developer be liable for any claim, damages, or other liability, including data loss or business interruption, arising from, out of, or in connection with the software or the use or other dealings in the software. Users are responsible for verifying the validity of their analysis results.</p>
+
+            <strong>4. Copyright</strong>
+            <p>All copyrights and intellectual property rights related to this software are retained by the developer (Soyogu Matsushita).</p>
+
+            <p>Date of Enactment: March 17, 2026<br>
+            Applicable Version: DocR v0.8</p>
+        </div>
+
+        <div>
+            <h4>利用規約（日本語版）</h4>
+            <p>本ソフトウェア「DocR」をご利用いただきありがとうございます。本ソフトウェアをダウンロードまたは利用することにより、以下の条項に同意したものとみなされます。</p>
+
+            <strong>1. 利用許諾</strong>
+            <p>本ソフトウェアは、学術研究、教育、および個人利用の目的に限り、無償でご利用いただけます。民間企業の研究所等における非営利目的の研究活動での利用もこれに含まれます。</p>
+
+            <strong>2. 禁止事項</strong>
+            <p>本ソフトウェアの提供形態（VBAプロジェクトの保護など）を尊重し、以下の行為を禁止します。</p>
+            <ul>
+                <li>本ソフトウェアのソースコードの閲覧、改変、リバースエンジニアリング、または保護の解除を試みること。</li>
+                <li>本ソフトウェアの一部または全部を、開発者の許可なく再配布、二次配布、または販売すること。</li>
+                <li>本ソフトウェアの操作方法や活用方法を主たるコンテンツとした、営利目的の講習、解説動画の公開、または出版（広告収益が発生するものを含む）。</li>
+                <li>商用目的での利用（ご希望の場合は別途ご連絡ください）。</li>
+            </ul>
+
+            <strong>3. 免責事項</strong>
+            <p>本ソフトウェアは「現状のまま」提供され、明示または黙示を問わず、いかなる保証も行いません。本ソフトウェアの利用に関連して生じたデータの損失、業務の停止、その他のいかなる損害についても、開発者は一切の責任を負いません。分析結果の妥当性については、利用者自身の責任においてご確認ください。</p>
+
+            <strong>4. 著作権</strong>
+            <p>本ソフトウェアに関するすべての著作権および知的財産権は、開発者（松下戦具）に帰属します。</p>
+
+            <p>制定日：2026年3月17日<br>
+            適用バージョン：DocR v0.8</p>
+        </div>
+    </details>
 
     <h2>Changelog</h2>
     <div class="changelog">
