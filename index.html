@@ -56,6 +56,16 @@
             object-fit: contain; /* アスペクト比を維持 */
         }
 
+	.blue-check {
+	color: #276dc2; /* R blue */
+	font-weight: bold;
+	}
+	.green-check {
+	color: #217346; /* Excel green */
+	font-weight: bold;
+	}
+
+
         /* 見出しのデザイン */
         h2 { font-size: 1.8em; color: #2c3e50; border-left: 8px solid #3498db; padding-left: 15px; margin-top: 60px; margin-bottom: 25px; }
         h3 { font-size: 1.3em; color: #34495e; margin-top: 35px; border-bottom: 1px dashed #ccc; padding-bottom: 8px; }
@@ -178,8 +188,8 @@
     </ul>
 
     <h2>インストールガイド</h2>
-    <p>はじめにDockerをインストールし、その後でこのDocRをインストールする順序になります。</p>
-    <p>もしあなたがすでにRをインストールしていても、その環境には一切干渉しません。</p>
+    <p><span class="blue-check">✔</span> はじめにDockerをインストールし、その後でこのDocRをインストールする順序になります。</p>
+    <p><span class="blue-check">✔</span> もしあなたがすでにRをインストールしていても、その環境には一切干渉しません。</p>
 
     <h3>ステップ0：Dockerのインストール</h3>
     <p> <a href="https://www.docker.com/products/docker-desktop" target="_blank">Docker Desktopのダウンロードページ</a></p>
@@ -202,12 +212,6 @@
         <li>管理の「Excel アドイン」から「設定」ボタンを押し、「DocR」にチェックを入れます。</li>
     </ol>
 
-    <div class="support-box">
-        <p><strong>Mac版の開発に向けて、Mac購入資金の支援をお願いしています！</strong></p>
-        <a href="https://www.buymeacoffee.com/docr" target="_blank">
-            <img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me A Coffee" style="height: 40px !important;width: 145px !important;" >
-        </a>
-    </div>
 
 
     <h2>ユーザーマニュアル</h2>

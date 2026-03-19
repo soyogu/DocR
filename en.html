@@ -53,6 +53,19 @@
             object-fit: contain; /* アスペクト比を維持 */
         }
 
+
+
+	.blue-check {
+	color: #276dc2; /* R blue */
+	font-weight: bold;
+	}
+	.green-check {
+	color: #217346; /* Excel green */
+	font-weight: bold;
+	}
+
+
+
         /* 見出しのデザイン */
         h2 { font-size: 1.8em; color: #2c3e50; border-left: 8px solid #3498db; padding-left: 15px; margin-top: 60px; margin-bottom: 25px; }
         h3 { font-size: 1.3em; color: #34495e; margin-top: 35px; border-bottom: 1px dashed #ccc; padding-bottom: 8px; }
@@ -174,8 +187,8 @@
     </ul>
 
     <h2>Installation Guide</h2>
-    <p>Please install Docker first, and then install the DocR add-in.</p>
-    <p>Even if you already have R installed, DocR will not interfere with your existing environment.</p>
+    <p><span class="blue-check">✔</span> Please install Docker first, and then install the DocR add-in.</p>
+    <p><span class="blue-check">✔</span> Even if you already have R installed, DocR will not interfere with your existing environment.</p>
 
     <h3>Step 0: Install Docker</h3>
     <p> <a href="https://www.docker.com/products/docker-desktop" target="_blank">Docker Desktop Download Page</a></p>
@@ -197,13 +210,6 @@
         <li>In Excel, click "File" > "Options" > "Add-ins".</li>
         <li>Select "Excel Add-ins" from the Manage dropdown menu, click "Go...", and check the box for "DocR".</li>
     </ol>
-
-    <div class="support-box">
-        <p><strong>We are raising funds to buy a Mac for developing the macOS version! Your support is highly appreciated.</strong></p>
-        <a href="https://www.buymeacoffee.com/docr" target="_blank">
-            <img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me A Coffee" style="height: 40px !important;width: 145px !important;" >
-        </a>
-    </div>
 
 
     <h2>User Manual</h2>
