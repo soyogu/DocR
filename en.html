@@ -29,16 +29,15 @@
             display: flex;
             align-items: center; /* 垂直中央揃え */
             gap: 30px;          /* 文字と画像の間隔 */
-            border-bottom: 2px solid #3498db; /* 線を#333(黒)から#3498db(青)に変更 */
+            border-bottom: 2px solid #3498db; 
             padding-bottom: 20px;
             margin-top: 20px;
-            margin-bottom: 20px; /* 新しく追加：下にあるalert2-boxとの間に余白を作る */
-            flex-wrap: wrap;    /* 画面が狭い時に折り返す */
+            margin-bottom: 20px; 
+            flex-wrap: wrap;    
         }
 
-
         h1 { 
-            font-size: 5em;     /* 巨大な文字サイズ */
+            font-size: 5em;     
             margin: 0;
             line-height: 1;
         }
@@ -50,21 +49,17 @@
         .title-logo {
             width: 300px;
             height: 150px;
-            object-fit: contain; /* アスペクト比を維持 */
+            object-fit: contain; 
         }
 
-
-
 	.blue-check {
-	color: #276dc2; /* R blue */
+	color: #276dc2; 
 	font-weight: bold;
 	}
 	.green-check {
-	color: #217346; /* Excel green */
+	color: #217346; 
 	font-weight: bold;
 	}
-
-
 
         /* 見出しのデザイン */
         h2 { font-size: 1.8em; color: #2c3e50; border-left: 8px solid #3498db; padding-left: 15px; margin-top: 60px; margin-bottom: 25px; }
@@ -83,7 +78,7 @@
         .pain-box { background-color: #e8f4fd; border-left: 5px solid #b6d4fe; padding: 20px; margin: 30px 0; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
         .pain-box ul { list-style-type: none; padding-left: 0; }
         .pain-box li::before { content: "☑ "; color: #e74c3c; font-weight: bold; }
-.hero-message { font-size: 1.6em; font-weight: bold; color: #2c3e50; text-align: center; margin: 40px 0; line-height: 1.5; }
+        .hero-message { font-size: 1.6em; font-weight: bold; color: #2c3e50; text-align: center; margin: 40px 0; line-height: 1.5; }
         .hero-message span { color: #3498db; border-bottom: 4px solid #f1c40f; }
         
         .prompt-box { background-color: #f4f6f7; border-left: 4px solid #3498db; padding: 15px; margin: 15px 0 30px 0; font-family: 'Consolas', monospace; white-space: pre-wrap; font-size: 0.95em; }
@@ -98,7 +93,7 @@
         summary::before { content: "Q."; position: absolute; left: 0; color: #3498db; font-weight: 900; }
         details p { margin: 15px 0 0 0; padding-top: 15px; border-top: 1px dashed #eee; color: #444; }
 
-        /* 利用規約 用アコーディオン（FAQのスタイルを上書き） */
+        /* 利用規約 用アコーディオン */
         details.license-details { background-color: #fafafa; border: 1px solid #ccc; padding: 20px; font-size: 0.85em; margin-bottom: 40px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); margin-top: 30px; }
         summary.license-summary { font-size: 1.2em; color: #333; padding-left: 5px; border-bottom: 1px solid #ddd; padding-bottom: 10px; margin-bottom: 15px; }
         summary.license-summary::before { content: "📄 "; position: static; color: inherit; font-weight: normal; }
@@ -128,25 +123,26 @@
             <span class="doc-green">Doc</span><span class="r-blue">R</span>
         </h1>
     </div>
-    
-    <div class="alert2-box">
-        <strong>Currently in Beta. We appreciate your feedback and bug reports! Now multilingual!</strong><br>
-        Currently Windows only, but we hope to support macOS in the near future.
+
+    <h2>Quick Diagnosis, Deep Insights.</h2>
+
+    <p>DocR is a tool that allows you to easily run robust R analyses, such as brms, directly in Excel. It is designed to be user-friendly for everyone, from beginners to heavy R users.</p>
+
+    <div class="pain-box">
+      <p><strong>Smooth "First Steps" in Data Analysis</strong></p>
+      <ul>
+	<li>Run advanced statistical models intuitively.</li>
+	<li>Use the output as a reference when sharing results with AI to discuss interpretations and next steps.</li>
+	<li>DocR's accessibility helps you become more comfortable with data analysis.</li>
+      </ul>
+      <p><strong>Quick, On-the-Spot Handling of Diverse Data</strong></p>
+      <ul>
+	<li>Grasp the structure of various datasets received from different sources right on the spot.</li>
+	<li>Save the effort required for preliminary analysis and assessing the data's current state before moving to full-scale analysis.</li>
+	<li>Enjoy the flexibility that makes it highly usable even for heavy R users.</li>
+      </ul>
     </div>
-
-
-    <h2>3 Key Features of DocR</h2>
-    <h3>1. Run R Analyses with the Familiar Feel of Excel</h3>
-    <p>Simply select variables intuitively from the Excel screen, and R runs the calculations in the background. It eliminates the learning curve of programming, allowing you to focus on the essential task: "interpreting your data."</p>
     
-    <h3>2. Cutting-Edge Statistical Methods (From Bayesian Inference to SEM)</h3>
-    <p>With just one click, you can access powerful R packages required at the forefront of academic research—such as Linear Mixed Models (lmer), Exploratory Factor Analysis (fa), Structural Equation Modeling (SEM: lavaan), and even Bayesian Hierarchical Models using brms—which are impossible in standard Excel.</p>
-    
-    <h3>3. Designed to be AI-Prompt Friendly</h3>
-    <p>Model formulas and output summaries are R-standard, designed for a workflow where you can paste them directly into generative AI (like Gemini or ChatGPT) to ask, "How do I interpret these results?" or "How should I write this in my paper?" This makes it a great tool for learning statistics while conducting your analysis.</p>
-
-
-
     <h2>User Interface (Complete Everything within Excel)</h2>
     <p>A "DocR" menu is added to your familiar Excel ribbon. Just select variables and click; R runs in the background and outputs the results to a new sheet.</p>
     
@@ -155,24 +151,6 @@
         <img src="images/rbmsresults.png" alt="Analysis results output screen">
     </div>
 
-
-
-
-    <div class="pain-box">
-        <p><strong>Are you facing these challenges?</strong></p>
-        <ul>
-            <li>Panicking because a journal reviewer suddenly demanded a <strong>Linear Mixed Model (lmer)</strong>.</li>
-            <li>Gave up on <strong>Bayesian statistics</strong> because of complex software environments and installations.</li>
-            <li>Want to quickly explore and analyze received Excel data on the spot.</li>
-            <li>Looking for a convenient, Swiss Army knife-like statistical tool!</li>
-        </ul>
-    </div>
-
-
-
-
-
-
     <h2>List of Available Analytical Features</h2>
     <ul>
         <li><strong>Linear Regression (lm)</strong> - Simple / Multiple Linear Regression</li>
@@ -180,11 +158,15 @@
         <li><strong>ANOVA (afex)</strong> - Analysis of Variance</li>
         <li><strong>Linear Mixed (lmer)</strong> - Linear Mixed Models</li>
         <li><strong>Bayesian (brms)</strong> - Bayesian Hierarchical Models</li>
-        <li><strong>Factor Analysis (fa)</strong> - Exploratory Factor Analysis</li>
+        <li><strong>Factor Analysis (fa/principal)</strong> - Exploratory Factor Analysis / Principal Component Analysis</li>
         <li><strong>SEM / CFA (lavaan)</strong> - Structural Equation Modeling / Confirmatory Factor Analysis</li>
         <li><strong>LPA / LCA (tidyLPA/poLCA)</strong> - Latent Variable Models</li>
         <li><strong>Text Analysis (Japanese only)</strong> - Correspondence Analysis, TF-IDF, Word Frequency, Co-occurrence Network, Word Cloud</li>
     </ul>
+
+    <div class="alert2-box">
+        <strong>Now supports Mac!</strong><br>
+    </div>
 
     <h2>Installation Guide</h2>
     <p><span class="blue-check">✔</span> Please install Docker first, and then install the DocR add-in.</p>
@@ -199,25 +181,49 @@
     </ul>
 
     <h3>Step 1: Install DocR</h3>
-    <p> <strong><a href="https://github.com/soyogu/DocR/releases/download/v0.8.0/DocR_0_8.zip">Download DocR_0_8.zip (638 MB)</a></strong></p>
+    <p> <strong><a href="https://github.com/soyogu/DocR/releases/download/v0.9.0/DocR_Win_0_9_0.zip">Download for Windows: DocR_Win_0_9_0.zip</a></strong></p>
+    <p> <strong><a href="https://github.com/soyogu/DocR/releases/download/v0.9.0/DocR_Mac_0_9_0.zip">Download for Mac: DocR_Mac_0_9_0.zip</a></strong></p>
     <ul>
-        <li>Run the <code>Install_DocR.bat</code> file located inside the extracted folder.</li>
-        <li>The installation is complete when "DocR.xlam has been successfully installed." is displayed.</li>
+      <li>
+        Run the <code>Install_DocR.bat</code> (For Mac, <code>Install_DocR_Mac.command</code>) located in the extracted folder.
+        
+        <details style="margin-top: 10px; background-color: #f8f9fa; padding: 10px; border-radius: 6px; border: 1px solid #e2e8f0;">
+          <summary style="cursor: pointer; font-weight: bold; color: #0056b3; font-size: 0.9em;">
+            If you see a blue warning screen (Windows protected your PC) on Windows
+          </summary>
+          <p style="margin-top: 10px; margin-bottom: 0; font-size: 0.9em; line-height: 1.5;">
+            Click the <strong>"More info"</strong> text link within the message, and then click the <strong>"Run anyway"</strong> button that appears at the bottom right.
+          </p>
+        </details>
+        
+        <details style="margin-top: 5px; background-color: #f8f9fa; padding: 10px; border-radius: 6px; border: 1px solid #e2e8f0;">
+          <summary style="cursor: pointer; font-weight: bold; color: #0056b3; font-size: 0.9em;">
+            If you see an "unidentified developer" warning on Mac
+          </summary>
+          <p style="margin-top: 10px; margin-bottom: 0; font-size: 0.9em; line-height: 1.5;">
+            Do not double-click. Instead, <strong>right-click (or Control-click)</strong> the file, and select <strong>"Open"</strong> from the context menu to run it.
+          </p>
+        </details>
+      </li>
+      <li style="margin-top: 10px;">The installation is complete when "<code>DocR.xlam has been successfully installed.</code>" is displayed.</li>
     </ul>
 
     <h3>Step 2: Enable the Add-in in Excel</h3>
+    <strong>Windows</strong>
     <ol>
         <li>In Excel, click "File" > "Options" > "Add-ins".</li>
         <li>Select "Excel Add-ins" from the Manage dropdown menu, click "Go...", and check the box for "DocR".</li>
     </ol>
-
+    <strong>Mac</strong>
+    <p>No action required. It will appear in the menu automatically.</p>
 
     <h2>User Manual</h2>
     <h3>Basic Specifications & Notes</h3>
     <ul>
-        <li><strong>Data Selection:</strong> Select the data cell range (minimum 2 rows x 2 columns) before running an analysis.</li>
-        <li><strong>Variable Names:</strong> The first row of the selected range is automatically treated as the header (variable names).</li>
-        <li><strong>Data Cleansing:</strong> The analysis will not run if the data contains blank cells or Excel calculation errors.</li>
+        <li><strong>Basic Operation:</strong> Select the data cell range and click the analysis button.</li>
+        <li><strong>Variable Names:</strong> The first row of the selected range is automatically treated as the header. Parentheses like "()" can also be used.</li>
+        <li><strong>Editing Formulas:</strong> For some analyses, you can directly edit the model formula.</li>
+        <li><strong>Result Output:</strong> The output is basically the result of R's <code>summary</code>. There may be some additions or modifications.</li>
     </ul>
 
     <h3>Tips for Learning & Analyzing with AI</h3>
@@ -232,13 +238,10 @@ What does this mean? What is the 'R-hat' in the summary?</div>
     Prompt Example: Reducing Manual Work
     <div class="prompt-box">I'm considering the following structure: ... (omitted) ... Please write the R lavaan syntax to test this structure.</div>
 
-
     <div class="hero-message">
       Created with the concept:<br>
       "<span>Anyone can become a Bayesian analyst today.</span>"
     </div>
-
-
 
     <h2>Frequently Asked Questions (FAQ)</h2>
     <details>
@@ -250,11 +253,11 @@ What does this mean? What is the 'R-hat' in the summary?</div>
         <summary>Can it handle complex models?</summary>
         <p>Yes, advanced users can directly edit the model formula text area to run customized models as desired.</p>
     </details>
+    
     <details>
         <summary>Is there a Mac version?</summary>
-        <p>Currently, only the Windows version is available. We are looking for donations to purchase equipment to develop a macOS version!</p>
+        <p>Yes. However, I managed to develop it on a borrowed Mac, so I need to buy my own Mac for this project...</p>
     </details>
-
 
     <details>
         <summary>Why doesn't DocR conflict with my existing R installation?</summary>
@@ -351,6 +354,14 @@ What does this mean? What is the 'R-hat' in the summary?</div>
 
     <h2>Changelog</h2>
     <div class="changelog">
+        <h3><span class="changelog-date">2026.03.23</span> v0.9.0</h3>
+        <ul>
+            <li>Now supports Mac!</li>
+            <li>Now flexibly handles missing values!</li>
+            <li>Added support for multiple comparisons in linear model families (using <code>emmeans</code>).</li>
+            <li><code>hypothesis</code> is now available in <code>brms</code>.</li>
+            <li>Sped up some <code>brms</code> models with pre-compilation.</li>
+        </ul>
         <h3><span class="changelog-date">2026.03.16</span> v0.8.0</h3>
         <ul>
             <li>Now supports multiple languages (Japanese & English)!</li>
@@ -372,7 +383,6 @@ What does this mean? What is the 'R-hat' in the summary?</div>
         This website uses Google Analytics, a service provided by Google LLC, to analyze site traffic and improve our content. Google Analytics uses "cookies" to collect data anonymously. This information does not personally identify you. For more details on how Google handles data, please visit <a href="https://policies.google.com/technologies/partner-sites" target="_blank" style="color: #666;">Google's Privacy & Terms</a>.
       </p>
     </section>
-
 
 </body>
 </html>

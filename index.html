@@ -130,21 +130,27 @@
         </h1>
     </div>
     
-    <div class="alert2-box">
-        <strong>現在β版です。動作確認などご協力ください！なんとマルチリンガル！</strong><br>
-        まだWindowsだけですがMac対応もしたいです。
+
+
+    <h2>手早い診断、深い洞察。</h2>
+
+    <p>DocRは、brms等の強力なR分析をExcel上で手軽に実行できるツールです。分析初心者にもRのヘビーユーザーにも使いやすく設計されています。</p>
+
+    <div class="pain-box">
+        <p><strong>データ分析の「最初の一歩」をスムーズに</strong></p>
+        <ul>
+          <li>高度な統計モデルも直感的に実行できます。</li>
+	  <li>出力結果をAIに共有し、解釈や次の方針を相談する際のリファレンスになります。</li>
+	  <li>DocRは手軽なのでデータ分析に慣れ親しむことができます。</li>
+        </ul>
+        <p><strong>多様なデータを、その場で手早く</strong></p>
+	<ul>
+	  <li>色々な人から受け取る様々なデータに対してその場で構造を把握できます。</li>
+	  <li>本格的な解析の前の、予備分析や現状把握にかかる手間を省きます。</li>
+	  <li>Rのヘビーユーザーにも使いやすい柔軟性を持っています。</li>
+	</ul>
+
     </div>
-
-
-    <h2>DocRの3つの特徴</h2>
-    <h3>1. Excelの操作感そのままに、Rの分析を実装</h3>
-    <p>Excelの画面から直感的に変数を選択するだけで、裏側でRが計算を実行します。プログラミングの学習コストをゼロにし、本来の「データの解釈」に集中できます。</p>
-    
-    <h3>2. 最先端の統計手法（ベイズ推定からSEMまで）</h3>
-    <p>標準のExcelでは不可能な、線形混合モデル（lmer）、探索的因子分析（fa）、構造方程式モデリング（SEM: lavaan）、さらにはbrmsを用いたベイズ階層モデルまで、学術研究の最前線で求められる強力なパッケージ群をワンクリックで呼び出せます。</p>
-    
-    <h3>3. 生成AIに尋ねやすい設計</h3>
-    <p>モデル式や出力結果のサマリーはR準拠なので、そのまま生成AI（GeminiやChatGPTなど）に貼り付け、「出力結果の見方や論文への書き方をAIに相談する」という、分析の勉強にもなるワークフローを前提に設計されています。</p>
 
 
 
@@ -159,19 +165,6 @@
 
 
 
-    <div class="pain-box">
-        <p><strong>こんなあなたも・・・</strong></p>
-        <ul>
-            <li>論文の査読で、いきなり<strong>線形混合モデル（lmer）</strong>を要求されて焦っている</li>
-            <li><strong>ベイズ統計</strong>はアプリケーションのインストールで挫折した</li>
-            <li>受け取ったExcelデータをその場でササっと眺めたい</li>
-            <li>スイスアーミーナイフのような便利なツールが欲しい！</li>
-        </ul>
-    </div>
-
-
-
-
 
 
     <h2>搭載している分析機能一覧</h2>
@@ -181,11 +174,16 @@
         <li><strong>ANOVA (afex)</strong> - 分散分析</li>
         <li><strong>Linear Mixed (lmer)</strong> - 線形混合モデル</li>
         <li><strong>Bayesian (brms)</strong> - ベイズ階層モデル</li>
-        <li><strong>Factor Analysis (fa)</strong> - 探索的因子分析</li>
+        <li><strong>Factor Analysis (fa/principal)</strong> - 探索的因子分析 / 主成分分析</li>
         <li><strong>SEM / CFA (lavaan)</strong> - 構造方程式モデリング / 確認的因子分析</li>
         <li><strong>LPA / LCA (tidyLPA/poLCA)</strong> - 潜在変数モデル</li>
         <li><strong>テキスト分析（日本語のみ）</strong> - 対応分析・TF-IDFスコア・出現頻度・共起ネットワーク・ワードクラウド</li>
     </ul>
+
+        <div class="alert2-box">
+          <strong>Mac対応しました！</strong><br>
+	</div>
+
 
     <h2>インストールガイド</h2>
     <p><span class="blue-check">✔</span> はじめにDockerをインストールし、その後でこのDocRをインストールする順序になります。</p>
@@ -200,26 +198,50 @@
     </ul>
 
     <h3>ステップ1：DocRのインストール</h3>
-    <p> <strong><a href="https://github.com/soyogu/DocR/releases/download/v0.8.0/DocR_0_8.zip">DocR_0_8.zip をダウンロード (638 MB)</a></strong></p>
+    <p> <strong><a href="https://github.com/soyogu/DocR/releases/download/v0.9.0/DocR_Win_0_9_0.zip">Windows版：DocR_Win_0_9_0.zip をダウンロード </a></strong></p>
+    <p> <strong><a href="https://github.com/soyogu/DocR/releases/download/v0.9.0/DocR_Mac_0_9_0.zip">Mac版：DocR_Mac_0_9_0.zip をダウンロード </a></strong></p>
     <ul>
-        <li>展開したフォルダ内にある <code>Install_DocR.bat</code> を実行します。</li>
-        <li>「DocR.xlam has been successfully installed.」と表示されたら完了です。</li>
+      <li>
+        展開したフォルダ内にある <code>Install_DocR.bat</code> （Macでは<code>Install_DocR_Mac.command</code>）を実行します。
+        
+        <details style="margin-top: 10px; background-color: #f8f9fa; padding: 10px; border-radius: 6px; border: 1px solid #e2e8f0;">
+          <summary style="cursor: pointer; font-weight: bold; color: #0056b3; font-size: 0.9em;">
+            Windowsで青い警告画面（PCが保護されました）が出た場合
+          </summary>
+          <p style="margin-top: 10px; margin-bottom: 0; font-size: 0.9em; line-height: 1.5;">
+            メッセージ内の<strong>「詳細情報」</strong>という文字をクリックし、右下に現れる<strong>「実行」</strong>ボタンを押してください。
+          </p>
+        </details>
+        
+        <details style="margin-top: 5px; background-color: #f8f9fa; padding: 10px; border-radius: 6px; border: 1px solid #e2e8f0;">
+          <summary style="cursor: pointer; font-weight: bold; color: #0056b3; font-size: 0.9em;">
+            Macで「開発元を検証できない」と警告が出た場合
+          </summary>
+          <p style="margin-top: 10px; margin-bottom: 0; font-size: 0.9em; line-height: 1.5;">
+            そのままダブルクリックせず、ファイルを<strong>右クリック（または Controlキー を押しながらクリック）</strong>し、表示されたメニューから<strong>「開く」</strong>を選択して実行してください。
+          </p>
+        </details>
+        </li>
+      <li>「<code>DocR.xlam has been successfully installed.</code>」と表示されたら成功です。</li>
     </ul>
 
     <h3>ステップ2：Excelでのアドイン有効化</h3>
+    Windows
     <ol>
         <li>Excelの「ファイル」＞「オプション」＞「アドイン」をクリック。</li>
         <li>管理の「Excel アドイン」から「設定」ボタンを押し、「DocR」にチェックを入れます。</li>
     </ol>
+    Mac
+    <p>何もせずにメニューに表示されます。</p>
 
 
-
-    <h2>ユーザーマニュアル</h2>
-    <h3>基本仕様と注意事項</h3>
+    <h2>使い方</h2>
+    <h3>基本仕様</h3>
     <ul>
-        <li><strong>データ選択:</strong> 分析前にデータのセル範囲（最低2行×2列以上）を選択してください。</li>
-        <li><strong>変数名:</strong> 選択範囲の1行目はヘッダーとして処理されます。</li>
-        <li><strong>データクレンジング:</strong> 空白セルや計算エラーが含まれていると実行されません。</li>
+        <li><strong>基本操作:</strong> データのセル範囲を選択し、分析のボタンを押してください。</li>
+        <li><strong>変数名:</strong> 選択範囲の1行目はヘッダーとして処理されます。「()」などが使われていても大丈夫です。</li>
+	<li><strong>式の編集:</strong> 分析によっては、モデル式を直接編集できるものもあります。</li>
+	<li><strong>結果出力:</strong> 結果出力は基本的にはRの<code>summary</code>です。一部追加や修正されている場合もあります。</li>
     </ul>
 
     <h3>AIを活用した分析・勉強のTIPS</h3>
@@ -255,7 +277,7 @@ Rのlmerで解析したいのですが、固定効果と変量効果には何を
 
     <details>
         <summary>Mac版はありますか？</summary>
-        <p>現在はWindows版のみの提供となっています。Mac版の開発機材購入に向けたご支援を募集中です！</p>
+        <p>はい。しかし人から借りたMacでなんとか開発したので、自分の作業用のMacを買わなければ・・・。</p>
     </details>
 
     <details>
@@ -357,6 +379,14 @@ Rのlmerで解析したいのですが、固定効果と変量効果には何を
 
     <h2>更新履歴</h2>
     <div class="changelog">
+        <h3><span class="changelog-date">2026.03.23</span> v0.9.0</h3>
+        <ul>
+            <li>Mac対応しました！</li>
+            <li>欠損値があっても柔軟に対応できるようになりました！</li>
+            <li>線形モデル族で多重比較できるようになりました（<code>emmeans</code>）。</li>
+	    <li><code>brms</code>で<code>hypothesis</code>使用可能に。</li>
+	    <li><code>brms</code>にいくつかのモデルは事前コンパイル搭載により高速化。</li>
+        </ul>
         <h3><span class="changelog-date">2026.03.16</span> v0.8.0</h3>
         <ul>
             <li>マルチリンガル（日本語・英語）対応になりました！</li>
@@ -364,6 +394,7 @@ Rのlmerで解析したいのですが、固定効果と変量効果には何を
             <li>SEM、CFA、潜在変数モデル（LPA/LCA）にフル対応。</li>
             <li>探索的因子分析（fa）と構造方程式モデリング（SEM）に対応。</li>
         </ul>
+
         <h3><span class="changelog-date">2026.03.13</span> v0.1.0 初公開</h3>
         <ul>
             <li>brmsなど基本的な機能を実装したアルファ版。</li>
