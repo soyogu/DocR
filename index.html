@@ -156,11 +156,25 @@
 
     <h2>操作画面（Excelだけで完結します）</h2>
     <p>普段お使いのExcelのリボンに「DocR」のメニューが追加されます。変数を選んでクリックするだけで、裏側でRが走り、結果が新しいシートに出力されます。</p>
+
+
     
-    <div class="screenshot-grid">
-        <img src="images/rbmsdialog.png" alt="Excel上での変数選択画面">
-        <img src="images/rbmsresults.png" alt="分析結果の出力画面">
+    <div style="width: 80%; max-width: 800px; margin: 0 auto;">
+      <iframe
+	src="https://www.youtube.com/embed/cGsTw-73b9M?si=RuBJTit3JATNoOD7"
+	style="width: 100%; aspect-ratio: 16/9;"
+	title="YouTube video player"
+	frameborder="0"
+	allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+	referrerpolicy="strict-origin-when-cross-origin"
+	allowfullscreen>
+      </iframe>
     </div>
+
+    <!-- <div class="screenshot-grid"> -->
+    <!--     <img src="images/rbmsdialog.png" alt="Excel上での変数選択画面"> -->
+    <!--     <img src="images/rbmsresults.png" alt="分析結果の出力画面"> -->
+    <!-- </div> -->
 
 
 
@@ -198,8 +212,8 @@
     </ul>
 
     <h3>ステップ1：DocRのインストール</h3>
-    <p> <strong><a href="https://github.com/soyogu/DocR/releases/download/v0.9.0/DocR_Win_0_9_0.zip">Windows版：DocR_Win_0_9_0.zip をダウンロード </a></strong></p>
-    <p> <strong><a href="https://github.com/soyogu/DocR/releases/download/v0.9.0/DocR_Mac_0_9_0.zip">Mac版：DocR_Mac_0_9_0.zip をダウンロード </a></strong></p>
+    <p> <strong><a href="https://github.com/soyogu/DocR/releases/download/v0.9.1/DocR_Win_0_9_1.zip">Windows版：DocR_Win_0_9_1.zip をダウンロード </a></strong></p>
+    <p> <strong><a href="https://github.com/soyogu/DocR/releases/download/v0.9.1/DocR_Mac_0_9_1.zip">Mac版：DocR_Mac_0_9_1.zip をダウンロード </a></strong></p>
     <ul>
       <li>
         展開したフォルダ内にある <code>Install_DocR.bat</code> （Macでは<code>Install_DocR_Mac.command</code>）を実行します。
@@ -379,6 +393,11 @@ Rのlmerで解析したいのですが、固定効果と変量効果には何を
 
     <h2>更新履歴</h2>
     <div class="changelog">
+        <h3><span class="changelog-date">2026.03.25</span> v0.9.1</h3>
+        <ul>
+          <li>適切なタイミングでgcを回すことでメモリ消費量を激減させました。</li>
+	  <li>英語ロケールのユーザーが非ASCIIユーザー名を使った時にエラーになるのを解消しました。</li>
+        </ul>
         <h3><span class="changelog-date">2026.03.23</span> v0.9.0</h3>
         <ul>
             <li>Mac対応しました！</li>

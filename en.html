@@ -145,11 +145,26 @@
     
     <h2>User Interface (Complete Everything within Excel)</h2>
     <p>A "DocR" menu is added to your familiar Excel ribbon. Just select variables and click; R runs in the background and outputs the results to a new sheet.</p>
+
+
     
-    <div class="screenshot-grid">
-        <img src="images/rbmsdialog.png" alt="Variable selection screen in Excel">
-        <img src="images/rbmsresults.png" alt="Analysis results output screen">
+    
+    <div style="width: 80%; max-width: 800px; margin: 0 auto;">
+      <iframe
+	src="https://www.youtube.com/embed/cGsTw-73b9M?si=RuBJTit3JATNoOD7"
+	style="width: 100%; aspect-ratio: 16/9;"
+	title="YouTube video player"
+	frameborder="0"
+	allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+	referrerpolicy="strict-origin-when-cross-origin"
+	allowfullscreen>
+      </iframe>
     </div>
+
+    <!-- <div class="screenshot-grid"> -->
+    <!--     <img src="images/rbmsdialog.png" alt="Variable selection screen in Excel"> -->
+    <!--     <img src="images/rbmsresults.png" alt="Analysis results output screen"> -->
+    <!-- </div> -->
 
     <h2>List of Available Analytical Features</h2>
     <ul>
@@ -181,8 +196,8 @@
     </ul>
 
     <h3>Step 1: Install DocR</h3>
-    <p> <strong><a href="https://github.com/soyogu/DocR/releases/download/v0.9.0/DocR_Win_0_9_0.zip">Download for Windows: DocR_Win_0_9_0.zip</a></strong></p>
-    <p> <strong><a href="https://github.com/soyogu/DocR/releases/download/v0.9.0/DocR_Mac_0_9_0.zip">Download for Mac: DocR_Mac_0_9_0.zip</a></strong></p>
+    <p> <strong><a href="https://github.com/soyogu/DocR/releases/download/v0.9.1/DocR_Win_0_9_1.zip">Download for Windows: DocR_Win_0_9_1.zip</a></strong></p>
+    <p> <strong><a href="https://github.com/soyogu/DocR/releases/download/v0.9.1/DocR_Mac_0_9_1.zip">Download for Mac: DocR_Mac_0_9_1.zip</a></strong></p>
     <ul>
       <li>
         Run the <code>Install_DocR.bat</code> (For Mac, <code>Install_DocR_Mac.command</code>) located in the extracted folder.
@@ -354,6 +369,12 @@ What does this mean? What is the 'R-hat' in the summary?</div>
 
     <h2>Changelog</h2>
     <div class="changelog">
+      <h3><span class="changelog-date">2026.03.25</span> v0.9.1</h3>
+      <ul>
+        <li>Drastically reduced memory consumption by running garbage collection (gc) at appropriate times.</li>
+        <li>Fixed an error that occurred when English locale users had non-ASCII characters in their usernames.</li>
+        </ul>
+      
         <h3><span class="changelog-date">2026.03.23</span> v0.9.0</h3>
         <ul>
             <li>Now supports Mac!</li>
