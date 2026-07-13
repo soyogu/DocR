@@ -1,14 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-GH3W6HPQV9"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
+  <head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-GH3W6HPQV9"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
 
-    gtag('config', 'G-GH3W6HPQV9');
-  </script>
+      gtag('config', 'G-GH3W6HPQV9');
+    </script>
+
+
+    
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DocR - Bayesian Statistics from Excel (The Latest Statistical Tool You Can Use Today)</title>
@@ -29,15 +32,16 @@
             display: flex;
             align-items: center; /* 垂直中央揃え */
             gap: 30px;          /* 文字と画像の間隔 */
-            border-bottom: 2px solid #3498db; 
+            border-bottom: 2px solid #3498db; /* 線を#333(黒)から#3498db(青)に変更 */
             padding-bottom: 20px;
             margin-top: 20px;
-            margin-bottom: 20px; 
-            flex-wrap: wrap;    
+            margin-bottom: 20px; /* 新しく追加：下にあるalert2-boxとの間に余白を作る */
+            flex-wrap: wrap;    /* 画面が狭い時に折り返す */
         }
 
+
         h1 { 
-            font-size: 5em;     
+            font-size: 5em;     /* 巨大な文字サイズ */
             margin: 0;
             line-height: 1;
         }
@@ -49,17 +53,18 @@
         .title-logo {
             width: 300px;
             height: 150px;
-            object-fit: contain; 
+            object-fit: contain; /* アスペクト比を維持 */
         }
 
 	.blue-check {
-	color: #276dc2; 
+	color: #276dc2; /* R blue */
 	font-weight: bold;
 	}
 	.green-check {
-	color: #217346; 
+	color: #217346; /* Excel green */
 	font-weight: bold;
 	}
+
 
         /* 見出しのデザイン */
         h2 { font-size: 1.8em; color: #2c3e50; border-left: 8px solid #3498db; padding-left: 15px; margin-top: 60px; margin-bottom: 25px; }
@@ -78,6 +83,7 @@
         .pain-box { background-color: #e8f4fd; border-left: 5px solid #b6d4fe; padding: 20px; margin: 30px 0; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
         .pain-box ul { list-style-type: none; padding-left: 0; }
         .pain-box li::before { content: "☑ "; color: #e74c3c; font-weight: bold; }
+        
         .hero-message { font-size: 1.6em; font-weight: bold; color: #2c3e50; text-align: center; margin: 40px 0; line-height: 1.5; }
         .hero-message span { color: #3498db; border-bottom: 4px solid #f1c40f; }
         
@@ -87,13 +93,13 @@
         .screenshot-grid { display: flex; gap: 20px; margin: 30px 0; flex-wrap: wrap; }
         .screenshot-grid img { flex: 1; min-width: 400px; max-width: 100%; height: auto; border: 1px solid #ddd; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
 
-        /* FAQ */
+        /* FAQ 用アコーディオン */
         details { background-color: #fff; border: 1px solid #ddd; border-radius: 5px; margin-bottom: 12px; padding: 18px; }
         summary { font-weight: bold; cursor: pointer; color: #2c3e50; font-size: 1.1em; list-style: none; position: relative; padding-left: 30px; }
         summary::before { content: "Q."; position: absolute; left: 0; color: #3498db; font-weight: 900; }
         details p { margin: 15px 0 0 0; padding-top: 15px; border-top: 1px dashed #eee; color: #444; }
 
-        /* 利用規約 用アコーディオン */
+        /* 利用規約 用アコーディオン（FAQのスタイルを上書き） */
         details.license-details { background-color: #fafafa; border: 1px solid #ccc; padding: 20px; font-size: 0.85em; margin-bottom: 40px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); margin-top: 30px; }
         summary.license-summary { font-size: 1.2em; color: #333; padding-left: 5px; border-bottom: 1px solid #ddd; padding-bottom: 10px; margin-bottom: 15px; }
         summary.license-summary::before { content: "📄 "; position: static; color: inherit; font-weight: normal; }
@@ -110,7 +116,7 @@
         .changelog h3 { margin-top: 0; border-bottom: none; }
         .changelog-date { font-weight: bold; color: #3498db; margin-right: 15px; }
     </style>
-</head>
+  </head>
 <body>
 
     <div class="header-links">
@@ -123,31 +129,29 @@
             <span class="doc-green">Doc</span><span class="r-blue">R</span>
         </h1>
     </div>
+    
+
 
     <h2>Quick Diagnosis, Deep Insights.</h2>
 
-    <p>DocR is a tool that allows you to easily run robust R analyses, such as brms, directly in Excel. It is designed to be user-friendly for everyone, from beginners to heavy R users.</p>
+    <p>DocR is a tool that allows you to easily run powerful R analyses, such as brms, directly in Excel.</p>
+    <p>"Anyone can become a Bayesian analysis user today."</p>
 
     <div class="pain-box">
-      <p><strong>Smooth "First Steps" in Data Analysis</strong></p>
-      <ul>
-	<li>Run advanced statistical models intuitively.</li>
-	<li>Use the output as a reference when sharing results with AI to discuss interpretations and next steps.</li>
-	<li>DocR's accessibility helps you become more comfortable with data analysis.</li>
-      </ul>
-      <p><strong>Quick, On-the-Spot Handling of Diverse Data</strong></p>
-      <ul>
-	<li>Grasp the structure of various datasets received from different sources right on the spot.</li>
-	<li>Save the effort required for preliminary analysis and assessing the data's current state before moving to full-scale analysis.</li>
-	<li>Enjoy the flexibility that makes it highly usable even for heavy R users.</li>
-      </ul>
+        <p><strong>Smooth "First Steps" in Data Analysis</strong></p>
+        <ul>
+          <li>Run advanced statistical models intuitively.</li>
+          <li>Flexibility that satisfies even heavy R users.</li>
+          <li>Analyze Excel files immediately on the spot.</li>
+        </ul>
     </div>
-    
+
+
+
     <h2>User Interface (Complete Everything within Excel)</h2>
     <p>A "DocR" menu is added to your familiar Excel ribbon. Just select variables and click; R runs in the background and outputs the results to a new sheet.</p>
 
 
-    
     
 <div style="width: 80%; max-width: 800px; margin: 0 auto;">
   <iframe
@@ -160,28 +164,38 @@
     allowfullscreen>
   </iframe>
 </div>
-
     <!-- <div class="screenshot-grid"> -->
     <!--     <img src="images/rbmsdialog.png" alt="Variable selection screen in Excel"> -->
     <!--     <img src="images/rbmsresults.png" alt="Analysis results output screen"> -->
     <!-- </div> -->
 
+
+
+
+
+
     <h2>List of Available Analytical Features</h2>
     <ul>
+        <li><strong>Describe (psych)</strong> - Descriptive Statistics & Distribution Plots (Ver 1.5+)</li>
+        <li><strong>Correlation (cor)</strong> - Correlation Analysis (Bayesian Correlation, Partial Correlation) (Ver 1.5+)</li>
         <li><strong>Linear Regression (lm)</strong> - Simple / Multiple Linear Regression</li>
         <li><strong>GLM (glm)</strong> - Generalized Linear Models</li>
         <li><strong>ANOVA (afex)</strong> - Analysis of Variance</li>
         <li><strong>Linear Mixed (lmer)</strong> - Linear Mixed Models</li>
+        <li><strong>Elastic Net (glmnet)</strong> - Regularized Regression (Lasso/Ridge) (Ver 1.5+)</li>
         <li><strong>Bayesian (brms)</strong> - Bayesian Hierarchical Models</li>
+        <li><strong>BART (dbarts)</strong> - Bayesian Additive Regression Trees (Non-linear Prediction) (Ver 1.5+)</li>
         <li><strong>Factor Analysis (fa/principal)</strong> - Exploratory Factor Analysis / Principal Component Analysis</li>
         <li><strong>SEM / CFA (lavaan)</strong> - Structural Equation Modeling / Confirmatory Factor Analysis</li>
         <li><strong>LPA / LCA (tidyLPA/poLCA)</strong> - Latent Variable Models</li>
-        <li><strong>Text Analysis (Japanese only)</strong> - Correspondence Analysis, TF-IDF, Word Frequency, Co-occurrence Network, Word Cloud</li>
+        <li><strong>Text Mining (Japanese only)</strong> - Correspondence Analysis, TF-IDF, Word Frequency, Co-occurrence Network, Word Cloud</li>
     </ul>
 
-    <div class="alert2-box">
-        <strong>Now supports Mac!</strong><br>
-    </div>
+        <div class="alert2-box">
+          <strong>Now supports Mac! (However, since I don't have a Mac with me right now, it is stopped at Ver 1.)</strong><br>
+	</div>
+
+
 
     <h2>Installation Guide</h2>
     <p><span class="blue-check">✔</span> Please install Docker first, and then install the DocR add-in.</p>
@@ -190,49 +204,53 @@
     <h3>Step 0: Install Docker</h3>
     <p> <a href="https://www.docker.com/products/docker-desktop" target="_blank">Docker Desktop Download Page</a></p>
     <ul>
-      <li>Download by clicking the white "[Download Docker Desktop]" button.</li>
-      <li>You can leave the checkboxes as default during the installation process.</li>
-      <li>You may be prompted to register a user account, but you can safely click "Skip".</li>
+        <li>Download by clicking the blue "[Download Docker Desktop]" button.</li>
+        <li>You can leave the checkboxes as default during the installation process.</li>
+        <li>You may be prompted to register a user account, but you can safely click "Skip".</li>
     </ul>
 
     <h3>Step 1: Install DocR</h3>
-    <p> <strong><a href="https://github.com/soyogu/DocR/releases/download/v1.0.0/DocR_Win_1_0_1.zip">Download for Windows: DocR_Win_1_0_1.zip</a></strong></p>
-    <p> <strong><a href="https://github.com/soyogu/DocR/releases/download/v1.0.0/DocR_Mac_1_0_0.zip">Download for Mac: DocR_Mac_1_0_0.zip</a></strong></p>
+    <p> <strong><a href="https://github.com/soyogu/DocR/releases/download/v1.5.1/DocR_Win_1_5_1.zip">Download for Windows: DocR_Win_1_5_1.zip</a></strong></p>
+    <p> <strong><a href="https://github.com/soyogu/DocR/releases/download/v1.0.0/DocR_Mac_1_0_0.zip">Download for Mac: DocR_Mac_1_0_0.zip</a> (Sorry! The Mac version is stopped at Ver 1.)</strong></p>
     <ul>
-      <li>
-        Run the <code>Install_DocR.bat</code> (For Mac, <code>Install_DocR_Mac.command</code>) located in the extracted folder.
-        
-        <details style="margin-top: 10px; background-color: #f8f9fa; padding: 10px; border-radius: 6px; border: 1px solid #e2e8f0;">
-          <summary style="cursor: pointer; font-weight: bold; color: #0056b3; font-size: 0.9em;">
-            If you see a blue warning screen (Windows protected your PC) on Windows
-          </summary>
-          <p style="margin-top: 10px; margin-bottom: 0; font-size: 0.9em; line-height: 1.5;">
-            Click the <strong>"More info"</strong> text link within the message, and then click the <strong>"Run anyway"</strong> button that appears at the bottom right.
-          </p>
-        </details>
-        
-        <details style="margin-top: 5px; background-color: #f8f9fa; padding: 10px; border-radius: 6px; border: 1px solid #e2e8f0;">
-          <summary style="cursor: pointer; font-weight: bold; color: #0056b3; font-size: 0.9em;">
-            If you see an "unidentified developer" warning on Mac
-          </summary>
-          <p style="margin-top: 10px; margin-bottom: 0; font-size: 0.9em; line-height: 1.5;">
-            Do not double-click. Instead, <strong>right-click (or Control-click)</strong> the file, and select <strong>"Open"</strong> from the context menu to run it.
-          </p>
-        </details>
-      </li>
-      <li style="margin-top: 10px;">The installation is complete when "<code>DocR.xlam has been successfully installed.</code>" is displayed.</li>
+        <li>
+            Run the <code>Install_DocR.bat</code> (For Mac, <code>Install_DocR_Mac.command</code>) located in the extracted folder.
+
+            <details style="margin-top: 10px; background-color: #f8f9fa; padding: 10px; border-radius: 6px; border: 1px solid #e2e8f0;">
+                <summary style="cursor: pointer; font-weight: bold; color: #0056b3; font-size: 0.9em;">
+                    If you see a blue warning screen (Windows protected your PC) on Windows
+                </summary>
+                <p style="margin-top: 10px; margin-bottom: 0; font-size: 0.9em; line-height: 1.5;">
+                    Click the <strong>"More info"</strong> text link within the message, and then click the <strong>"Run anyway"</strong> button that appears at the bottom right.
+                </p>
+            </details>
+
+            <details style="margin-top: 5px; background-color: #f8f9fa; padding: 10px; border-radius: 6px; border: 1px solid #e2e8f0;">
+                <summary style="cursor: pointer; font-weight: bold; color: #0056b3; font-size: 0.9em;">
+                    If you see an "unidentified developer" warning on Mac
+                </summary>
+                <p style="margin-top: 10px; margin-bottom: 0; font-size: 0.9em; line-height: 1.5;">
+                    Do not double-click. Instead, <strong>right-click (or Control-click)</strong> the file, and select <strong>"Open"</strong> from the context menu to run it.
+                </p>
+            </details>
+        </li>
+        <li>The installation is complete when "<code>DocR.xlam has been successfully installed.</code>" is displayed.</li>
     </ul>
 
     <h3>Step 2: Enable the Add-in in Excel</h3>
-    <strong>Windows</strong>
+    <p><strong>Windows</strong></p>
     <ol>
         <li>In Excel, click "File" > "Options" > "Add-ins".</li>
         <li>Select "Excel Add-ins" from the Manage dropdown menu, click "Go...", and check the box for "DocR".</li>
     </ol>
-    <strong>Mac</strong>
+    <p><strong>Mac</strong></p>
     <p>No action required. It will appear in the menu automatically.</p>
 
     <h2>User Manual</h2>
+        <h3>Tutorial</h3>  
+        <p>The following Excel file contains data, instructions, and results for various analysis methods. By looking at this, you will understand what you can do and how to do it.</p>
+        <p><a href="files/DemoBook.xlsx" target="_blank">Download DemoBook.xlsx</a></p>
+
     <h3>Basic Specifications & Notes</h3>
     <ul>
         <li><strong>Basic Operation:</strong> Select the data cell range and click the analysis button.</li>
@@ -253,25 +271,28 @@ What does this mean? What is the 'R-hat' in the summary?</div>
     Prompt Example: Reducing Manual Work
     <div class="prompt-box">I'm considering the following structure: ... (omitted) ... Please write the R lavaan syntax to test this structure.</div>
 
+
     <div class="hero-message">
       Created with the concept:<br>
       "<span>Anyone can become a Bayesian analyst today.</span>"
     </div>
 
+
+
     <h2>Frequently Asked Questions (FAQ)</h2>
     <details>
         <summary>Is it free to use?</summary>
-        <p>Yes, it is completely free to use. Our goal is to contribute to the advancement of research and education worldwide.</p>
+        <p>Yes, it is completely free to use. Our goal is to contribute to the advancement of research and education.</p>
     </details>
 
     <details>
         <summary>Can it handle complex models?</summary>
         <p>Yes, advanced users can directly edit the model formula text area to run customized models as desired.</p>
     </details>
-    
+
     <details>
         <summary>Is there a Mac version?</summary>
-        <p>Yes. However, I managed to develop it on a borrowed Mac, so I need to buy my own Mac for this project...</p>
+        <p>Yes. However, I managed to develop it on a borrowed Mac, so I need to buy my own Mac for my work...</p>
     </details>
 
     <details>
@@ -300,16 +321,19 @@ What does this mean? What is the 'R-hat' in the summary?</div>
         <p>Please report it using the <a href="https://docs.google.com/forms/d/e/1FAIpQLSdA2CFIqM3h8nqi3Nrt435hap4EHg96t00YKLP6SmPmq-GMVA/viewform?usp=header">feedback form</a>.</p>
     </details>
 
+
+
     <div style="margin-top: 50px; padding: 20px; background-color: #f8f9fa; border-radius: 8px; text-align: center;">
       <h3>Bug Reports & Feedback</h3>
       <p style="margin-bottom: 20px;">
-        We welcome bug reports and feature requests to help improve DocR.
+        We welcome bug reports and feature requests to help improve DocR.<br>
       </p>
 
       <a href="https://docs.google.com/forms/d/e/1FAIpQLSdA2CFIqM3h8nqi3Nrt435hap4EHg96t00YKLP6SmPmq-GMVA/viewform?usp=header" target="_blank" rel="noopener noreferrer" style="display: inline-block; padding: 12px 24px; margin: 5px 10px; background-color: #0056b3; color: white; text-decoration: none; border-radius: 5px; font-weight: bold;">
         Report Form
       </a>
     </div>
+
 
     <details class="license-details">
         <summary class="license-summary">Terms of Use / 利用規約</summary>
@@ -367,34 +391,43 @@ What does this mean? What is the 'R-hat' in the summary?</div>
         </div>
     </details>
 
+
     <h2>Changelog</h2>
     <div class="changelog">
-      <h3><span class="changelog-date">2026.04.11</span> v1.0.1</h3>
-      <ul>
-	<li>Fixed an issue where repeated launches could consume excessive disk space (Windows only).</li>
-      </ul>
-
-      <h3><span class="changelog-date">2026.04.3</span> v1.0.0</h3>
-      <ul>
-	<li>Implemented marginal effects plots (<code>ggeffects</code>, <code>conditional_effects</code>), making the results easier to visualize!</li>
-	<li>Added CI display to the fitted values in <code>brms</code>.</li>
-	<li>Added an "About" section to display version information.</li>
-	<li>Fixed a bug where the paste keyboard shortcut was not working in the Mac version.</li>
-      </ul>
-
-      <h3><span class="changelog-date">2026.03.25</span> v0.9.1</h3>
-      <ul>
-        <li>Drastically reduced memory consumption by running garbage collection (gc) at appropriate times.</li>
-        <li>Fixed an error that occurred when English locale users had non-ASCII characters in their usernames.</li>
+        <h3><span class="changelog-date">2026.07.13</span> v1.5.1</h3>
+        <ul>
+          <li>Added descriptive statistics.</li>
+	        <li>Added correlation analysis.</li>
+            	        <li>Added Glmnet.</li>
+                        <li>Added Bart2.</li>
         </ul>
-      
+
+
+        <h3><span class="changelog-date">2026.04.11</span> v1.0.1</h3>
+        <ul>
+	  <li>Fixed an issue where repeated launches could consume excessive disk space (Windows only).</li>
+        </ul>
+        <h3><span class="changelog-date">2026.04.3</span> v1.0.0</h3>
+        <ul>
+	  <li>Implemented marginal effects plots (<code>ggeffects</code>, <code>conditional_effects</code>), making the results easier to visualize!</li>
+	  <li>Added CI display to the fitted values in <code>brms</code>.</li>
+	  <li>Added an "About" section to display version information.</li>
+          <li>Fixed a bug where the paste keyboard shortcut was not working in the Mac version.</li>
+        </ul>
+
+        <h3><span class="changelog-date">2026.03.25</span> v0.9.1</h3>
+        <ul>
+          <li>Drastically reduced memory consumption by running garbage collection (gc) at appropriate times.</li>
+	  <li>Fixed an error that occurred when English locale users had non-ASCII characters in their usernames.</li>
+        </ul>
+
         <h3><span class="changelog-date">2026.03.23</span> v0.9.0</h3>
         <ul>
             <li>Now supports Mac!</li>
             <li>Now flexibly handles missing values!</li>
             <li>Added support for multiple comparisons in linear model families (using <code>emmeans</code>).</li>
-            <li><code>hypothesis</code> is now available in <code>brms</code>.</li>
-            <li>Sped up some <code>brms</code> models with pre-compilation.</li>
+	    <li><code>hypothesis</code> is now available in <code>brms</code>.</li>
+	    <li>Sped up some <code>brms</code> models with pre-compilation.</li>
         </ul>
 
         <h3><span class="changelog-date">2026.03.16</span> v0.8.0</h3>
@@ -409,7 +442,6 @@ What does this mean? What is the 'R-hat' in the summary?</div>
         <ul>
             <li>Alpha version implementing basic features like brms.</li>
         </ul>
-
     </div>
 
     <hr>
