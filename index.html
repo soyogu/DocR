@@ -134,22 +134,16 @@
 
     <h2>手早い診断、深い洞察。</h2>
 
-    <p>DocRは、brms等の強力なR分析をExcel上で手軽に実行できるツールです。分析初心者にもRのヘビーユーザーにも使いやすく設計されています。</p>
+    <p>DocRは、brms等の強力なR分析をExcel上で手軽に実行できるツールです。</p>
+    <p>「だれでも今日中にベイズ分析ユーザーになれる。」</p>
 
     <div class="pain-box">
         <p><strong>データ分析の「最初の一歩」をスムーズに</strong></p>
         <ul>
           <li>高度な統計モデルも直感的に実行できます。</li>
-	  <li>出力結果をAIに共有し、解釈や次の方針を相談する際のリファレンスになります。</li>
-	  <li>DocRは手軽なのでデータ分析に慣れ親しむことができます。</li>
+	  <li>Rのヘビーユーザーも納得の柔軟性。</li>
+	  <li>エクセルファイルをその場ですぐに分析。</li>
         </ul>
-        <p><strong>多様なデータを、その場で手早く</strong></p>
-	<ul>
-	  <li>色々な人から受け取る様々なデータに対してその場で構造を把握できます。</li>
-	  <li>本格的な解析の前の、予備分析や現状把握にかかる手間を省きます。</li>
-	  <li>Rのヘビーユーザーにも使いやすい柔軟性を持っています。</li>
-	</ul>
-
     </div>
 
 
@@ -182,20 +176,25 @@
 
     <h2>搭載している分析機能一覧</h2>
     <ul>
+        <li><strong>Describe (psych)</strong> - 記述統計・分布プロット表示（Ver 1.5以降）</li>
+        <li><strong>Correlation (cor)</strong> - 相関分析（ベイジアン相関・偏相関）（Ver 1.5以降）</li>
         <li><strong>Linear Regression (lm)</strong> - 単回帰・重回帰分析</li>
         <li><strong>GLM (glm)</strong> - 一般化線形モデル</li>
         <li><strong>ANOVA (afex)</strong> - 分散分析</li>
         <li><strong>Linear Mixed (lmer)</strong> - 線形混合モデル</li>
+        <li><strong>Elastic Net (glmnet)</strong> - 正則化回帰（Lasso/Ridge）（Ver 1.5以降）</li>
         <li><strong>Bayesian (brms)</strong> - ベイズ階層モデル</li>
+        <li><strong>BART (dbarts)</strong> - ベイジアン加法回帰木（非線形予測）（Ver 1.5以降）</li>
         <li><strong>Factor Analysis (fa/principal)</strong> - 探索的因子分析 / 主成分分析</li>
         <li><strong>SEM / CFA (lavaan)</strong> - 構造方程式モデリング / 確認的因子分析</li>
         <li><strong>LPA / LCA (tidyLPA/poLCA)</strong> - 潜在変数モデル</li>
-        <li><strong>テキスト分析（日本語のみ）</strong> - 対応分析・TF-IDFスコア・出現頻度・共起ネットワーク・ワードクラウド</li>
+        <li><strong>Text Mining（日本語専用）</strong> - 対応分析・TF-IDFスコア・出現頻度・共起ネットワーク・ワードクラウド</li>
     </ul>
 
         <div class="alert2-box">
-          <strong>Mac対応しました！</strong><br>
+          <strong>Mac対応しました！（しかし、今手元にMacがないため、Ver1で止まっています。）</strong><br>
 	</div>
+
 
 
     <h2>インストールガイド</h2>
@@ -205,50 +204,51 @@
     <h3>ステップ0：Dockerのインストール</h3>
     <p> <a href="https://www.docker.com/products/docker-desktop" target="_blank">Docker Desktopのダウンロードページ</a></p>
     <ul>
-      <li>[Download Deocer Desktop]という白いボタンからダウンロード。</li>
-      <li>インストール中のチェックボックスはデフォルトのままでOKです。</li>
-      <li>途中でユーザー登録を勧められる場面がありますが、「Skip」でOKです。</li>
+        <li>[Download Deocer Desktop]という白いボタンからダウンロード。</li>
+        <li>インストール中のチェックボックスはデフォルトのままでOKです。</li>
+        <li>途中でユーザー登録を勧められる場面がありますが、「Skip」でOKです。</li>
     </ul>
 
     <h3>ステップ1：DocRのインストール</h3>
     <p> <strong><a href="https://github.com/soyogu/DocR/releases/download/v1.0.1/DocR_Win_1_0_1.zip">Windows版：DocR_Win_1_0_1.zip をダウンロード </a></strong></p>
     <p> <strong><a href="https://github.com/soyogu/DocR/releases/download/v1.0.0/DocR_Mac_1_0_0.zip">Mac版：DocR_Mac_1_0_0.zip をダウンロード </a></strong></p>
     <ul>
-      <li>
-        展開したフォルダ内にある <code>Install_DocR.bat</code> （Macでは<code>Install_DocR_Mac.command</code>）を実行します。
-        
-        <details style="margin-top: 10px; background-color: #f8f9fa; padding: 10px; border-radius: 6px; border: 1px solid #e2e8f0;">
-          <summary style="cursor: pointer; font-weight: bold; color: #0056b3; font-size: 0.9em;">
-            Windowsで青い警告画面（PCが保護されました）が出た場合
-          </summary>
-          <p style="margin-top: 10px; margin-bottom: 0; font-size: 0.9em; line-height: 1.5;">
-            メッセージ内の<strong>「詳細情報」</strong>という文字をクリックし、右下に現れる<strong>「実行」</strong>ボタンを押してください。
-          </p>
-        </details>
-        
-        <details style="margin-top: 5px; background-color: #f8f9fa; padding: 10px; border-radius: 6px; border: 1px solid #e2e8f0;">
-          <summary style="cursor: pointer; font-weight: bold; color: #0056b3; font-size: 0.9em;">
-            Macで「開発元を検証できない」と警告が出た場合
-          </summary>
-          <p style="margin-top: 10px; margin-bottom: 0; font-size: 0.9em; line-height: 1.5;">
-            そのままダブルクリックせず、ファイルを<strong>右クリック（または Controlキー を押しながらクリック）</strong>し、表示されたメニューから<strong>「開く」</strong>を選択して実行してください。
-          </p>
-        </details>
+        <li>
+            展開したフォルダ内にある <code>Install_DocR.bat</code> （Macでは<code>Install_DocR_Mac.command</code>）を実行します。
+
+            <details style="margin-top: 10px; background-color: #f8f9fa; padding: 10px; border-radius: 6px; border: 1px solid #e2e8f0;">
+                <summary style="cursor: pointer; font-weight: bold; color: #0056b3; font-size: 0.9em;">
+                    Windowsで青い警告画面（PCが保護されました）が出た場合
+                </summary>
+                <p style="margin-top: 10px; margin-bottom: 0; font-size: 0.9em; line-height: 1.5;">
+                    メッセージ内の<strong>「詳細情報」</strong>という文字をクリックし、右下に現れる<strong>「実行」</strong>ボタンを押してください。
+                </p>
+            </details>
+
+            <details style="margin-top: 5px; background-color: #f8f9fa; padding: 10px; border-radius: 6px; border: 1px solid #e2e8f0;">
+                <summary style="cursor: pointer; font-weight: bold; color: #0056b3; font-size: 0.9em;">
+                    Macで「開発元を検証できない」と警告が出た場合
+                </summary>
+                <p style="margin-top: 10px; margin-bottom: 0; font-size: 0.9em; line-height: 1.5;">
+                    そのままダブルクリックせず、ファイルを<strong>右クリック（または Controlキー を押しながらクリック）</strong>し、表示されたメニューから<strong>「開く」</strong>を選択して実行してください。
+                </p>
+            </details>
         </li>
-      <li>「<code>DocR.xlam has been successfully installed.</code>」と表示されたら成功です。</li>
+        <li>「<code>DocR.xlam has been successfully installed.</code>」と表示されたら成功です。</li>
     </ul>
 
     <h3>ステップ2：Excelでのアドイン有効化</h3>
-    Windows
+    <p><strong>Windows</strong></p>
     <ol>
         <li>Excelの「ファイル」＞「オプション」＞「アドイン」をクリック。</li>
         <li>管理の「Excel アドイン」から「設定」ボタンを押し、「DocR」にチェックを入れます。</li>
     </ol>
-    Mac
+    <p><strong>Mac</strong></p>
     <p>何もせずにメニューに表示されます。</p>
 
-
     <h2>使い方</h2>
+        <h3>チュートリアル</h3>  
+        <p>下記のエクセルファイルに、様々な分析方法のデータ、インストラクション、結果、が記載されています。これをご覧いただければ何ができるか、どうすれば良いかお解りいただけます。</p>
     <h3>基本仕様</h3>
     <ul>
         <li><strong>基本操作:</strong> データのセル範囲を選択し、分析のボタンを押してください。</li>
@@ -392,6 +392,15 @@ Rのlmerで解析したいのですが、固定効果と変量効果には何を
 
     <h2>更新履歴</h2>
     <div class="changelog">
+        <h3><span class="changelog-date">2026.07.13</span> v1.5.1</h3>
+        <ul>
+          <li>記述統計追加。</li>
+	        <li>相関分析追加。    </li>
+            	        <li>Glmnet追加</li>
+                        <li>Bart2追加</li>
+        </ul>
+
+
         <h3><span class="changelog-date">2026.04.11</span> v1.0.1</h3>
         <ul>
 	  <li>繰り返し起動によるディスクスペースを圧迫するバグを修正しました（Windowsバージョンのみ）</li>

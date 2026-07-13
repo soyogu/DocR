@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-GH3W6HPQV9"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-GH3W6HPQV9');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DocR - Excelからベイズ統計（今日から使える最新統計ツール）</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="header-links">
+        <a href="en.html">English Page</a>
+    </div>
+
+    <div class="title-container">
+        <img src="images/logo.png" alt="DocR Logo" class="title-logo">
+        <h1>
+            <span class="doc-green">Doc</span><span class="r-blue">R</span>
+        </h1>
+    </div>
+
+    <nav class="global-nav">
+        <a href="index.html" class="nav-item active">ホーム</a>
+        <a href="download.html" class="nav-item">ダウンロード</a>
+        <a href="manuals/index.html" class="nav-item">マニュアル</a>
+        <a href="faq.html" class="nav-item">FAQ</a>
+    </nav>
+
+    <h2>手早い診断、深い洞察。</h2>
+    <p>DocRは、brms等の強力なR分析をExcel上で手軽に実行できるツールです。</p>
+    <p>「だれでも今日中にベイズ分析ユーザーになれる。」</p>
+
+    <div class="pain-box">
+        <p><strong>データ分析の「最初の一歩」をスムーズに</strong></p>
+        <ul>
+            <li>高度な統計モデルも直感的に実行。</li>
+            <li>Rのヘビーユーザーも納得の柔軟性。</li>
+            <li>エクセルファイルをその場ですぐに分析。</li>
+        </ul>
+    </div>
+
+    <h2>操作画面（Excelだけで完結します）</h2>
+    <p>普段お使いのExcelのリボンに「DocR」のメニューが追加されます。変数を選んでクリックするだけで、裏側でRが走り、結果が新しいシートに出力されます。</p>
+
+    <div style="width: 80%; max-width: 800px; margin: 0 auto;">
+        <iframe
+            src="https://www.youtube.com/embed/cGsTw-73b9M?si=RuBJTit3JATNoOD7&cc_load_policy=1&cc_lang_pref=ja&hl=ja&autoplay=1&mute=1"
+            style="width: 100%; aspect-ratio: 16/9;"
+            title="YouTube video player"
+            frameborder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            referrerpolicy="strict-origin-when-cross-origin"
+            allowfullscreen>
+        </iframe>
+    </div>
+
+<h2>搭載している分析機能一覧</h2>
+    <ul>
+        <li><strong>Describe (psych)</strong> - 記述統計・分布プロット表示（Ver 1.5以降）</li>
+        <li><strong>Correlation (cor)</strong> - 相関分析（ベイジアン相関・偏相関）（Ver 1.5以降）</li>
+        <li><strong>Linear Regression (lm)</strong> - 単回帰・重回帰分析</li>
+        <li><strong>GLM (glm)</strong> - 一般化線形モデル</li>
+        <li><strong>ANOVA (afex)</strong> - 分散分析</li>
+        <li><strong>Linear Mixed (lmer)</strong> - 線形混合モデル</li>
+        <li><strong>Elastic Net (glmnet)</strong> - 正則化回帰（Lasso/Ridge）（Ver 1.5以降）</li>
+        <li><strong>Bayesian (brms)</strong> - ベイズ階層モデル</li>
+        <li><strong>BART (dbarts)</strong> - ベイジアン加法回帰木（非線形予測）（Ver 1.5以降）</li>
+        <li><strong>Factor Analysis (fa/principal)</strong> - 探索的因子分析 / 主成分分析</li>
+        <li><strong>SEM / CFA (lavaan)</strong> - 構造方程式モデリング / 確認的因子分析</li>
+        <li><strong>LPA / LCA (tidyLPA/poLCA)</strong> - 潜在変数モデル</li>
+        <li><strong>Text Mining（日本語専用）</strong> - 対応分析・TF-IDFスコア・出現頻度・共起ネットワーク・ワードクラウド</li>
+    </ul>
+
+    <div class="alert2-box">
+        <strong>Mac対応しました！（しかし現在手元にMacが無いためMac版は旧バージョンで止まっています	。）</strong><br>
+    </div>
+
+
+
+
+    <h2>更新履歴</h2>
+    <div class="changelog">
+        <h3><span class="changelog-date">2026.04.11</span> v1.0.1</h3>
+        <ul>
+            <li>繰り返し起動によるディスクスペースを圧迫するバグを修正しました（Windowsバージョンのみ）</li>
+        </ul>
+        <h3><span class="changelog-date">2026.04.3</span> v1.0.0</h3>
+        <ul>
+            <li>限界効果プロット（<code>ggeffects</code>, <code>conditional_effects</code>）を実装して結果が見やすくなりました!</li>
+            <li><code>brms</code>の当てはめ値にCIを表示するようにしました。</li>
+            <li>バージョン情報の表示(「About」)を付けました。</li>
+            <li>Mac版のペーストのショートカットキーが効かなかったバグを修正しました。</li>
+        </ul>
+        <h3><span class="changelog-date">2026.03.25</span> v0.9.1</h3>
+        <ul>
+            <li>適切なタイミングでgcを回すことでメモリ消費量を激減させました。</li>
+            <li>英語ロケールのユーザーが非ASCIIユーザー名を使った時にエラーになるのを解消しました。</li>
+        </ul>
+        <h3><span class="changelog-date">2026.03.23</span> v0.9.0</h3>
+        <ul>
+            <li>Mac対応しました！</li>
+            <li>欠損値があっても柔軟に対応できるようになりました！</li>
+            <li>線形モデル族で多重比較できるようになりました（<code>emmeans</code>）。</li>
+            <li><code>brms</code>で<code>hypothesis</code>使用可能に。</li>
+            <li><code>brms</code>にいくつかのモデルは事前コンパイル搭載により高速化。</li>
+        </ul>
+        <h3><span class="changelog-date">2026.03.16</span> v0.8.0</h3>
+        <ul>
+            <li>マルチリンガル（日本語・英語）対応になりました！</li>
+            <li>テキスト分析機能を追加（日本語のみ）。</li>
+            <li>SEM、CFA、潜在変数モデル（LPA/LCA）にフル対応。</li>
+            <li>探索的因子分析（fa）と構造方程式モデリング（SEM）に対応。</li>
+        </ul>
+        <h3><span class="changelog-date">2026.03.13</span> v0.1.0 初公開</h3>
+        <ul>
+            <li>brmsなど基本的な機能を実装したアルファ版。</li>
+        </ul>
+    </div>
+
+    <hr>
+    <section style="font-size: 0.85em; color: #666; margin-top: 50px;">
+        <h3>プライバシーポリシー</h3>
+        <p>
+            <strong>アクセス解析ツールについて</strong><br>
+            当サイトでは、利用状況の把握とサービスの向上のため、Googleによるアクセス解析ツール「Googleアナリティクス」を利用しています。このGoogleアナリティクスはデータの収集のためにCookieを使用していますが、データは匿名で収集されており、個人を特定するものではありません。Google社のデータ収集・処理の仕組みについては、<a href="https://policies.google.com/technologies/partner-sites" target="_blank" style="color: #666;">Googleのポリシーと規約</a>をご覧ください。
+        </p>
+    </section>
+<!-- ここからミニマルフッター -->
+    <footer class="site-footer">
+
+        <div class="footer-copyright">
+            &copy; 2026 Soyogu Matsushita. All rights reserved. | DocR v1.0.1
+        </div>
+    </footer>
+    <!-- フッターここまで -->
+</body>
+</html>

@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-GH3W6HPQV9"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-GH3W6HPQV9');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ダウンロード＆インストール - DocR</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="header-links">
+        <a href="en.html">English Page</a>
+    </div>
+
+    <div class="title-container">
+        <img src="images/logo.png" alt="DocR Logo" class="title-logo">
+        <h1>
+            <span class="doc-green">Doc</span><span class="r-blue">R</span>
+        </h1>
+    </div>
+
+    <nav class="global-nav">
+        <a href="index.html" class="nav-item">ホーム</a>
+        <a href="download.html" class="nav-item active">ダウンロード</a>
+        <a href="manuals/index.html" class="nav-item">マニュアル</a>
+        <a href="faq.html" class="nav-item">FAQ</a>
+    </nav>
+
+    <h2>インストールガイド</h2>
+    <p><span class="blue-check">✔</span> はじめにDockerをインストールし、その後でこのDocRをインストールする順序になります。</p>
+    <p><span class="blue-check">✔</span> もしあなたがすでにRをインストールしていても、その環境には一切干渉しません。</p>
+
+    <h3>ステップ0：Dockerのインストール</h3>
+    <p> <a href="https://www.docker.com/products/docker-desktop" target="_blank">Docker Desktopのダウンロードページ</a></p>
+    <ul>
+        <li>[Download Deocer Desktop]という白いボタンからダウンロード。</li>
+        <li>インストール中のチェックボックスはデフォルトのままでOKです。</li>
+        <li>途中でユーザー登録を勧められる場面がありますが、「Skip」でOKです。</li>
+    </ul>
+
+    <h3>ステップ1：DocRのインストール</h3>
+    <p> <strong><a href="https://github.com/soyogu/DocR/releases/download/v1.0.1/DocR_Win_1_0_1.zip">Windows版：DocR_Win_1_0_1.zip をダウンロード </a></strong></p>
+    <p> <strong><a href="https://github.com/soyogu/DocR/releases/download/v1.0.0/DocR_Mac_1_0_0.zip">Mac版：DocR_Mac_1_0_0.zip をダウンロード </a></strong></p>
+    <ul>
+        <li>
+            展開したフォルダ内にある <code>Install_DocR.bat</code> （Macでは<code>Install_DocR_Mac.command</code>）を実行します。
+
+            <details style="margin-top: 10px; background-color: #f8f9fa; padding: 10px; border-radius: 6px; border: 1px solid #e2e8f0;">
+                <summary style="cursor: pointer; font-weight: bold; color: #0056b3; font-size: 0.9em;">
+                    Windowsで青い警告画面（PCが保護されました）が出た場合
+                </summary>
+                <p style="margin-top: 10px; margin-bottom: 0; font-size: 0.9em; line-height: 1.5;">
+                    メッセージ内の<strong>「詳細情報」</strong>という文字をクリックし、右下に現れる<strong>「実行」</strong>ボタンを押してください。
+                </p>
+            </details>
+
+            <details style="margin-top: 5px; background-color: #f8f9fa; padding: 10px; border-radius: 6px; border: 1px solid #e2e8f0;">
+                <summary style="cursor: pointer; font-weight: bold; color: #0056b3; font-size: 0.9em;">
+                    Macで「開発元を検証できない」と警告が出た場合
+                </summary>
+                <p style="margin-top: 10px; margin-bottom: 0; font-size: 0.9em; line-height: 1.5;">
+                    そのままダブルクリックせず、ファイルを<strong>右クリック（または Controlキー を押しながらクリック）</strong>し、表示されたメニューから<strong>「開く」</strong>を選択して実行してください。
+                </p>
+            </details>
+        </li>
+        <li>「<code>DocR.xlam has been successfully installed.</code>」と表示されたら成功です。</li>
+    </ul>
+
+    <h3>ステップ2：Excelでのアドイン有効化</h3>
+    <p><strong>Windows</strong></p>
+    <ol>
+        <li>Excelの「ファイル」＞「オプション」＞「アドイン」をクリック。</li>
+        <li>管理の「Excel アドイン」から「設定」ボタンを押し、「DocR」にチェックを入れます。</li>
+    </ol>
+    <p><strong>Mac</strong></p>
+    <p>何もせずにメニューに表示されます。</p>
+
+<!-- ここからミニマルフッター -->
+    <footer class="site-footer">
+        <div class="footer-copyright">
+            &copy; 2026 Soyogu Matsushita. All rights reserved. | DocR v1.0.1
+        </div>
+    </footer>
+    <!-- フッターここまで -->
+</body>
+</html>

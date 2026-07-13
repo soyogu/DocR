@@ -1,0 +1,182 @@
+/* ページ全体の基本設定 */
+body {
+    font-family: "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo, sans-serif;
+    line-height: 1.6;
+    color: #333;
+    max-width: 1000px; 
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #fcfcfc;
+}
+
+/* タイトルエリア（ロゴと文字の横並び） */
+.title-container {
+    display: flex;
+    align-items: center; /* 垂直中央揃え */
+    gap: 30px;          /* 文字と画像の間隔 */
+    border-bottom: 2px solid #3498db; /* 線を#333(黒)から#3498db(青)に変更 */
+    padding-bottom: 20px;
+    margin-top: 20px;
+    margin-bottom: 20px; /* 新しく追加：下にあるalert2-boxとの間に余白を作る */
+    flex-wrap: wrap;    /* 画面が狭い時に折り返す */
+}
+
+h1 { 
+    font-size: 5em;     /* 巨大な文字サイズ */
+    margin: 0;
+    line-height: 1;
+}
+
+/* Doc (Excel Green) / R (R Blue) */
+.doc-green { color: #217346; }
+.r-blue { color: #276dc2; }
+
+.title-logo {
+    width: 300px;
+    height: 150px;
+    object-fit: contain; /* アスペクト比を維持 */
+}
+
+.blue-check {
+    color: #276dc2; /* R blue */
+    font-weight: bold;
+}
+.green-check {
+    color: #217346; /* Excel green */
+    font-weight: bold;
+}
+
+/* 見出しのデザイン */
+h2 { font-size: 1.8em; color: #2c3e50; border-left: 8px solid #3498db; padding-left: 15px; margin-top: 60px; margin-bottom: 25px; }
+h3 { font-size: 1.3em; color: #34495e; margin-top: 35px; border-bottom: 1px dashed #ccc; padding-bottom: 8px; }
+
+/* テキストとリスト */
+p { margin-bottom: 18px; }
+ul, ol { margin-bottom: 25px; padding-left: 25px; }
+li { margin-bottom: 10px; }
+a { color: #0066cc; text-decoration: none; font-weight: bold; }
+a:hover { text-decoration: underline; }
+
+/* ボックス装飾 */
+.alert-box { background-color: #fff5f5; border: 1px solid #e74c3c; padding: 15px; border-radius: 5px; margin-bottom: 20px; }
+.alert2-box { background-color: #e8f4fd; border: 1px solid #e74c3c; padding: 15px; border-radius: 5px; margin-bottom: 20px; }
+.pain-box { background-color: #e8f4fd; border-left: 5px solid #b6d4fe; padding: 20px; margin: 30px 0; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+.pain-box ul { list-style-type: none; padding-left: 0; }
+.pain-box li::before { content: "☑ "; color: #e74c3c; font-weight: bold; }
+
+.hero-message { font-size: 1.6em; font-weight: bold; color: #2c3e50; text-align: center; margin: 40px 0; line-height: 1.5; }
+.hero-message span { color: #3498db; border-bottom: 4px solid #f1c40f; }
+
+.prompt-box { background-color: #f4f6f7; border-left: 4px solid #3498db; padding: 15px; margin: 15px 0 30px 0; font-family: 'Consolas', monospace; white-space: pre-wrap; font-size: 0.95em; }
+
+/* 画像ギャラリー */
+.screenshot-grid { display: flex; gap: 20px; margin: 30px 0; flex-wrap: wrap; }
+.screenshot-grid img { flex: 1; min-width: 400px; max-width: 100%; height: auto; border: 1px solid #ddd; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+
+/* FAQ 用アコーディオン */
+details { background-color: #fff; border: 1px solid #ddd; border-radius: 5px; margin-bottom: 12px; padding: 18px; }
+summary { font-weight: bold; cursor: pointer; color: #2c3e50; font-size: 1.1em; list-style: none; position: relative; padding-left: 30px; }
+summary::before { content: "Q."; position: absolute; left: 0; color: #3498db; font-weight: 900; }
+details p { margin: 15px 0 0 0; padding-top: 15px; border-top: 1px dashed #eee; color: #444; }
+
+/* 利用規約 用アコーディオン（FAQのスタイルを上書き） */
+details.license-details { background-color: #fafafa; border: 1px solid #ccc; padding: 20px; font-size: 0.85em; margin-bottom: 40px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); margin-top: 30px; }
+summary.license-summary { font-size: 1.2em; color: #333; padding-left: 5px; border-bottom: 1px solid #ddd; padding-bottom: 10px; margin-bottom: 15px; }
+summary.license-summary::before { content: "📄 "; position: static; color: inherit; font-weight: normal; }
+details.license-details p { border-top: none; padding-top: 0; margin: 0 0 10px 0; color: #555; }
+details.license-details h4 { font-size: 1.15em; color: #444; border-bottom: 1px solid #eee; padding-bottom: 5px; margin-top: 25px; margin-bottom: 15px; }
+details.license-details strong { display: inline-block; margin-top: 10px; color: #333; }
+details.license-details ul { margin-top: 5px; margin-bottom: 15px; padding-left: 20px; color: #555; }
+details.license-details li { margin-bottom: 5px; }
+
+/* その他レイアウト */
+.header-links { text-align: right; margin-bottom: 20px; }
+.support-box { background-color: #fff3cd; border: 1px solid #ffeeba; padding: 15px; border-radius: 5px; margin: 30px 0; text-align: center; }
+.changelog { background-color: #f9f9f9; border: 1px solid #eee; padding: 25px; border-radius: 5px; margin-top: 50px; }
+.changelog h3 { margin-top: 0; border-bottom: none; }
+.changelog-date { font-weight: bold; color: #3498db; margin-right: 15px; }
+
+/* --- マニュアルページ用の追加スタイル --- */
+.breadcrumb {
+    margin-bottom: 20px;
+    font-size: 0.9em;
+    color: #666;
+}
+.breadcrumb a {
+    color: #3498db;
+    text-decoration: none;
+}
+.breadcrumb a:hover {
+    text-decoration: underline;
+}
+.manual-content {
+    background-color: #fff;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    margin-top: 20px;
+}
+
+/* --- グローバルナビゲーション --- */
+.global-nav {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 40px; /* 下の見出しとの間にゆとりを持たせる */
+    flex-wrap: wrap;     /* スマホ等で画面が狭い時に自動で折り返す */
+}
+
+.nav-item {
+    display: flex;
+    align-items: center;
+    padding: 10px 25px;
+    background-color: #e8f4fd; /* 既存のalert2-boxと同じ爽やかな薄い青 */
+    color: #276dc2;            /* R-blueで統一感 */
+    text-decoration: none;
+    font-weight: bold;
+    border-radius: 30px;       /* モダンなピル（角丸）形状 */
+    transition: all 0.3s ease; /* ホバー時のアニメーションを滑らかに */
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05); /* ほんのり影をつける */
+}
+
+.nav-item:hover {
+    background-color: #3498db; /* ホバーで少し明るい青に */
+    color: #fff;
+    text-decoration: none;
+    box-shadow: 0 4px 8px rgba(52, 152, 219, 0.3);
+    transform: translateY(-2px); /* マウスを乗せると2pxだけフワッと浮き上がる */
+}
+
+/* 現在いるページ（アクティブ状態） */
+.nav-item.active {
+    background-color: #2c3e50; /* ダークネイビーで現在地をしっかり示す */
+    color: #fff;
+    box-shadow: none;
+}
+
+/* --- ミニマルフッター --- */
+.site-footer {
+    background-color: #2c3e50; /* ダークネイビー */
+    color: #bdc3c7;
+    padding: 20px;
+    margin-top: 60px;
+    text-align: center;
+    font-size: 0.9em;
+}
+
+.site-footer a {
+    color: #ecf0f1;
+    text-decoration: none;
+    margin: 0 15px; /* リンク同士の間隔 */
+    font-weight: bold;
+    transition: color 0.3s ease;
+}
+
+.site-footer a:hover {
+    color: #3498db; /* ホバーで青く光る */
+}
+
+.footer-copyright {
+    margin-top: 15px;
+    font-size: 0.85em;
+    color: #7f8c8d;
+}

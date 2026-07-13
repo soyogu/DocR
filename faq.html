@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-GH3W6HPQV9"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-GH3W6HPQV9');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FAQ・サポート - DocR</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="header-links">
+        <a href="en.html">English Page</a>
+    </div>
+
+    <div class="title-container">
+        <img src="images/logo.png" alt="DocR Logo" class="title-logo">
+        <h1>
+            <span class="doc-green">Doc</span><span class="r-blue">R</span>
+        </h1>
+    </div>
+
+    <nav class="global-nav">
+        <a href="index.html" class="nav-item">ホーム</a>
+        <a href="download.html" class="nav-item">ダウンロード</a>
+        <a href="manuals/index.html" class="nav-item">マニュアル</a>
+        <a href="faq.html" class="nav-item active">FAQ</a>
+    </nav>
+
+    <h2>よくある質問（FAQ）</h2>
+    <details>
+        <summary>無料で使えますか？</summary>
+        <p>はい、完全に無料でご利用いただけます。研究・教育の発展を目的としています。</p>
+    </details>
+
+    <details>
+        <summary>複雑なモデルも扱えますか？</summary>
+        <p>モデル式のテキストエリアを直接編集できるので上級者も思うままのモデルを扱えます。</p>
+    </details>
+
+    <details>
+        <summary>Mac版はありますか？</summary>
+        <p>はい。しかし人から借りたMacでなんとか開発したので、自分の作業用のMacを買わなければ・・・。</p>
+    </details>
+
+    <details>
+        <summary>なぜDocRは既存のR環境と競合しないのですか？</summary>
+        <p>DocRは、あなたのコンピュータのOSに直接Rをインストールするのではなく、「Dockerコンテナ」という独立した隔離空間の中でRを動かすからです。またそれゆえ、ライブラリの依存関係やバージョンの不一致に悩む心配もありません。</p>
+    </details>
+
+    <details>
+        <summary>はじめに立ち上がる青いウィンドウは何ですか？</summary>
+        <p>バックエンドに使われているDockerのウインドウです。立ち上がった後に閉じていただいても大丈夫です。</p>
+    </details>
+
+    <details>
+        <summary>論文での引用方法（Citation）を教えてください</summary>
+        <p>以下の形式で引用していただけますと幸いです。<br>
+        Matsushita, S. (2026). DocR: An Excel Gateway to Containerized R Environments. https://researchmap.jp/multidatabases/multidatabase_contents/detail/250145/1fcd545ec0b04eee0fe5cd87492c19bb?frame_id=710763</p>
+    </details>
+
+    <details>
+        <summary>誰が開発していますか？</summary>
+        <p><a href="https://researchmap.jp/soyogu" target="_blank">とある日本人研究者</a> が開発しています。</p>
+    </details>
+
+    <details>
+        <summary>不具合を発見したのですがどうすれば良い？</summary>
+        <p>どうぞ<a href="https://docs.google.com/forms/d/e/1FAIpQLSdA2CFIqM3h8nqi3Nrt435hap4EHg96t00YKLP6SmPmq-GMVA/viewform?usp=header">報告フォーム</a>からお知らせください。</p>
+    </details>
+
+    <div style="margin-top: 50px; padding: 20px; background-color: #f8f9fa; border-radius: 8px; text-align: center;">
+        <h3>バグ報告・フィードバック</h3>
+        <p style="margin-bottom: 20px;">
+            DocRの品質向上のため、不具合のご報告や機能のご要望をお待ちしております。<br>
+        </p>
+        <a href="https://docs.google.com/forms/d/e/1FAIpQLSdA2CFIqM3h8nqi3Nrt435hap4EHg96t00YKLP6SmPmq-GMVA/viewform?usp=header" target="_blank" rel="noopener noreferrer" style="display: inline-block; padding: 12px 24px; margin: 5px 10px; background-color: #0056b3; color: white; text-decoration: none; border-radius: 5px; font-weight: bold;">
+            報告フォーム
+        </a>
+    </div>
+
+    <details class="license-details">
+        <summary class="license-summary">利用規約 / Terms of Use</summary>
+        
+        <div style="margin-bottom: 30px;">
+            <h4 style="margin-top: 5px;">Terms of Use (English Version)</h4>
+            <p>Thank you for using "DocR". By downloading or using this software, you agree to the following terms.</p>
+
+            <strong>1. Grant of License</strong>
+            <p>This software is provided free of charge for academic research, educational, and personal use only. This includes non-commercial research activities within private research institutions.</p>
+
+            <strong>2. Prohibitions</strong>
+            <p>Please respect the current format of the software (e.g., locked VBA project). The following actions are strictly prohibited:</p>
+            <ul>
+                <li>Attempting to view, modify, reverse-engineer, or unlock the source code of this software.</li>
+                <li>Redistributing, sublicensing, or selling all or part of this software without prior permission from the developer.</li>
+                <li>Creating and publishing commercial content (including monetized instructional videos, paid seminars, or publications) where the primary content is the operation or utilization of this software.</li>
+                <li>Using the software for commercial purposes (please contact the developer if you wish to do so).</li>
+            </ul>
+
+            <strong>3. Disclaimer of Warranty and Liability</strong>
+            <p>This software is provided "as is", without warranty of any kind, express or implied. In no event shall the developer be liable for any claim, damages, or other liability, including data loss or business interruption, arising from, out of, or in connection with the software or the use or other dealings in the software. Users are responsible for verifying the validity of their analysis results.</p>
+
+            <strong>4. Copyright</strong>
+            <p>All copyrights and intellectual property rights related to this software are retained by the developer (Soyogu Matsushita).</p>
+
+            <p>Date of Enactment: March 17, 2026<br>
+            Applicable Version: DocR v0.8</p>
+        </div>
+
+        <div>
+            <h4>利用規約（日本語版）</h4>
+            <p>本ソフトウェア「DocR」をご利用いただきありがとうございます。本ソフトウェアをダウンロードまたは利用することにより、以下の条項に同意したものとみなされます。</p>
+
+            <strong>1. 利用許諾</strong>
+            <p>本ソフトウェアは、学術研究、教育、および個人利用の目的に限り、無償でご利用いただけます。民間企業の研究所等における非営利目的の研究活動での利用もこれに含まれます。</p>
+
+            <strong>2. 禁止事項</strong>
+            <p>本ソフトウェアの提供形態（VBAプロジェクトの保護など）を尊重し、以下の行為を禁止します。</p>
+            <ul>
+                <li>本ソフトウェアのソースコードの閲覧、改変、リバースエンジニアリング、または保護の解除を試みること。</li>
+                <li>本ソフトウェアの一部または全部を、開発者の許可なく再配布、二次配布、または販売すること。</li>
+                <li>本ソフトウェアの操作方法や活用方法を主たるコンテンツとした、営利目的の講習、解説動画の公開、または出版（広告収益が発生するものを含む）。</li>
+                <li>商用目的での利用（ご希望の場合は別途ご連絡ください）。</li>
+            </ul>
+
+            <strong>3. 免責事項</strong>
+            <p>本ソフトウェアは「現状のまま」提供され、明示または黙示を問わず、いかなる保証も行いません。本ソフトウェアの利用に関連して生じたデータの損失、業務の停止、その他のいかなる損害についても、開発者は一切の責任を負いません。分析結果の妥当性については、利用者自身の責任においてご確認ください。</p>
+
+            <strong>4. Copyright</strong>
+            <p>本ソフトウェアに関するすべての著作権および知的財産権は、開発者（松下戦具）に帰属します。</p>
+
+            <p>制定日：2026年3月17日<br>
+            適用バージョン：DocR v0.8</p>
+        </div>
+    </details>
+
+</body>
+</html>

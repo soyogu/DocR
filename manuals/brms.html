@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ベイズ推定（brms） - DocR Manual</title>
+    <!-- 1つ上の階層のCSSを読み込む -->
+    <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+
+    <div class="header-links">
+        <!-- クリックすると、URLの「.html」を「_en.html」に自動置換してジャンプする -->
+        <a href="#" onclick="location.href = window.location.pathname.replace('.html', '_en.html'); return false;">English Page</a>
+    </div>
+
+    <div class="title-container" style="border-bottom:none; padding-bottom:0; margin-bottom: 0;">
+        <h1>
+            <span class="doc-green">Doc</span><span class="r-blue">R</span>
+        </h1>
+        <span style="font-size: 1.5em; font-weight: bold; color: #2c3e50;">マニュアル</span>
+    </div>
+
+    <!-- グローバルナビゲーション -->
+    <nav class="global-nav">
+        <a href="../index.html" class="nav-item">ホーム</a>
+        <a href="../download.html" class="nav-item">ダウンロード</a>
+        <a href="index.html" class="nav-item active">マニュアル</a>
+        <a href="../faq.html" class="nav-item">FAQ</a>
+    </nav>
+
+    <!-- パンくずリスト -->
+    <div class="breadcrumb">
+        <a href="index.html">マニュアル一覧</a> > ベイズ推定（brms）
+    </div>
+
+    <!-- コンテンツ枠 -->
+    <div class="manual-content">
+        <h2>ベイズ推定（brms）</h2>
+        <p>個人差などのばらつきを考慮しながら、柔軟かつ強力にデータをモデリングします。</p>
+
+        <h3 style="margin-top: 40px;">1. サンプルデータと分析の目的</h3>
+        <p><a href="../data/sleepstudy.csv">📥 サンプルデータ（sleepstudy.csv）をダウンロード</a></p>
+        <ul>
+            <li><strong>データの内容：</strong> 睡眠不足が「反応時間」に与える影響を調べた有名なデータセットです。睡眠不足の日数（<code>Days</code>）、反応時間（<code>Reaction</code>）、被験者ID（<code>Subject</code>）が含まれています。</li>
+            <li><strong>分析の目的：</strong> 睡眠不足の日数（Days）が増えるにつれて反応時間（Reaction）がどう変化するかを、<strong>「被験者（Subject）ごとのベースラインの個人差」</strong>を考慮に入れながら分析します。</li>
+        </ul>
+
+        <h3 style="margin-top: 40px;">2. DocRでの操作ステップ</h3>
+        
+        <div class="alert-box">
+            <strong>💡 【重要】欠損値（空欄）の扱いについて</strong><br>
+            データ内に空白セルがあると、DocRは自動で警告を出します。計算時には、「目的変数(Y)または説明変数(X)のいずれかが欠損している行」は自動的に除外（リストワイズ削除）されて安全に学習が行われます。
+        </div>
+
+        <p><strong>【基本の分析手順（Mainタブ）】</strong></p>
+        <ol>
+            <li>Excel上でデータのセル範囲（変数名を含む）を選択し、DocRリボンから「brms」をクリックします。</li>
+            <li>「Main」タブで、中央の矢印ボタン（<code>&lt;</code>, <code>&gt;</code>）を使って以下のように変数をセットします。
+                <ul>
+                    <li><strong>目的変数:</strong> <code>Reaction</code> （予測したい変数）</li>
+                    <li><strong>固定効果:</strong> <code>Days</code> （全体に共通する影響を調べたい変数）</li>
+                    <li><strong>変量効果 (グループ化):</strong> <code>Subject</code> （個人差を吸収させたい変数）</li>
+                </ul>
+            </li>
+            <li>下部の設定（family: gaussian, Chains: 4, Iter: 2000など）は基本的にはデフォルトのままでOKです。</li>
+            <li>「実行」ボタンを押します。<br>
+            <span style="font-size: 0.9em; color: #666;">※MCMCサンプリングの計算には数分かかる場合があり、その間Excelは待機状態になりますが正常に動作しています。完了するとダイアログと音でお知らせします。</span></li>
+        </ol>
+
+        <!-- ★スクショを配置する場所 -->
+        <div style="margin: 20px 0;">
+            <img src="../images/brms_main.png" alt="brmsの操作画面" style="max-width: 100%; border: 1px solid #ddd; border-radius: 5px;">
+        </div>
+
+        <p><strong>【さらに高度な分析（追加機能）】</strong></p>
+        <ul>
+            <li><strong>多重比較（Post-hoc）を行いたい場合:</strong><br>
+            「Post-hoc」タブを開き、右側の変数リストから要因を選んで <code>&lt;&lt;</code> ボタンを押します。指定した要因の各水準間で、事後分布に基づく正確な多重比較（emmeans）が自動実行されます。</li>
+            <li><strong>仮説検証（Hypothesis）を行いたい場合:</strong><br>
+            同じく「Post-hoc」タブの仮説検定欄に、具体的な数式（例: <code>Days > 0</code> や <code>A = B</code>）を入力すると、「その仮説が成り立つ確率は何％か？」を直接検証できます。</li>
+            <li><strong>目的変数を予測したい場合（予測値の出力）:</strong><br>
+            「Main」タブ左下の<strong>「予測値・残差を出力する」</strong>にチェックを入れてください。もしExcelデータの中に「目的変数(Y)は空欄だが、説明変数(X)は入力されている行」があった場合、モデルがその空欄に対する予測値と「95%信用区間（変動範囲）」を自動計算して出力します。</li>
+        </ul>
+
+        <h3 style="margin-top: 40px;">3. 結果の解釈</h3>
+        <p>AIに貼り付けてください。</p>
+
+
+
+    </div>
+<footer class="site-footer">
+        <div class="footer-copyright">
+            &copy; 2026 Soyogu Matsushita. All rights reserved. | DocR v1.0.1
+        </div>
+    </footer>
+</body>
+</html>
