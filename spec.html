@@ -1,0 +1,1844 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-GH3W6HPQV9"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-GH3W6HPQV9');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="DocR v1.9.0 の公式技術仕様書・応用リファレンス。Docker化されたR 4.3.2統計基盤、全13分析モジュールの計算仕様・デフォルト引数・カスタム数式レシピを解説。">
+    <title>DocR v1.9.0 技術仕様書・応用リファレンス | Technical Specification</title>
+    <style>
+:root {
+    --doc-green: #217346;
+    --r-blue: #276dc2;
+    --accent-blue: #3498db;
+    --heading-dark: #2c3e50;
+    --heading-sub: #34495e;
+    --text-main: #2b3440;
+    --text-muted: #5a6778;
+    --bg-page: #f7f9fc;
+    --bg-surface: #ffffff;
+    --border-light: #e2e8f0;
+    --header-height: 64px;
+    --sidebar-width: 300px;
+}
+
+*, *::before, *::after {
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+    font-size: 16px;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo, sans-serif;
+    line-height: 1.72;
+    color: var(--text-main);
+    background-color: var(--bg-page);
+    -webkit-font-smoothing: antialiased;
+}
+
+/* Sticky Top Header */
+.site-header {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    height: var(--header-height);
+    background: rgba(255, 255, 255, 0.97);
+    backdrop-filter: blur(8px);
+    border-bottom: 2px solid var(--accent-blue);
+    box-shadow: 0 2px 8px rgba(44, 62, 80, 0.06);
+}
+
+.header-inner {
+    max-width: 1400px;
+    height: 100%;
+    margin: 0 auto;
+    padding: 0 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.header-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-width: 0;
+}
+
+.brand-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+    color: inherit;
+}
+
+.brand-link:hover {
+    text-decoration: none;
+    opacity: 0.92;
+}
+
+.header-logo {
+    height: 38px;
+    width: auto;
+    object-fit: contain;
+    flex-shrink: 0;
+}
+
+.brand-wordmark {
+    font-size: 1.65rem;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    line-height: 1;
+}
+
+.doc-green { color: var(--doc-green); }
+.r-blue { color: var(--r-blue); }
+
+.brand-badge {
+    display: inline-block;
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: var(--r-blue);
+    background: #e8f4fd;
+    border: 1px solid #b6d4fe;
+    padding: 3px 10px;
+    border-radius: 999px;
+    white-space: nowrap;
+}
+
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-shrink: 0;
+}
+
+.btn-home,
+.btn-lang {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 7px 14px;
+    border-radius: 6px;
+    font-size: 0.86rem;
+    font-weight: 700;
+    text-decoration: none;
+    transition: all 0.18s ease;
+    white-space: nowrap;
+}
+
+.btn-home {
+    color: var(--heading-dark);
+    background: #f1f5f9;
+    border: 1px solid #cbd5e1;
+}
+
+.btn-home:hover {
+    background: #e2e8f0;
+    text-decoration: none;
+}
+
+.btn-lang {
+    color: #ffffff;
+    background: var(--r-blue);
+    border: 1px solid var(--r-blue);
+}
+
+.btn-lang:hover {
+    background: #1d5aa6;
+    border-color: #1d5aa6;
+    text-decoration: none;
+}
+
+.mobile-toc-btn {
+    display: none;
+    align-items: center;
+    gap: 6px;
+    padding: 7px 11px;
+    font-size: 0.86rem;
+    font-weight: 700;
+    color: var(--heading-dark);
+    background: #f1f5f9;
+    border: 1px solid #cbd5e1;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.mobile-toc-btn:hover {
+    background: #e2e8f0;
+}
+
+/* Two-Column Layout */
+.spec-layout {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 24px 20px 48px;
+    display: grid;
+    grid-template-columns: var(--sidebar-width) minmax(0, 1fr);
+    gap: 28px;
+    align-items: start;
+}
+
+/* Sticky Left Sidebar TOC */
+.toc-sidebar {
+    position: sticky;
+    top: calc(var(--header-height) + 16px);
+    max-height: calc(100vh - var(--header-height) - 32px);
+    display: flex;
+    flex-direction: column;
+    background: var(--bg-surface);
+    border: 1px solid var(--border-light);
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04);
+    overflow: hidden;
+}
+
+.toc-header {
+    padding: 14px 14px 10px;
+    border-bottom: 1px solid var(--border-light);
+    background: #fbfcfe;
+    flex-shrink: 0;
+}
+
+.toc-title-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 8px;
+}
+
+.toc-title {
+    font-size: 0.82rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--heading-dark);
+}
+
+.toc-close-btn {
+    display: none;
+    background: none;
+    border: none;
+    font-size: 1.3rem;
+    line-height: 1;
+    color: var(--text-muted);
+    cursor: pointer;
+    padding: 2px 6px;
+}
+
+.toc-search-wrap {
+    position: relative;
+}
+
+.toc-search-input {
+    width: 100%;
+    padding: 7px 10px;
+    font-size: 0.84rem;
+    font-family: inherit;
+    color: var(--text-main);
+    background: #ffffff;
+    border: 1px solid #cbd5e1;
+    border-radius: 6px;
+    outline: none;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.toc-search-input:focus {
+    border-color: var(--accent-blue);
+    box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.16);
+}
+
+.toc-nav {
+    overflow-y: auto;
+    padding: 10px 10px 16px;
+    flex: 1;
+}
+
+.toc-list,
+.toc-sublist {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.toc-group {
+    margin-bottom: 4px;
+}
+
+.toc-sublist {
+    margin: 2px 0 6px 10px;
+    padding-left: 10px;
+    border-left: 1px solid #e2e8f0;
+}
+
+.toc-link {
+    display: block;
+    padding: 5px 9px;
+    border-radius: 5px;
+    text-decoration: none;
+    line-height: 1.38;
+    transition: background-color 0.14s ease, color 0.14s ease;
+    word-break: break-word;
+}
+
+.toc-h2 {
+    font-size: 0.86rem;
+    font-weight: 700;
+    color: var(--heading-dark);
+}
+
+.toc-h3 {
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: var(--text-muted);
+    padding: 4px 8px;
+}
+
+.toc-link:hover {
+    background: #eff6ff;
+    color: var(--r-blue);
+    text-decoration: none;
+}
+
+.toc-link.active {
+    background: #e8f4fd;
+    color: var(--r-blue);
+    font-weight: 700;
+    box-shadow: inset 3px 0 0 var(--doc-green);
+}
+
+.toc-empty {
+    display: none;
+    padding: 16px 10px;
+    text-align: center;
+    font-size: 0.84rem;
+    color: var(--text-muted);
+}
+
+/* Main Specification Content Card */
+.spec-content {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-light);
+    border-radius: 12px;
+    padding: 40px 48px 56px;
+    box-shadow: 0 2px 12px rgba(15, 23, 42, 0.04);
+    min-width: 0;
+}
+
+/* Headings & Anchor Offset */
+.spec-content h1,
+.spec-content h2,
+.spec-content h3,
+.spec-content h4,
+.spec-content h5,
+.spec-content h6 {
+    scroll-margin-top: calc(var(--header-height) + 20px);
+    line-height: 1.35;
+}
+
+.spec-main-title {
+    font-size: 2.05rem;
+    color: var(--heading-dark);
+    margin: 0 0 24px 0;
+    padding-bottom: 16px;
+    border-bottom: 3px solid transparent;
+    border-image: linear-gradient(90deg, var(--doc-green) 0%, var(--r-blue) 60%, var(--accent-blue) 100%) 1;
+}
+
+.spec-content h2 {
+    font-size: 1.55rem;
+    color: var(--heading-dark);
+    border-left: 7px solid var(--accent-blue);
+    padding: 3px 0 3px 14px;
+    margin-top: 52px;
+    margin-bottom: 20px;
+    background: linear-gradient(90deg, rgba(52, 152, 219, 0.06) 0%, rgba(52, 152, 219, 0) 85%);
+}
+
+.spec-content h3 {
+    font-size: 1.22rem;
+    color: var(--heading-sub);
+    margin-top: 34px;
+    margin-bottom: 14px;
+    padding-bottom: 6px;
+    border-bottom: 1px dashed #cbd5e1;
+}
+
+.spec-content h4 {
+    font-size: 1.05rem;
+    color: var(--heading-dark);
+    margin-top: 24px;
+    margin-bottom: 10px;
+    padding-left: 10px;
+    border-left: 3px solid var(--doc-green);
+}
+
+.spec-content h5,
+.spec-content h6 {
+    font-size: 0.96rem;
+    color: var(--heading-sub);
+    margin-top: 18px;
+    margin-bottom: 8px;
+}
+
+.heading-anchor {
+    margin-left: 8px;
+    font-size: 0.85em;
+    font-weight: 400;
+    color: #94a3b8;
+    text-decoration: none;
+    opacity: 0;
+    transition: opacity 0.15s ease, color 0.15s ease;
+}
+
+.spec-content h2:hover .heading-anchor,
+.spec-content h3:hover .heading-anchor,
+.spec-content h4:hover .heading-anchor,
+.spec-content h5:hover .heading-anchor,
+.spec-content h6:hover .heading-anchor,
+.heading-anchor:focus {
+    opacity: 1;
+}
+
+.heading-anchor:hover {
+    color: var(--accent-blue);
+    text-decoration: none;
+}
+
+/* Prose, Links & Lists */
+.spec-content p {
+    margin: 0 0 16px 0;
+}
+
+.spec-content a:not(.heading-anchor) {
+    color: #0066cc;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.spec-content a:not(.heading-anchor):hover {
+    text-decoration: underline;
+}
+
+.spec-content ul,
+.spec-content ol {
+    margin: 0 0 18px 0;
+    padding-left: 24px;
+}
+
+.spec-content li {
+    margin-bottom: 7px;
+}
+
+.spec-content li > ul,
+.spec-content li > ol {
+    margin-top: 6px;
+    margin-bottom: 8px;
+}
+
+.spec-content li > p {
+    margin-bottom: 8px;
+}
+
+.spec-content hr {
+    border: none;
+    border-top: 1px solid var(--border-light);
+    margin: 36px 0;
+}
+
+.spec-content img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+    border: 1px solid var(--border-light);
+}
+
+/* Inline Code & Fenced Code Blocks */
+.spec-content code {
+    font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace;
+    font-size: 0.88em;
+    background-color: #f1f5f9;
+    color: #0f3a6d;
+    padding: 0.15em 0.42em;
+    border-radius: 4px;
+    border: 1px solid #e2e8f0;
+    word-break: break-word;
+}
+
+.code-block {
+    margin: 16px 0 22px 0;
+    border: 1px solid #d8e1eb;
+    border-radius: 8px;
+    background: #f8fafc;
+    overflow: hidden;
+}
+
+.code-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 6px 12px;
+    background: #eef2f7;
+    border-bottom: 1px solid #d8e1eb;
+}
+
+.code-lang {
+    font-family: "SFMono-Regular", Consolas, monospace;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: #475569;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+.copy-btn {
+    font-family: inherit;
+    font-size: 0.76rem;
+    font-weight: 600;
+    color: #334155;
+    background: #ffffff;
+    border: 1px solid #cbd5e1;
+    border-radius: 4px;
+    padding: 3px 9px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+.copy-btn:hover {
+    background: var(--r-blue);
+    color: #ffffff;
+    border-color: var(--r-blue);
+}
+
+.copy-btn.copied {
+    background: var(--doc-green);
+    color: #ffffff;
+    border-color: var(--doc-green);
+}
+
+.code-block pre {
+    margin: 0;
+    padding: 14px 16px;
+    overflow-x: auto;
+    line-height: 1.55;
+}
+
+.code-block pre code {
+    background: transparent;
+    color: #1e293b;
+    padding: 0;
+    border: none;
+    font-size: 0.87rem;
+    word-break: normal;
+    white-space: pre;
+}
+
+/* Tables */
+.table-wrapper {
+    width: 100%;
+    overflow-x: auto;
+    margin: 18px 0 24px 0;
+    border: 1px solid var(--border-light);
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(15, 23, 42, 0.03);
+}
+
+.spec-content table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.92rem;
+    background: #ffffff;
+}
+
+.spec-content thead th {
+    background: #f1f6fb;
+    color: var(--heading-dark);
+    font-weight: 700;
+    text-align: left;
+    padding: 11px 14px;
+    border-bottom: 2px solid var(--accent-blue);
+    border-right: 1px solid #e2e8f0;
+}
+
+.spec-content thead th:last-child {
+    border-right: none;
+}
+
+.spec-content tbody td {
+    padding: 10px 14px;
+    border-bottom: 1px solid #e2e8f0;
+    border-right: 1px solid #eef2f6;
+    vertical-align: top;
+}
+
+.spec-content tbody td:last-child {
+    border-right: none;
+}
+
+.spec-content tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.spec-content tbody tr:nth-child(even) {
+    background-color: #fafcfe;
+}
+
+.spec-content tbody tr:hover {
+    background-color: #f0f7ff;
+}
+
+/* Blockquotes & GitHub-Style Alerts */
+.spec-content blockquote {
+    margin: 18px 0;
+    padding: 12px 18px;
+    border-left: 4px solid #94a3b8;
+    background: #f8fafc;
+    color: #475569;
+    border-radius: 0 6px 6px 0;
+}
+
+.spec-content blockquote > *:last-child {
+    margin-bottom: 0;
+}
+
+.markdown-alert {
+    margin: 20px 0;
+    padding: 14px 18px;
+    border-left: 5px solid var(--r-blue);
+    border-radius: 6px;
+    background: #f0f7ff;
+}
+
+.markdown-alert-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 700;
+    font-size: 0.92rem;
+    margin-bottom: 8px;
+}
+
+.alert-icon {
+    flex-shrink: 0;
+}
+
+.markdown-alert-body > *:last-child {
+    margin-bottom: 0;
+}
+
+.markdown-alert-note {
+    border-left-color: #276dc2;
+    background-color: #f0f7ff;
+}
+.markdown-alert-note .markdown-alert-title { color: #1d5aa6; }
+
+.markdown-alert-tip {
+    border-left-color: #217346;
+    background-color: #eefaf3;
+}
+.markdown-alert-tip .markdown-alert-title { color: #185c37; }
+
+.markdown-alert-important {
+    border-left-color: #7c3aed;
+    background-color: #f6f3ff;
+}
+.markdown-alert-important .markdown-alert-title { color: #6d28d9; }
+
+.markdown-alert-warning {
+    border-left-color: #d97706;
+    background-color: #fffbeb;
+}
+.markdown-alert-warning .markdown-alert-title { color: #b45309; }
+
+.markdown-alert-caution {
+    border-left-color: #dc2626;
+    background-color: #fef2f2;
+}
+.markdown-alert-caution .markdown-alert-title { color: #b91c1c; }
+
+/* Back-to-top floating button */
+.back-to-top {
+    position: fixed;
+    right: 22px;
+    bottom: 22px;
+    z-index: 900;
+    padding: 9px 14px;
+    border-radius: 999px;
+    background: var(--heading-dark);
+    color: #ffffff;
+    font-size: 0.82rem;
+    font-weight: 700;
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(15, 23, 42, 0.22);
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(8px);
+    transition: opacity 0.2s ease, transform 0.2s ease, background-color 0.15s ease;
+}
+
+.back-to-top.visible {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateY(0);
+}
+
+.back-to-top:hover {
+    background: var(--r-blue);
+}
+
+/* Footer */
+.site-footer {
+    background: var(--heading-dark);
+    color: #cbd5e1;
+    padding: 28px 20px;
+    text-align: center;
+    font-size: 0.88rem;
+    border-top: 3px solid var(--doc-green);
+}
+
+.footer-links {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 20px;
+    margin-bottom: 12px;
+}
+
+.footer-links a {
+    color: #f1f5f9;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.footer-links a:hover {
+    color: #7dd3fc;
+    text-decoration: underline;
+}
+
+.footer-copyright {
+    color: #94a3b8;
+    font-size: 0.84rem;
+}
+
+/* Mobile Backdrop */
+.toc-backdrop {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.45);
+    z-index: 1050;
+}
+
+.toc-backdrop.open {
+    display: block;
+}
+
+/* Responsive Breakpoints */
+@media (max-width: 1024px) {
+    .spec-layout {
+        grid-template-columns: 1fr;
+        padding: 16px 14px 40px;
+    }
+
+    .mobile-toc-btn {
+        display: inline-flex;
+    }
+
+    .toc-sidebar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        width: min(320px, 86vw);
+        max-height: 100vh;
+        z-index: 1100;
+        border-radius: 0 12px 12px 0;
+        transform: translateX(-104%);
+        transition: transform 0.24s ease;
+        box-shadow: 4px 0 24px rgba(15, 23, 42, 0.2);
+    }
+
+    .toc-sidebar.open {
+        transform: translateX(0);
+    }
+
+    .toc-close-btn {
+        display: inline-block;
+    }
+
+    .spec-content {
+        padding: 26px 20px 40px;
+    }
+}
+
+@media (max-width: 640px) {
+    .brand-badge {
+        display: none;
+    }
+
+    .header-logo {
+        height: 30px;
+    }
+
+    .brand-wordmark {
+        font-size: 1.35rem;
+    }
+
+    .btn-home,
+    .btn-lang {
+        padding: 6px 10px;
+        font-size: 0.78rem;
+    }
+
+    .spec-main-title {
+        font-size: 1.55rem;
+    }
+
+    .spec-content h2 {
+        font-size: 1.28rem;
+        margin-top: 38px;
+    }
+
+    .spec-content {
+        padding: 20px 15px 32px;
+    }
+}
+
+@media print {
+    .site-header,
+    .toc-sidebar,
+    .toc-backdrop,
+    .back-to-top,
+    .copy-btn {
+        display: none !important;
+    }
+
+    body {
+        background: #ffffff;
+    }
+
+    .spec-layout {
+        display: block;
+        max-width: 100%;
+        padding: 0;
+    }
+
+    .spec-content {
+        border: none;
+        box-shadow: none;
+        padding: 0;
+    }
+}
+
+    </style>
+</head>
+<body>
+    <header class="site-header">
+        <div class="header-inner">
+            <div class="header-left">
+                <button type="button" class="mobile-toc-btn" id="mobileTocBtn" aria-expanded="false" aria-controls="tocSidebar">☰ 目次</button>
+                <a href="index.html" class="brand-link">
+                    <img src="images/logo.png" alt="DocR Logo" class="header-logo">
+                    <span class="brand-wordmark"><span class="doc-green">Doc</span><span class="r-blue">R</span></span>
+                </a>
+                <span class="brand-badge">v1.9.0 技術仕様書</span>
+            </div>
+            <nav class="header-actions" aria-label="Primary navigation">
+                <a href="index.html" class="btn-home">← ホームに戻る</a>
+                <a href="spec_en.html" class="btn-lang" lang="en">English Specification</a>
+            </nav>
+        </div>
+    </header>
+
+    <div class="toc-backdrop" id="tocBackdrop"></div>
+
+    <div class="spec-layout">
+        <aside class="toc-sidebar" id="tocSidebar" aria-label="目次 (Table of Contents)">
+            <div class="toc-header">
+                <div class="toc-title-row">
+                    <span class="toc-title">目次 (Table of Contents)</span>
+                    <button type="button" class="toc-close-btn" id="tocCloseBtn" aria-label="Close">&times;</button>
+                </div>
+                <div class="toc-search-wrap">
+                    <input type="search" id="tocSearchInput" class="toc-search-input" placeholder="目次を検索 (例: brms, VIF)..." aria-label="目次を検索 (例: brms, VIF)...">
+                </div>
+            </div>
+            <nav class="toc-nav">
+<ul class="toc-list" id="tocList">
+<li class="toc-group">
+<a href="#第1部システム共通仕様アーキテクチャ" class="toc-link toc-h2" data-search="第1部：システム共通仕様・アーキテクチャ">第1部：システム共通仕様・アーキテクチャ</a>
+<ul class="toc-sublist">
+<li class="toc-subitem"><a href="#11-ローカル完結型コンテナアーキテクチャとmac完全対応-v190" class="toc-link toc-h3" data-search="1.1 ローカル完結型コンテナアーキテクチャとmac完全対応 (v1.9.0)">1.1 ローカル完結型コンテナアーキテクチャとMac完全対応 (v1.9.0)</a></li>
+<li class="toc-subitem"><a href="#12-リアルタイム-r-計算コンソール再現用-r-コード出力リボンマニュアルボタン" class="toc-link toc-h3" data-search="1.2 リアルタイム r 計算コンソール・再現用 r コード出力・リボン「マニュアル」ボタン">1.2 リアルタイム R 計算コンソール・再現用 R コード出力・リボン「マニュアル」ボタン</a></li>
+<li class="toc-subitem"><a href="#13-データ入力規則型変換ステルス変数エイリアシング" class="toc-link toc-h3" data-search="1.3 データ入力規則・型変換・ステルス変数エイリアシング">1.3 データ入力規則・型変換・ステルス変数エイリアシング</a></li>
+<li class="toc-subitem"><a href="#14-欠損値-na-の処理仕様と未知データの自動予測-out-of-sample-prediction" class="toc-link toc-h3" data-search="1.4 欠損値 (na) の処理仕様と未知データの自動予測 (out-of-sample prediction)">1.4 欠損値 (NA) の処理仕様と未知データの自動予測 (Out-of-Sample Prediction)</a></li>
+<li class="toc-subitem"><a href="#15-グラフ出力仕様ベクターsvg編集と限界効果プロット" class="toc-link toc-h3" data-search="1.5 グラフ出力仕様：ベクターsvg編集と限界効果プロット">1.5 グラフ出力仕様：ベクターSVG編集と限界効果プロット</a></li>
+<li class="toc-subitem"><a href="#16-多重比較事後検定の共通仕様-emmeans--holm法" class="toc-link toc-h3" data-search="1.6 多重比較・事後検定の共通仕様 (emmeans &amp; holm法)">1.6 多重比較・事後検定の共通仕様 (emmeans &amp; Holm法)</a></li>
+<li class="toc-subitem"><a href="#17-実行環境採用rパッケージ一覧と論文への記載引用方法-methods--citation" class="toc-link toc-h3" data-search="1.7 実行環境・採用rパッケージ一覧と論文への記載・引用方法 (methods &amp; citation)">1.7 実行環境・採用Rパッケージ一覧と論文への記載・引用方法 (Methods &amp; Citation)</a></li>
+</ul>
+</li>
+<li class="toc-group">
+<a href="#第2部分析モデル別計算仕様カスタム構文リファレンス" class="toc-link toc-h2" data-search="第2部：分析モデル別・計算仕様＆カスタム構文リファレンス">第2部：分析モデル別・計算仕様＆カスタム構文リファレンス</a>
+<ul class="toc-sublist">
+<li class="toc-subitem"><a href="#21-記述統計データ概観--describe-psych" class="toc-link toc-h3" data-search="2.1 記述統計・データ概観 — describe (psych)">2.1 記述統計・データ概観 — Describe (psych)</a></li>
+<li class="toc-subitem"><a href="#22-相関分析--correlation-correlation" class="toc-link toc-h3" data-search="2.2 相関分析 — correlation (correlation)">2.2 相関分析 — Correlation (correlation)</a></li>
+<li class="toc-subitem"><a href="#23-線形回帰分析--linear-regression-lm" class="toc-link toc-h3" data-search="2.3 線形回帰分析 — linear regression (lm)">2.3 線形回帰分析 — Linear Regression (lm)</a></li>
+<li class="toc-subitem"><a href="#24-一般化線形モデル順序ロジスティック回帰--glm-glm--masspolr" class="toc-link toc-h3" data-search="2.4 一般化線形モデル・順序ロジスティック回帰 — glm (glm / mass::polr)">2.4 一般化線形モデル・順序ロジスティック回帰 — GLM (glm / MASS::polr)</a></li>
+<li class="toc-subitem"><a href="#25-分散分析--anova-afex" class="toc-link toc-h3" data-search="2.5 分散分析 — anova (afex)">2.5 分散分析 — ANOVA (afex)</a></li>
+<li class="toc-subitem"><a href="#26-線形混合モデル--linear-mixed-lmertest" class="toc-link toc-h3" data-search="2.6 線形混合モデル — linear mixed (lmertest)">2.6 線形混合モデル — Linear Mixed (lmerTest)</a></li>
+<li class="toc-subitem"><a href="#27-正則化回帰-lasso--ridge--elastic-net--elastic-net-glmnet" class="toc-link toc-h3" data-search="2.7 正則化回帰 (lasso / ridge / elastic net) — elastic net (glmnet)">2.7 正則化回帰 (Lasso / Ridge / Elastic Net) — Elastic Net (glmnet)</a></li>
+<li class="toc-subitem"><a href="#28-ベイズ階層モデリング--bayesian-brms" class="toc-link toc-h3" data-search="2.8 ベイズ階層モデリング — bayesian (brms)">2.8 ベイズ階層モデリング — Bayesian (brms)</a></li>
+<li class="toc-subitem"><a href="#29-ベイジアン加法回帰木--bart-dbartsbart2" class="toc-link toc-h3" data-search="2.9 ベイジアン加法回帰木 — bart (dbarts::bart2)">2.9 ベイジアン加法回帰木 — BART (dbarts::bart2)</a></li>
+<li class="toc-subitem"><a href="#210-探索的因子分析主成分分析--factor-analysis-efa--pca" class="toc-link toc-h3" data-search="2.10 探索的因子分析・主成分分析 — factor analysis (efa / pca)">2.10 探索的因子分析・主成分分析 — Factor Analysis (EFA / PCA)</a></li>
+<li class="toc-subitem"><a href="#211-共分散構造分析確認的因子分析--sem--cfa-lavaan" class="toc-link toc-h3" data-search="2.11 共分散構造分析・確認的因子分析 — sem / cfa (lavaan)">2.11 共分散構造分析・確認的因子分析 — SEM / CFA (lavaan)</a></li>
+<li class="toc-subitem"><a href="#212-潜在プロファイル分析潜在クラス分析--lpa--lca-tidylpa--polca" class="toc-link toc-h3" data-search="2.12 潜在プロファイル分析・潜在クラス分析 — lpa / lca (tidylpa / polca)">2.12 潜在プロファイル分析・潜在クラス分析 — LPA / LCA (tidyLPA / poLCA)</a></li>
+<li class="toc-subitem"><a href="#213-日本語テキストマイニング--text-mining-rmecab" class="toc-link toc-h3" data-search="2.13 日本語テキストマイニング — text mining (rmecab)">2.13 日本語テキストマイニング — Text Mining (RMeCab)</a></li>
+</ul>
+</li>
+</ul>
+                <div class="toc-empty" id="tocEmpty">一致するセクションがありません</div>
+            </nav>
+        </aside>
+
+        <main class="spec-content" id="mainContent">
+<h1 id="docr-v190-技術仕様書応用リファレンス" class="spec-main-title">DocR v1.9.0 技術仕様書・応用リファレンス</h1>
+<p>本書は、Excel アドイン型 R 統計解析ゲートウェイ <strong>DocR (v1.9.0)</strong> の内部アーキテクチャ、各分析モジュールの統計学的計算仕様（学術論文の <em>Methods</em> セクション執筆に必要なパッケージ・推定法・自由度計算・補正法等）、バックエンドの自動前処理・安全装置（フェイルセーフ）、および上級者向けのカスタム数式・構文レシピを網羅した公式技術仕様書です。</p>
+<div class="markdown-alert markdown-alert-tip" role="note"><div class="markdown-alert-title"><svg class="alert-icon" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M8 1.5c-2.363 0-4 1.69-4 3.75 0 .984.424 1.625.984 2.304l.214.253c.223.264.47.556.673.848.284.411.537.896.621 1.49a.75.75 0 0 1-1.484.211c-.04-.282-.163-.547-.37-.847a8.456 8.456 0 0 0-.542-.68c-.084-.1-.173-.205-.268-.32C3.201 7.75 2.5 6.766 2.5 5.25 2.5 2.31 4.863 0 8 0s5.5 2.31 5.5 5.25c0 1.516-.701 2.5-1.328 3.259-.095.115-.184.22-.268.319-.207.245-.383.453-.541.681-.208.3-.33.565-.37.847a.751.751 0 0 1-1.485-.212c.084-.593.337-1.078.621-1.489.203-.292.45-.584.673-.848.075-.088.147-.173.213-.253.561-.679.985-1.32.985-2.304 0-2.06-1.637-3.75-4-3.75ZM5.75 12h4.5a.75.75 0 0 1 0 1.5h-4.5a.75.75 0 0 1 0-1.5ZM6 15.25a.75.75 0 0 1 .75-.75h2.5a.75.75 0 0 1 0 1.5h-2.5a.75.75 0 0 1-.75-.75Z"></path></svg><span>TIP / 実践テクニック</span></div><div class="markdown-alert-body"><p><strong>基本的なGUI操作チュートリアルとリボンからのクイック起動</strong>
+「どのセルを選んでどのボタンを押すか」といった初歩的な操作手順やサンプルデータを用いた実践例については、配布サイト（<a href="https://soyogu.github.io/DocR/" target="_blank" rel="noopener noreferrer">https://soyogu.github.io/DocR/</a>）および配布 ZIP 同梱の実践ワークブック <strong><a href="https://soyogu.github.io/DocR/files/DemoBook.xlsx" target="_blank" rel="noopener noreferrer"><code>DemoBook.xlsx</code></a></strong>、ならびに紹介動画をご参照ください。また、本仕様書（<code>spec.html</code>）は Excel リボンの「DocR」タブ内（「設定・システム」グループの <strong>「マニュアル」</strong> ボタン、<code>About</code> の隣）からもワンクリックでブラウザ表示できます。本書では UI 操作の逐次解説を省き、計算根拠と応用技法に焦点を当てています。</p></div></div>
+<hr>
+<h2 id="第1部システム共通仕様アーキテクチャ">第1部：システム共通仕様・アーキテクチャ<a class="heading-anchor" href="#第1部システム共通仕様アーキテクチャ" aria-label="Permalink">#</a></h2>
+<h3 id="11-ローカル完結型コンテナアーキテクチャとmac完全対応-v190">1.1 ローカル完結型コンテナアーキテクチャとMac完全対応 (v1.9.0)<a class="heading-anchor" href="#11-ローカル完結型コンテナアーキテクチャとmac完全対応-v190" aria-label="Permalink">#</a></h3>
+<p>DocR は Microsoft Excel（フロントエンド UI・入出力シート管理）と Docker コンテナ内の隔離された Linux 版 R 実行環境（バックエンド統計計算エンジン）をローカル HTTP 通信で接続する 3 層アーキテクチャを採用しています。</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">text</span><button type="button" class="copy-btn" data-copy="コピー" data-copied="✔ コピー済">コピー</button></div><pre><code class="language-text">[ Microsoft Excel (VBA Add-in: DocR.xlam) ]
+        │  JSON over HTTP (http://127.0.0.1:8000) ※完全ローカル通信
+        ▼
+[ Docker Container: docr-api (Image: r-stat-api / Base: rocker/r-ver:4.3.2) ]
+   ├── Port 8000: Python 3 マルチスレッドプロキシ &amp; リアルタイムコンソール配信 (/app/server.py)
+   └── Port 8001: R 4.3.2 + Plumber REST API サーバー (/app/api.R) + 事前コンパイル済み Stan モデル群</code></pre></div>
+<ul>
+<li><strong>完全ローカル実行とデータ秘匿性</strong>: すべての通信は PC 内部のループバックアドレス（<code>127.0.0.1:8000</code>）のみで完結します。選択した Excel データが外部のクラウドサーバーやインターネットへ送信されることは一切なく、機密性の高い臨床データ・人事データ・未発表実験データもオフライン環境で安全に解析できます。</li>
+<li><strong>既存 R 環境との完全非干渉</strong>: 統計エンジンおよび全 R パッケージは Docker コンテナ（<code>docr-api</code>）内部に完全封入されています。ホスト OS 側に既に R や RStudio がインストールされていても、バージョン競合やパッケージ依存関係の破損は一切発生しません。</li>
+<li><strong>コンテナ自動起動とメモリ管理</strong>: 分析実行時に Docker Desktop や <code>docr-api</code> コンテナが停止していた場合、VBA 側（<code>EnsureDockerRunning</code>）が自動的にバックグラウンド起動・ヘルスチェック（<code>GET /ping</code>）を行います。また各エンドポイントの計算終了時には不要オブジェクトの明示的破棄とガベージコレクション（<code>gc()</code>）が実行され、大規模データや反復実行時のメモリ肥大化を抑制します。</li>
+<li><p><strong>Windows / Mac 完全機能統合 (v1.9.0)</strong>:</p>
+<ul>
+<li>v1.9.0 より、従来 Windows 版先行であった記述統計（<code>Describe</code>）、相関分析（<code>Correlation</code>）、正則化回帰（<code>Elastic Net</code>）、ベイジアン加法回帰木（<code>BART</code>）および各種拡張機能を含む <strong>全 13 分析モジュールが Windows と macOS（Apple Silicon M1/M2/M3/M4 および Intel）で完全に同一仕様で動作</strong>します。</li>
+<li><strong>Apple Silicon (ARM64) 対応</strong>: ARM64 環境における旧版 <code>dbarts</code> の NEON ベクトル命令型不一致バグを回避するため、最新 CRAN パッケージをネイティブビルドして搭載しています。</li>
+<li><strong>Mac 版の文字コード無劣化パイプライン</strong>: Mac 版 Excel VBA 特有の内部 UTF-16LE エンコーディングと HTTP 通信制限を解決するため、<code>iconv</code>（UTF-16LE ⇔ UTF-8 双方向変換）とバイナリ <code>curl</code>（タイムアウト 1,800 秒）を組み合わせた専用ブリッジ（<code>MacCurlPost</code>）を実装し、日本語変数名・水準名・SVG グラフラベルの文字化けを完全に排除しています。</li>
+<li><strong>Mac ユーザーフォーム上のクリップボード統合</strong>: Mac 版 VBA の UserForm で標準では無効化されるキーボードショートカットを独自イベントハンドラ（<code>MacTextBoxHandler</code>）で補完し、数式欄やシンタックス欄での <strong><code>Cmd + C</code>（コピー）/ <code>Cmd + V</code>（ペースト）/ <code>Cmd + X</code>（カット）</strong> をネイティブ同様に利用できます。</li>
+</ul></li>
+</ul>
+<h4 id="推奨動作環境ディスク空き容量メモリ要件">推奨動作環境・ディスク空き容量・メモリ要件<a class="heading-anchor" href="#推奨動作環境ディスク空き容量メモリ要件" aria-label="Permalink">#</a></h4>
+<ul>
+<li><strong>対応 OS および Excel</strong>: Windows 10 / 11（64-bit）または macOS（Apple Silicon M1〜M4 / Intel）＋ デスクトップ版 Microsoft Excel</li>
+<li><p><strong>ストレージ（必要な空き容量）</strong>: <strong>10 GB 以上の空き容量を推奨</strong></p>
+<ul>
+<li>配布リリース ZIP：約 1.1 GB（内部のイメージアーカイブ <code>docr_image.tar</code> は約 1.3 GB）、ロード後の <code>r-stat-api</code> Docker イメージ：ディスク上で約 4.3 GB（ZIP 解凍および <code>docker load</code> 実行時の一時領域を含め 10 GB 以上の余裕を推奨）。</li>
+<li>なお、バージョンアップデート実行時はインストーラが旧バージョンの DocR コンテナ・イメージを自動的に削除してから入れ替えるため、更新を重ねてもディスク使用量が累積することはありません。</li>
+</ul></li>
+<li><strong>メモリ（RAM）</strong>: <strong>最小 8 GB（16 GB 以上を推奨</strong> — Docker Desktop のバックグラウンド稼働に加え、<code>brms</code> や <code>BART</code> における並列 MCMC サンプリングを快適に実行するため）</li>
+</ul>
+<hr>
+<h3 id="12-リアルタイム-r-計算コンソール再現用-r-コード出力リボンマニュアルボタン">1.2 リアルタイム R 計算コンソール・再現用 R コード出力・リボン「マニュアル」ボタン<a class="heading-anchor" href="#12-リアルタイム-r-計算コンソール再現用-r-コード出力リボンマニュアルボタン" aria-label="Permalink">#</a></h3>
+<p>ブラックボックス化しがちな GUI 統計ツールの課題を解消するため、DocR v1.9.0 では計算過程のライブ可視化、実行コードの完全な再現性、および仕様リファレンスへの即時アクセスを提供しています。</p>
+<ul>
+<li><p><strong>リボン「マニュアル」ボタンによるワンクリック参照</strong>:</p>
+<ul>
+<li>Excel リボンの「DocR」タブ ＞「設定・システム」グループ（<code>About</code> ボタンの隣）にある <strong>「マニュアル」（英語 UI: <code>Manual</code>）</strong> ボタンをクリックすると、現在の UI 言語設定に応じて日本語版仕様書（<code>spec.html</code>）または英語版仕様書（<code>spec_en.html</code>）が既定のブラウザで直接開きます。</li>
+</ul></li>
+<li><p><strong>リアルタイム R 計算コンソール (<code>http://127.0.0.1:8000/console</code>)</strong>:</p>
+<ul>
+<li>Excel リボンの「DocR」タブ内にある <strong>「Rコードを出力」（英語 UI: <code>Output R Code</code>）</strong> チェックボックスを ON にすると、既定の Web ブラウザでローカルコンソール画面（<code>http://127.0.0.1:8000/console</code>）が自動的に立ち上がります（設定状態はアドイン内に保存されます）。</li>
+<li>コンテナ内の Python プロキシ（<code>server.py</code>）が R プロセスの標準出力・標準エラー出力をアンバッファモードで捕捉し、300 ミリ秒間隔のポーリングによってブラウザへリアルタイム配信します。</li>
+<li>実行開始時刻、投入された R コード、<code>brms</code>（Stan）の MCMC サンプリング進捗（チェインごとの反復パーセンテージ）、<code>BART</code> のツリーサンプリングおよび部分従属プロット（PDP）計算状況、<code>LCA</code> の初期値反復状況、警告・エラーメッセージがリアルタイムで確認できます。</li>
+<li>チェックボックスを OFF に切り替えると、コンソール画面へクローズ信号（<code>/console_close</code>）が送られ自動的に閉じます。なお、チェックが OFF の状態でも、長時間計算中にブラウザから手動で <code>http://127.0.0.1:8000/console</code> を開けばいつでも進捗を覗き見ることができます。</li>
+</ul></li>
+<li><p><strong>結果シートへの再現用 R コード自動出力</strong>:</p>
+<ul>
+<li>「Rコードを出力」が ON の場合、出力シートの最下部に <strong><code>[ 実行されたRコード ]</code></strong> セクションが自動追記されます。</li>
+<li>内部の安全な変数エイリアスと元の Excel 列名の対応表（<code>Variable Alias Mapping</code>）および元のモデル式コメント（<code># Original Formula:</code>）が併記されるため、出力されたコードをそのまま単体の R / RStudio スクリプトへ移植して検証・発展させることが可能です。</li>
+</ul></li>
+</ul>
+<hr>
+<h3 id="13-データ入力規則型変換ステルス変数エイリアシング">1.3 データ入力規則・型変換・ステルス変数エイリアシング<a class="heading-anchor" href="#13-データ入力規則型変換ステルス変数エイリアシング" aria-label="Permalink">#</a></h3>
+<h4 id="データ範囲の選択と非破壊出力の原則">データ範囲の選択と非破壊出力の原則<a class="heading-anchor" href="#データ範囲の選択と非破壊出力の原則" aria-label="Permalink">#</a></h4>
+<ol>
+<li><strong>1行目ヘッダー規則</strong>: 選択したセル範囲の <strong>1行目は必ず変数名（列名）</strong> として処理され、2行目以降が観測データ（1行＝1観測／1レコードの整然データ：Tidy Data）として読み込まれます。列全体（例：<code>A:F</code>）を選択した場合でも、自動的にデータが存在する <code>UsedRange</code> との交差範囲のみが切り出されます。</li>
+<li><p><strong>最小データサイズと事前検証</strong>:</p>
+<ul>
+<li><code>記述統計 (describe)</code>: <strong>2行 × 1列以上</strong></li>
+<li><code>因子分析/主成分分析 (fa/principal)</code>: <strong>3行 × 2列以上</strong>（選択項目 2 変数以上）</li>
+<li>その他すべての分析モジュール: <strong>2行 × 2列以上</strong></li>
+<li>選択範囲内に Excel の数式エラー値（<code>#DIV/0!</code>, <code>#N/A</code>, <code>#VALUE!</code> 等）や空白のヘッダーセルが存在する場合、通信前に正確な行・列番号を通知して安全に停止します。</li>
+</ul></li>
+<li><strong>元データの絶対保護</strong>: すべての分析結果は <code>&lt;手法名&gt;_Res_&lt;時分秒&gt;</code>（例：<code>lm_Res_152030</code>）という新規ワークシートに出力され、1行目（<code>A1</code> セル）に参照元データ範囲（例：<code>Data Source: 'Sheet1'!A1:E120</code>）が自動記録されます。<strong>元のデータシートが上書き・変更されることは一切ありません。</strong></li>
+</ol>
+<h4 id="文字列数値の自動型変換ルール">文字列・数値の自動型変換ルール<a class="heading-anchor" href="#文字列数値の自動型変換ルール" aria-label="Permalink">#</a></h4>
+<ul>
+<li><strong>文字列（テキスト）データの自動因子化</strong>: 回帰・モデリング系モジュール（<code>lm</code>, <code>glm</code>, <code>lmer</code>, <code>glmnet</code>, <code>brms</code>, <code>bart</code>）では、文字データ列（例：<code>"Male"</code> / <code>"Female"</code>, <code>"統制群"</code> / <code>"介入群"</code>）は R 側で自動的に <strong><code>factor</code> 型（カテゴリ変数）</strong> へ変換され、ダミー変数（デフォルトは辞書順の先頭水準を参照水準とする処理対比 <code>contr.treatment</code>）として推定に組み込まれます。</li>
+<li><p><strong>数値でコーディングされたカテゴリ変数の扱い</strong>: グループ分けが <code>"1"</code>, <code>"2"</code>, <code>"3"</code> のような <strong>数値</strong> で入力されている場合、モジュールによって挙動が異なります。</p>
+<ul>
+<li><strong><code>ANOVA (afex)</code> および <code>LCA (poLCA)</code></strong>: 数値であっても自動的にカテゴリ（因子）として強制変換されます（回帰の傾きとして誤計算される事故を防止します）。</li>
+<li><strong><code>lm</code>, <code>glm</code>, <code>lmer</code>, <code>brms</code>, <code>glmnet</code>, <code>bart</code></strong>: 数値列はそのまま連続変数（量的変数）として扱われます。数値コードをカテゴリ要因として扱いたい場合は、モデル式（Formula）欄で <strong><code>factor(群変数)</code></strong> と記述するか、Excel 側で文字列（<code>"G1"</code>, <code>"G2"</code> 等）にしてください。</li>
+</ul></li>
+</ul>
+<h4 id="2段階ステルス変数エイリアシング機構-docrvar--zvar">2段階ステルス変数エイリアシング機構 (<code>DOCRVAR</code> &amp; <code>ZVAR</code>)<a class="heading-anchor" href="#2段階ステルス変数エイリアシング機構-docrvar--zvar" aria-label="Permalink">#</a></h4>
+<p>R の数式パーサーは本来、日本語（マルチバイト文字）、スペース、括弧 <code>()</code>、スラッシュ <code>/</code>、ハイフン <code>-</code>、パーセント <code>%</code> 等を含む列名を直接扱うと構文エラーを引き起こします。DocR は以下の 2 段階エイリアシングにより、Excel の自由な列名を維持したまま R の厳密な構文解析を両立させています。</p>
+<ol>
+<li><p><strong>第1段階：VBA ⇔ API ステルス置換 (<code>DOCRVAR0001</code>, <code>DOCRVAR0002</code>, ...)</strong>:</p>
+<ul>
+<li>すべての分析モジュールにおいて、VBA がデータと数式を JSON 化する直前に、全列名を衝突のない内部 ID（<code>DOCRVAR0001</code> 等）へ文字数の長い順かつ区切り文字境界判定付きで自動置換します。</li>
+<li>R からの返却後、テキストサマリー（全角・半角の表示幅差分を計算して等幅フォントの桁揃えを自動補正）、JSON テーブル、および SVG 画像内のラベル文字列に至るまで、すべて元の Excel 列名へ完全に復元されます。</li>
+</ul></li>
+<li><p><strong>第2段階：<code>brms</code> 事前コンパイルキャッシュ用正規化 (<code>ZVAR1</code>, <code>ZVAR2</code>, ...)</strong>:</p>
+<ul>
+<li><code>brms</code> モジュールではさらに、モデル式に登場する変数を登場順に <code>ZVAR1</code>, <code>ZVAR2</code>, ... へ正規化します。これにより、データセットや列名が異なっていてもモデル構造と確率分布が一致すればコンテナ内蔵の <strong>事前コンパイル済み Stan C++ バイナリ（全 16 モデル）</strong> にヒットし、通常 30〜60 秒を要する C++ コンパイル時間をゼロに短縮します。</li>
+</ul></li>
+</ol>
+<div class="markdown-alert markdown-alert-warning" role="note"><div class="markdown-alert-title"><svg class="alert-icon" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M6.457 1.047c.659-1.234 2.427-1.234 3.086 0l6.082 11.378A1.75 1.75 0 0 1 14.082 15H1.918a1.75 1.75 0 0 1-1.543-2.575Zm1.763.707a.25.25 0 0 0-.44 0L1.698 13.132a.25.25 0 0 0 .22.368h12.164a.25.25 0 0 0 .22-.368Zm.53 3.996v2.5a.75.75 0 0 1-1.5 0v-2.5a.75.75 0 0 1 1.5 0ZM9 11a1 1 0 1 1-2 0 1 1 0 0 1 2 0Z"></path></svg><span>WARNING / 注意事項</span></div><div class="markdown-alert-body"><p><strong><code>brms</code> で <code>bf()</code> 関数を直接記述する場合の重要な例外</strong>
+<code>brms</code> のモデル式（Formula）欄を <code>bf(...)</code> で書き始めた場合（非線形モデルやカスタムサブモデル等）、第2段階の <code>ZVAR</code> 正規化および事前コンパイルキャッシュ参照がバイパスされます。また <code>mvbind()</code> や複雑な <code>bf()</code> 構文では Stan 内部で変数名の連結・変換が行われるため、<strong><code>bf()</code> や <code>mvbind()</code> を使用する高度なモデリングでは、Excel 側の対象列名を半角英数字（例：<code>score</code>, <code>time</code>, <code>group</code>, <code>ID</code>）にして実行することを強く推奨します。</strong></p></div></div>
+<hr>
+<h3 id="14-欠損値-na-の処理仕様と未知データの自動予測-out-of-sample-prediction">1.4 欠損値 (NA) の処理仕様と未知データの自動予測 (Out-of-Sample Prediction)<a class="heading-anchor" href="#14-欠損値-na-の処理仕様と未知データの自動予測-out-of-sample-prediction" aria-label="Permalink">#</a></h3>
+<p>Excel 上の空白セルは欠損値（<code>NA</code>）として認識されます。各分析モジュールにおける欠損値の処理方式は以下の通りです。</p>
+<div class="table-wrapper"><table><thead><tr><th style="text-align:left">分析モジュール</th><th style="text-align:left">デフォルトの欠損値処理</th><th style="text-align:left">UI での切替選択肢・特記事項</th></tr></thead><tbody>
+<tr><td style="text-align:left"><strong>Describe</strong></td><td style="text-align:left">変数ごとに除外 (<code>na.rm = TRUE</code>)</td><td style="text-align:left">各変数の有効サンプルサイズ <code>n</code> を個別に算出</td></tr>
+<tr><td style="text-align:left"><strong>Correlation</strong></td><td style="text-align:left">ペアワイズ削除 (Pairwise)</td><td style="text-align:left">カテゴリ変数の自動ダミー化時も元の空白は <code>0</code> ではなく <code>NA</code> として厳密に保持（※偏相関 ON 時は完全ケース）</td></tr>
+<tr><td style="text-align:left"><strong>Linear Regression (<code>lm</code>)</strong></td><td style="text-align:left">リストワイズ削除 (Listwise)</td><td style="text-align:left">モデル式に含まれる変数のいずれかが空白の行を除外</td></tr>
+<tr><td style="text-align:left"><strong>GLM (<code>glm</code> / <code>polr</code>)</strong></td><td style="text-align:left">リストワイズ削除 (Listwise)</td><td style="text-align:left">除外後も元の有効行インデックス（<code>Row</code>）を保持して予測値・クラス確率を出力</td></tr>
+<tr><td style="text-align:left"><strong>ANOVA (<code>afex</code>)</strong></td><td style="text-align:left">被験者単位／リストワイズ削除</td><td style="text-align:left">反復測定要因に1箇所でも欠損がある被験者は <code>afex</code> の仕様上丸ごと除外（欠損がある反復測定データには <strong><code>lmer</code></strong> を推奨）</td></tr>
+<tr><td style="text-align:left"><strong>Linear Mixed (<code>lmer</code>)</strong></td><td style="text-align:left"><strong>観測行単位で除外 (Row-wise)</strong></td><td style="text-align:left">欠損している特定の測定行のみを除外し、同一被験者の残りの有効データ行はすべて推定に活用</td></tr>
+<tr><td style="text-align:left"><strong>Elastic Net (<code>glmnet</code>)</strong></td><td style="text-align:left">リストワイズ削除 (Listwise)</td><td style="text-align:left">モデル式内の使用変数に欠損のない完全ケースで交差検証を実行</td></tr>
+<tr><td style="text-align:left"><strong>Bayesian (<code>brms</code>)</strong></td><td style="text-align:left">説明変数 <code>X</code> 欠損行を除外 ＋ <strong><code>Y</code> 空白行の自動予測</strong></td><td style="text-align:left">「予測値・残差を出力する」ON 時、<code>Y</code> が空白で <code>X</code> が揃っている行を未知テストデータとして予測</td></tr>
+<tr><td style="text-align:left"><strong>BART (<code>bart2</code>)</strong></td><td style="text-align:left"><strong>欠損値インジケータ法 (保持)</strong> ＋ <strong><code>Y</code> 空白行の自動予測</strong></td><td style="text-align:left"><code>X</code> の欠損は「欠損値インジケータ法（保持）」と「リストワイズ削除」を UI で選択可能</td></tr>
+<tr><td style="text-align:left"><strong>Factor Analysis (<code>fa</code>/<code>pca</code>)</strong></td><td style="text-align:left"><strong>ペアワイズ削除 (Pairwise)</strong></td><td style="text-align:left">欠損検出時に「ペアワイズ削除」と「リストワイズ削除」を UI で選択可能</td></tr>
+<tr><td style="text-align:left"><strong>SEM / CFA (<code>lavaan</code>)</strong></td><td style="text-align:left"><strong>完全情報最尤法 (FIML)</strong></td><td style="text-align:left">欠損検出時に「完全情報最尤法 (FIML)」と「リストワイズ削除」を UI で選択可能</td></tr>
+<tr><td style="text-align:left"><strong>LPA / LCA</strong></td><td style="text-align:left">リストワイズ削除 (Listwise)</td><td style="text-align:left">選択した観測変数群に欠損のない行を対象に分類し、<code>被験者ID</code> と紐付けて出力</td></tr>
+<tr><td style="text-align:left"><strong>Text Mining</strong></td><td style="text-align:left">テキスト空白行の自動除外</td><td style="text-align:left">対象テキスト列が空欄の行を除外</td></tr>
+</tbody></table></div>
+<h4 id="未知データに対する自動予測機能out-of-sample-predictionbrms--bart">未知データに対する自動予測機能（Out-of-Sample Prediction：<code>brms</code> &amp; <code>BART</code>）<a class="heading-anchor" href="#未知データに対する自動予測機能out-of-sample-predictionbrms--bart" aria-label="Permalink">#</a></h4>
+<p><code>ベイズ推定 (brms)</code> および <code>ベイジアン加法回帰木 (bart2)</code> には、学習（推定）と未知データの予測を 1 回の実行で完結させる仕組みが組み込まれています。</p>
+<ol>
+<li>Excel シートの末尾（または任意の行）に、<strong>目的変数 <code>Y</code> のセルだけを空欄にし、説明変数 <code>X</code>（および変量効果のグループ ID）を入力した行</strong> を追加します。</li>
+<li>ダイアログで <strong>「予測値・残差を出力する」（<code>Output Predictions &amp; Residuals</code>）</strong> にチェックを入れて実行します。</li>
+<li><p>バックエンドが自動的にデータを分割します：</p>
+<ul>
+<li><strong>学習データ (<code>df_train</code>)</strong>: <code>Y</code> と <code>X</code> がともに揃っている行でモデルを推定。</li>
+<li><strong>予測対象テストデータ (<code>df_test</code>)</strong>: <code>Y</code> が空欄かつ <code>X</code> が揃っている行に対し、推定済みモデルの事後予測分布（<code>brms</code> では <code>fitted(..., allow_new_levels = TRUE)</code>、<code>BART</code> では <code>test = df_test</code>）を適用。</li>
+</ul></li>
+<li>出力シートの <code>[ 予測値と残差 ]</code> テーブルに、元の行番号（<code>Row</code>）とともに事後予測平均（<code>Fitted</code>）および <strong>95% 信用区間（<code>CI_Lower</code>, <code>CI_Upper</code>）</strong> が算出されます（テストデータ行の <code>Residual</code> は <code>NA</code> となります）。</li>
+</ol>
+<hr>
+<h3 id="15-グラフ出力仕様ベクターsvg編集と限界効果プロット">1.5 グラフ出力仕様：ベクターSVG編集と限界効果プロット<a class="heading-anchor" href="#15-グラフ出力仕様ベクターsvg編集と限界効果プロット" aria-label="Permalink">#</a></h3>
+<h4 id="論文品質のベクター画像svg出力と-office-上での分解編集">論文品質のベクター画像（SVG）出力と Office 上での分解編集<a class="heading-anchor" href="#論文品質のベクター画像svg出力と-office-上での分解編集" aria-label="Permalink">#</a></h4>
+<p>DocR が出力するすべてのグラフ・パス図・ネットワーク図は、ビットマップ（PNG/JPEG）ではなく <strong><code>svglite</code> パッケージによるスケーラブル・ベクター・グラフィックス（SVG）</strong> として生成され、フォントフォールバック（<code>'Hiragino Sans', 'MS Gothic', sans-serif</code>）を適用した上でシートに埋め込まれます。</p>
+<div class="markdown-alert markdown-alert-tip" role="note"><div class="markdown-alert-title"><svg class="alert-icon" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M8 1.5c-2.363 0-4 1.69-4 3.75 0 .984.424 1.625.984 2.304l.214.253c.223.264.47.556.673.848.284.411.537.896.621 1.49a.75.75 0 0 1-1.484.211c-.04-.282-.163-.547-.37-.847a8.456 8.456 0 0 0-.542-.68c-.084-.1-.173-.205-.268-.32C3.201 7.75 2.5 6.766 2.5 5.25 2.5 2.31 4.863 0 8 0s5.5 2.31 5.5 5.25c0 1.516-.701 2.5-1.328 3.259-.095.115-.184.22-.268.319-.207.245-.383.453-.541.681-.208.3-.33.565-.37.847a.751.751 0 0 1-1.485-.212c.084-.593.337-1.078.621-1.489.203-.292.45-.584.673-.848.075-.088.147-.173.213-.253.561-.679.985-1.32.985-2.304 0-2.06-1.637-3.75-4-3.75ZM5.75 12h4.5a.75.75 0 0 1 0 1.5h-4.5a.75.75 0 0 1 0-1.5ZM6 15.25a.75.75 0 0 1 .75-.75h2.5a.75.75 0 0 1 0 1.5h-2.5a.75.75 0 0 1-.75-.75Z"></path></svg><span>TIP / 実践テクニック</span></div><div class="markdown-alert-body"><p><strong>Excel / PowerPoint 上でグラフを論文投稿用に自在に編集する手順</strong></p>
+<ol>
+<li>出力シート上のグラフをコピーし、PowerPoint スライド（または Excel シート上）に貼り付けます。</li>
+<li>グラフを右クリックし、<strong>「図に変換」（Convert to Shape）</strong> を選択します（確認ダイアログで「はい」を選択）。</li>
+<li>必要に応じて再度右クリックし、<strong>「グループ化」＞「グループ解除」（Ungroup）</strong> を実行します。
+これにより、軸ラベル・タイトル・回帰直線・エラーバー・信頼区間リボン・データ点の 1 つ 1 つが <strong>Office ネイティブの図形オブジェクト</strong> に分解されます。投稿規定に合わせたフォント変更（Arial / Times New Roman 等）、文字サイズ拡大、日本語から英語ラベルへの書き換え、色調変更（グレースケール化等）を画質劣化ゼロで行えます。</li>
+</ol></div></div>
+<h4 id="生データの平均ではなく調整済み限界効果marginal-effectsを描画">「生データの平均」ではなく「調整済み限界効果（Marginal Effects）」を描画<a class="heading-anchor" href="#生データの平均ではなく調整済み限界効果marginal-effectsを描画" aria-label="Permalink">#</a></h4>
+<p>重回帰分析や混合モデル、一般化線形モデルにおいて、単純な 2 変数の散布図や生データの群平均を描画すると、他の共変量や個体差の交絡を含んだ誤解を招く図になります。DocR では各モデルの統計構造に即した <strong>調整済み限界効果・推定周辺平均プロット</strong> を自動生成します。</p>
+<ul>
+<li><strong><code>lm</code> / <code>glm</code> / <code>lmer</code></strong>: <code>ggeffects::ggpredict()</code> により、焦点変数以外の共変量を平均値（または基準カテゴリ）に統制した純粋な予測値と 95% 信頼区間を描画します。特に <strong><code>glm</code>（ロジスティック回帰・ポアソン回帰・順序ロジスティック回帰）では、逆リンク関数により対数オッズではなく「確率（0〜100%）」や「予測カウント」の直感的なスケールへ自動変換</strong> して描画します。</li>
+<li><strong><code>ANOVA (afex)</code></strong>: <code>ggeffects::ggemmeans()</code>（内部で <code>emmeans</code> を呼び出し）により、サンプルサイズの不均等や他要因を調整した <strong>推定周辺平均（Estimated Marginal Means）と 95% 信頼区間</strong> を描画します。</li>
+<li><strong><code>Bayesian (brms)</code></strong>: <code>brms::conditional_effects()</code> による事後周辺効果（95% 信用区間付き）に加え、MCMC 収束診断用の <strong>トレースプロット（Trace Plot）と事後分布密度プロット</strong> を一括出力します。</li>
+<li><strong><code>BART (bart2)</code></strong>: 変数重要度（Relative Variable Importance）棒グラフ、全説明変数の <strong>1次元部分従属プロット（1D PDP；±1.96 SD 区間付き）</strong>、および重要度上位 3 変数ペアの <strong>2次元交互作用ヒートマップ（2D PDP）</strong> を自動生成します。</li>
+<li><p><strong>回帰診断プロットと多重共線性診断 (<code>VIF</code>)</strong>:</p>
+<ul>
+<li><code>lm</code>, <code>glm</code>（<code>cumulative</code> を除く）, <code>lmer</code> では、等分散性・非線形性を点検する <strong>Residuals vs Fitted</strong>（<code>lm</code>/<code>glm</code> は赤色の LOESS 平滑化曲線付き）と残差の正規性を点検する <strong>Normal Q-Q プロット</strong> を自動併記します。</li>
+<li>さらに v1.9.0 より、<code>lm</code>, <code>glm</code>（<code>cumulative</code> を含む）, <code>lmer</code> において説明変数の項が <strong>2 つ以上</strong> 含まれる場合、<code>performance::check_collinearity()</code> が自動実行され、サマリー直下に <strong><code>=== Variance Inflation Factor (VIF) ===</code></strong>（VIF 値、標準誤差膨張率、Tolerance 等；多水準カテゴリ変数の場合は一般化 VIF）が出力されます。</li>
+</ul></li>
+</ul>
+<hr>
+<h3 id="16-多重比較事後検定の共通仕様-emmeans--holm法">1.6 多重比較・事後検定の共通仕様 (emmeans &amp; Holm法)<a class="heading-anchor" href="#16-多重比較事後検定の共通仕様-emmeans--holm法" aria-label="Permalink">#</a></h3>
+<p><code>ANOVA (afex)</code>（チェックボックス ON 時）、および <code>lm</code>, <code>glm</code>, <code>lmer</code>, <code>brms</code>（<code>Post-hoc</code> タブ入力時）では、<strong><code>emmeans</code>（Estimated Marginal Means）パッケージ</strong> を用いたペアワイズ多重比較（<code>pairs(em, adjust = "holm")</code>）を実行します。</p>
+<ul>
+<li><p><strong>p 値補正法：Holm 法（ステップダウン Bonferroni 法）</strong>:</p>
+<ul>
+<li>すべてのペアワイズ比較において <strong><code>adjust = "holm"</code></strong> を標準採用しています。古典的な Bonferroni 法と全く同じ前提条件の少なさ（正規性や等分散性の崩れ・反復測定に対しても頑健で、常に第1種の過誤率 FWER を有意水準以下に厳密制御）を維持しつつ、<strong>Bonferroni 法よりも常に検出力（Power）が高い</strong> ため、現代の行動科学・医学・心理学において広く推奨される補正法です。</li>
+<li>※ <strong><code>brms</code>（ベイズモデル）の場合</strong>: 頻度論的な p 値ではなく、事後分布から算出されたペア間の差の <strong>事後中央値（<code>estimate</code>）および 95% 最高事後密度区間（<code>lower.HPD</code>, <code>upper.HPD</code>）</strong> が出力されます。区間が <code>0</code> を跨いでいなければ実質的な差があると解釈できます。</li>
+</ul></li>
+<li><p><strong><code>Post-hoc</code> タブの指定構文（1行につき1指定）</strong>:</p>
+<ul>
+<li><strong>主効果の多重比較</strong>: <code>Group</code> （<code>Group</code> の全水準ペアを比較）</li>
+<li><strong>単純主効果の検定（Simple Main Effects）</strong>: <code>Group | Time</code> （<code>Time</code> の各水準ごとに、<code>Group</code> 間のペアワイズ比較を実行。連続変数×カテゴリ変数の交互作用モデルでも利用可能）</li>
+<li><strong>交互作用の全セル総当たり比較</strong>: <code>Group : Time</code> （<code>Group × Time</code> の全組み合わせセル間で総当たり比較を実行）</li>
+</ul></li>
+<li><strong><code>factor()</code> 自動除去フェイルセーフ</strong>: モデル式（Formula）欄で <code>factor(Group)</code> と記述したユーザーが、誤って <code>Post-hoc</code> 欄にも <code>factor(Group)</code> や <code>as.factor(Group)</code> と入力してしまっても、API 側の正規表現フィルタ（<code>strip_factor_wrapper</code>）が自動的にラッパーを除去して <code>~ Group</code> へ変換するため、構文エラーで停止しません。</li>
+</ul>
+<hr>
+<h3 id="17-実行環境採用rパッケージ一覧と論文への記載引用方法-methods--citation">1.7 実行環境・採用Rパッケージ一覧と論文への記載・引用方法 (Methods &amp; Citation)<a class="heading-anchor" href="#17-実行環境採用rパッケージ一覧と論文への記載引用方法-methods--citation" aria-label="Permalink">#</a></h3>
+<h4 id="コンテナ基盤環境と採用パッケージ対応表">コンテナ基盤環境と採用パッケージ対応表<a class="heading-anchor" href="#コンテナ基盤環境と採用パッケージ対応表" aria-label="Permalink">#</a></h4>
+<ul>
+<li><strong>コンテナ基盤イメージ</strong>: <code>rocker/r-ver:4.3.2</code>（Linux / <strong>R version 4.3.2</strong>）</li>
+<li><strong>グラフィックス・共通診断基盤</strong>: <code>ggplot2</code>, <code>svglite</code> (SVG 出力), <code>ggeffects</code> (限界効果), <code>emmeans</code> (推定周辺平均・多重比較), <code>performance</code> (VIF 多重共線性診断)</li>
+</ul>
+<div class="table-wrapper"><table><thead><tr><th style="text-align:center">#</th><th style="text-align:left">リボン表示名 (日本語 / 英語)</th><th style="text-align:left">主要 R パッケージ</th><th style="text-align:left">中核実行関数</th><th style="text-align:left">推定法・主なデフォルト仕様</th></tr></thead><tbody>
+<tr><td style="text-align:center">1</td><td style="text-align:left">記述統計 (<code>describe</code>) / Descriptives (<code>describe</code>)</td><td style="text-align:left"><code>psych</code>, <code>ggplot2</code></td><td style="text-align:left"><code>psych::describe()</code></td><td style="text-align:left">平均、SD、中央値、10%トリム平均、MAD、歪度、尖度、SE、ヒストグラム＋カーネル密度曲線</td></tr>
+<tr><td style="text-align:center">2</td><td style="text-align:left">相関分析 (<code>correlation</code>) / Correlation (<code>correlation</code>)</td><td style="text-align:left"><code>correlation</code>, <code>BayesFactor</code></td><td style="text-align:left"><code>correlation::correlation()</code></td><td style="text-align:left">Pearson / Spearman / Kendall / Biweight / Distance、Holm 補正、ベイズ相関 (BF &amp; 95% HDI)、偏相関</td></tr>
+<tr><td style="text-align:center">3</td><td style="text-align:left">線形回帰 (<code>lm</code>) / Linear Regression (<code>lm</code>)</td><td style="text-align:left"><code>stats</code>, <code>performance</code>, <code>emmeans</code></td><td style="text-align:left"><code>stats::lm()</code></td><td style="text-align:left">最小二乗法 (OLS)、自動 VIF 算出、限界効果プロット、残差診断図、Holm 事後検定</td></tr>
+<tr><td style="text-align:center">4</td><td style="text-align:left">一般化線形モデル (<code>glm</code>) / GLM (<code>glm</code>)</td><td style="text-align:left"><code>stats</code>, <code>MASS</code>, <code>performance</code></td><td style="text-align:left"><code>stats::glm()</code>, <code>MASS::polr()</code></td><td style="text-align:left">最尤法 (<code>gaussian</code>, <code>binomial</code>, <code>poisson</code>) ＋ <strong>順序ロジスティック回帰 (<code>cumulative</code>: 比例オッズモデル)</strong>、自動 VIF</td></tr>
+<tr><td style="text-align:center">5</td><td style="text-align:left">分散分析 (<code>afex</code>) / ANOVA (<code>afex</code>)</td><td style="text-align:left"><code>afex</code>, <code>emmeans</code></td><td style="text-align:left"><code>afex::aov_car()</code></td><td style="text-align:left"><strong>Type III 平方和</strong>、一般化イータ二乗 (<code>ges</code>: η²G)、Mauchly 球面性検定＋GG / HF 自由度補正、Holm 事後検定</td></tr>
+<tr><td style="text-align:center">6</td><td style="text-align:left">線形混合モデル (<code>lmer</code>) / Linear Mixed (<code>lmer</code>)</td><td style="text-align:left"><code>lme4</code>, <code>lmerTest</code>, <code>performance</code></td><td style="text-align:left"><code>lmerTest::lmer()</code></td><td style="text-align:left">REML（または ML）推定、<strong>Satterthwaite 法による自由度・p 値算出</strong>、自動 VIF 算出</td></tr>
+<tr><td style="text-align:center">7</td><td style="text-align:left">正則化回帰 (<code>glmnet</code>) / Regularized Regression (<code>glmnet</code>)</td><td style="text-align:left"><code>glmnet</code></td><td style="text-align:left"><code>glmnet::cv.glmnet()</code></td><td style="text-align:left">10分割交差検証による <code>lambda.min</code> (λ) 選択、α (<code>0.0〜1.0</code>) の <strong>0.1刻み自動グリッドサーチ</strong> 対応</td></tr>
+<tr><td style="text-align:center">8</td><td style="text-align:left">ベイズ推定 (<code>brms</code>) / Bayesian (<code>brms</code>)</td><td style="text-align:left"><code>brms</code> (Stan)</td><td style="text-align:left"><code>brms::brm()</code></td><td style="text-align:left">NUTS (HMC) サンプリング、8 分布族（<strong><code>student</code></strong> 含む）、事前コンパイルモデル 16 種、<code>bayes_R2</code> / PSIS-LOO、<code>hypothesis</code></td></tr>
+<tr><td style="text-align:center">9</td><td style="text-align:left">ベイジアン加法回帰木（<code>bart2</code>) / BART (<code>bart2</code>)</td><td style="text-align:left"><code>dbarts</code></td><td style="text-align:left"><code>dbarts::bart2()</code>, <code>pdbart()</code>, <code>pd2bart()</code></td><td style="text-align:left">決定木アンサンブル MCMC、欠損値インジケータ法、変数重要度、1D / 2D 部分従属プロット (PDP)</td></tr>
+<tr><td style="text-align:center">10</td><td style="text-align:left">因子分析/主成分分析 (<code>fa/principal</code>) / EFA/PCA</td><td style="text-align:left"><code>psych</code>, <code>GPArotation</code></td><td style="text-align:left"><code>psych::fa()</code>, <code>psych::principal()</code></td><td style="text-align:left"><code>minres</code> / <code>ml</code> / <code>pa</code>、<code>promax</code> / <code>varimax</code>、下位尺度別 Cronbach's α（逆転項目自動検知）、因子・主成分得点出力</td></tr>
+<tr><td style="text-align:center">11</td><td style="text-align:left">共分散構造分析 (<code>lavaan</code>) / SEM / CFA (<code>lavaan</code>)</td><td style="text-align:left"><code>lavaan</code>, <code>semPlot</code></td><td style="text-align:left"><code>lavaan::sem()</code>, <code>semPaths()</code></td><td style="text-align:left">最尤推定＋<strong>FIML（完全情報最尤法）</strong> デフォルト、<code>CFI</code>/<code>TLI</code>/<code>RMSEA</code>/<code>SRMR</code>、標準化係数パス図</td></tr>
+<tr><td style="text-align:center">12</td><td style="text-align:left">潜在変数モデル (<code>tidyLPA</code>/<code>poLCA</code>) / LPA/LCA</td><td style="text-align:left"><code>tidyLPA</code> (<code>mclust</code>), <code>poLCA</code></td><td style="text-align:left"><code>estimate_profiles()</code>, <code>poLCA()</code></td><td style="text-align:left">複数クラス数の自動探索と <strong>BIC 最小基準による最適モデル自動選択</strong>、LCA エントロピー算出、所属クラス出力</td></tr>
+<tr><td style="text-align:center">13</td><td style="text-align:left">テキスト分析（※日本語 UI 専用）</td><td style="text-align:left"><code>RMeCab</code> (<code>MeCab</code>), <code>wordcloud</code>, <code>igraph</code>, <code>ca</code></td><td style="text-align:left"><code>RMeCab::docDF()</code></td><td style="text-align:left"><code>mecab-ipadic-utf8</code> 原型抽出、ユーザー辞書動的コンパイル、TF-IDF、対応分析、共起ネットワーク</td></tr>
+</tbody></table></div>
+<h4 id="論文での引用方法citationと-methods-記載テンプレート">論文での引用方法（Citation）と Methods 記載テンプレート<a class="heading-anchor" href="#論文での引用方法citationと-methods-記載テンプレート" aria-label="Permalink">#</a></h4>
+<p>研究成果（論文・学会発表・学位論文等）で DocR を使用された際は、以下の形式で DocR 本体および該当する R パッケージを引用してください。</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">text</span><button type="button" class="copy-btn" data-copy="コピー" data-copied="✔ コピー済">コピー</button></div><pre><code class="language-text">Matsushita, S. (2026). DocR: An Excel Gateway to Containerized R Environments. https://researchmap.jp/multidatabases/multidatabase_contents/detail/250145/1fcd545ec0b04eee0fe5cd87492c19bb?frame_id=710763</code></pre></div>
+<div class="markdown-alert markdown-alert-note" role="note"><div class="markdown-alert-title"><svg class="alert-icon" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8Zm8-6.5a6.5 6.5 0 1 0 0 13 6.5 6.5 0 0 0 0-13ZM6.5 7.75A.75.75 0 0 1 7.25 7h1a.75.75 0 0 1 .75.75v2.75h.25a.75.75 0 0 1 0 1.5h-2a.75.75 0 0 1 0-1.5h.25v-2h-.25a.75.75 0 0 1-.75-.75ZM8 6a1 1 0 1 1 0-2 1 1 0 0 1 0 2Z"></path></svg><span>NOTE / 補足仕様</span></div><div class="markdown-alert-body"><p><strong>学術論文の Methods セクション記載例（日本語・英語）</strong></p>
+<ul>
+<li><strong>日本語記載例</strong>: 「統計解析には DocR（v1.9.0; Matsushita, 2026）を介してコンテナ環境上の R（version 4.3.2; R Core Team, 2023）を使用した。線形混合モデルの推定には <code>lmerTest</code> パッケージを用い、制限付き最尤法（REML）および Satterthwaite の自由度近似により有意確率を算出した。多重比較には <code>emmeans</code> パッケージを用い、Holm 法による p 値補正を行った。」</li>
+<li><strong>英語記載例</strong>: "Statistical analyses were conducted in R (version 4.3.2) via DocR (v1.9.0; Matsushita, 2026), a containerized R statistical interface for Microsoft Excel. Linear mixed-effects models were fitted using the <code>lmerTest</code> package with restricted maximum likelihood (REML) estimation and Satterthwaite's approximation for degrees of freedom. Post-hoc pairwise comparisons were performed using the <code>emmeans</code> package with Holm's p-value adjustment."</li>
+</ul></div></div>
+<hr>
+<h2 id="第2部分析モデル別計算仕様カスタム構文リファレンス">第2部：分析モデル別・計算仕様＆カスタム構文リファレンス<a class="heading-anchor" href="#第2部分析モデル別計算仕様カスタム構文リファレンス" aria-label="Permalink">#</a></h2>
+<p>以下、リボンの搭載順に全 13 モジュールの詳細な統計仕様・内部処理・カスタム構文レシピを解説します。</p>
+<hr>
+<h3 id="21-記述統計データ概観--describe-psych">2.1 記述統計・データ概観 — Describe (psych)<a class="heading-anchor" href="#21-記述統計データ概観--describe-psych" aria-label="Permalink">#</a></h3>
+<h4 id="バックエンド統計仕様">バックエンド・統計仕様<a class="heading-anchor" href="#バックエンド統計仕様" aria-label="Permalink">#</a></h4>
+<ul>
+<li><strong>エンドポイント / 実行関数</strong>: <code>POST /describe</code> — <code>psych::describe(df)</code> および <code>ggplot2</code></li>
+<li><p><strong>算出指標（一覧表出力）</strong>:</p>
+<ul>
+<li><code>vars</code>（変数番号）、<code>n</code>（欠損を除く有効観測数）、<code>mean</code>（算術平均）、<code>sd</code>（不偏標準偏差）、<code>median</code>（中央値）、<code>trimmed</code>（上下各 10% の外れ値を除外した <strong>10% トリム平均</strong>）、<code>mad</code>（中央絶対偏差；正規分布換算係数 1.4826 乗算済み）、<code>min</code>（最小値）、<code>max</code>（最大値）、<code>range</code>（範囲）、<code>skew</code>（歪度）、<code>kurtosis</code>（尖度；正規分布を 0 とする超過尖度）、<code>se</code>（標準誤差 <code>SD / sqrt(n)</code>）。</li>
+</ul></li>
+<li><strong>グラフ出力</strong>: 密度スケール（<code>after_stat(density)</code>）のヒストグラム（デフォルト <code>bins = 30</code>、塗り色 <code>steelblue</code>）に、赤色のカーネル密度推定曲線（<code>geom_density()</code>）を重ねて描画します。複数変数選択時は <code>facet_wrap(~ Variable, scales = "free")</code> により各変数固有の軸スケールで一覧表示します。</li>
+</ul>
+<h4 id="自動前処理安全装置-under-the-hood">自動前処理・安全装置 (Under the Hood)<a class="heading-anchor" href="#自動前処理安全装置-under-the-hood" aria-label="Permalink">#</a></h4>
+<ul>
+<li><strong>カテゴリ（文字列）データの自動数値コード化描画</strong>: 通常、文字列列をヒストグラムに投入すると型エラーになりますが、DocR はプロット生成時のみ非数値列を一時的に <code>as.numeric(as.factor(x))</code>（<code>1, 2, 3...</code> の連番）へ変換して描画します。ダミー変数化の手間なくカテゴリ水準の度数バランスを視覚確認できます。</li>
+<li><strong>複数変数選択時の軸固定オーバーライド防止</strong>: 階級数（<code>Bins</code>）および X 軸範囲（<code>Min</code> / <code>Max</code>）の手動指定が有効になるのは <strong>変数を 1 つだけ選択して詳細確認する時のみ</strong> です。2 つ以上の変数を同時選択した場合は、スケールの異なる変数群が共通軸で潰れる事故を防ぐため、UI 側・API 側の双方で自動的に <code>scales = "free"</code>（30 分割自動最適化）へ強制切り替えされます。なお、単一変数での <code>Min</code> / <code>Max</code> 指定にはデータを切り捨てない <code>coord_cartesian(xlim = ...)</code> を使用しているため、ズーム表示してもカーネル密度曲線が端で歪みません。</li>
+</ul>
+<h4 id="応用カスタム構文レシピ">応用・カスタム構文レシピ<a class="heading-anchor" href="#応用カスタム構文レシピ" aria-label="Permalink">#</a></h4>
+<ul>
+<li><strong>パラメトリック検定前の分布スクリーニング</strong>: <code>mean</code> と <code>trimmed</code>（10% トリム平均）が大きく乖離している場合や、<code>|skew| &gt; 2</code>・<code>|kurtosis| &gt; 7</code> を示す変数は強い歪みや外れ値を含んでいます。後続の回帰分析で対数変換 <code>log(y)</code> を適用するか、<code>brms</code> の <strong><code>student</code> 分布（ロバスト回帰）</strong> や <code>Correlation</code> の <strong><code>spearman</code> / <code>biweight</code></strong> を選択する客観的根拠として活用できます。</li>
+<li><strong>単一変数の外れ値ズーム確認</strong>: 極端な外れ値が 1 件あるためにヒストグラム本体が 1 本の棒に潰れてしまう場合、その変数 1 つだけを選択し、「階級(Bin)と描画範囲を自動最適化する」のチェックを外して <code>Max</code>（または <code>Min</code>）に上限値のみを入力することで、下限側は自動のまま本体分布を拡大観察できます。</li>
+</ul>
+<hr>
+<h3 id="22-相関分析--correlation-correlation">2.2 相関分析 — Correlation (correlation)<a class="heading-anchor" href="#22-相関分析--correlation-correlation" aria-label="Permalink">#</a></h3>
+<h4 id="バックエンド統計仕様-1">バックエンド・統計仕様<a class="heading-anchor" href="#バックエンド統計仕様-1" aria-label="Permalink">#</a></h4>
+<ul>
+<li><strong>エンドポイント / 実行関数</strong>: <code>POST /cor</code> — <code>correlation::correlation()</code>（<code>easystats</code> エコシステム）＋ <code>BayesFactor</code>（ベイズ相関 ON 時）</li>
+<li><p><strong>相関係数の種類 (<code>Correlation Method</code>)</strong>:</p>
+<ul>
+<li><code>pearson</code>（デフォルト）：ピアソンの積率相関係数 <em>r</em>（線形関係・パラメトリック）</li>
+<li><code>spearman</code>：スピアマンの順位相関係数 <em>ρ</em>（単調関係・順序尺度・外れ値に頑健）</li>
+<li><code>kendall</code>：ケンドールの順位相関係数 <em>τ</em>（同順位が多いデータや小標本に頑健）</li>
+<li><code>biweight</code>：Tukey の biweight 相関（M推定に基づく外れ値耐性の高いロバスト相関）</li>
+<li><code>distance</code>：距離相関（Distance Correlation；非線形・非単調な従属関係も検出可能で、値が 0 であることと統計的独立性が同値）</li>
+</ul></li>
+<li><strong>多重比較 p 値補正 (<code>p-value Adjustment</code>)</strong>: <code>holm</code>（デフォルト）、<code>bonferroni</code>、<code>fdr</code>（Benjamini–Hochberg 法による偽発見率制御）、<code>none</code>（無補正）。</li>
+<li><p><strong>追加オプション</strong>:</p>
+<ul>
+<li><strong>ベイズ相関 (<code>bayesian = TRUE</code>)</strong>: 各変数ペアに対してベイズファクター（<code>BF10</code>）および事後分布の 95% 最高密度区間（95% HDI）を算出します。</li>
+<li><strong>偏相関 (<code>partial = TRUE</code>)</strong>: 投入した他のすべての変数の影響を統計的に統制した偏相関係数を一括算出します。</li>
+</ul></li>
+<li><strong>出力形式</strong>: 相関行列（正方マトリックス）ではなく、1行＝1変数ペアの <strong>エッジリスト形式</strong>（<code>Parameter1</code>, <code>Parameter2</code>, <code>r</code> / <code>rho</code>, <code>95% CI</code>, <code>t</code> / <code>S</code>, <code>df</code>, <code>p</code>, <code>n_Obs</code> 等）で出力されます。</li>
+</ul>
+<h4 id="自動前処理安全装置-under-the-hood-1">自動前処理・安全装置 (Under the Hood)<a class="heading-anchor" href="#自動前処理安全装置-under-the-hood-1" aria-label="Permalink">#</a></h4>
+<ul>
+<li><strong>欠損値（NA）を破壊しない防弾ワンホット・ダミー化</strong>: 「カテゴリ変数を自動ダミー化して含める」（デフォルト ON）を有効にすると、文字列・因子列の各水準が <code>&lt;変数名&gt;.&lt;水準名&gt;</code>（例：<code>性別.女性</code>, <code>性別.男性</code>）という <code>0/1</code> ダミー変数へ自動展開されます。一般的なダミー変換処理では元の空白セルが誤って <code>0</code> に置換されて相関係数が歪む罠がありますが、DocR では <code>ifelse(df[[col]] == lvl, 1, 0)</code> により <strong>元のセルが欠損（<code>NA</code>）である行はダミー化後も厳密に <code>NA</code> のまま保持</strong> し、ペアワイズ削除が正確に機能するよう設計されています。</li>
+<li><strong>エッジリスト出力の実務的利点</strong>: 数十変数の総当たり相関でも Excel のオートフィルタや並び替え機能で「<code>p &lt; 0.05</code> かつ <code>|r|</code> が大きい順」に即座に抽出でき、そのまま外部のネットワーク可視化ツールのエッジデータとしても利用できます。</li>
+</ul>
+<h4 id="応用カスタム構文レシピ-1">応用・カスタム構文レシピ<a class="heading-anchor" href="#応用カスタム構文レシピ-1" aria-label="Permalink">#</a></h4>
+<ul>
+<li><strong>「無相関の証拠」を論文で主張する（ベイズ相関の活用）</strong>: 頻度論の <code>p &gt; 0.05</code> は「相関がないことの証明」にはなりませんが、「ベイズ相関を計算する」を ON にして <code>BF10 &lt; 0.33</code>（<code>1/3</code> 未満）が得られれば、「帰無仮説（無相関）が対立仮説の 3 倍以上支持された」という積極的根拠として論文に報告できます。</li>
+<li><strong>重回帰投入前の多重共線性・交絡チェック</strong>: 説明変数候補を一括投入し、通常の相関（<code>partial = FALSE</code>）と偏相関（<code>partial = TRUE</code>）を比較することで、見かけ上の擬似相関と直接的な関連を切り分けることができます。</li>
+</ul>
+<hr>
+<h3 id="23-線形回帰分析--linear-regression-lm">2.3 線形回帰分析 — Linear Regression (lm)<a class="heading-anchor" href="#23-線形回帰分析--linear-regression-lm" aria-label="Permalink">#</a></h3>
+<h4 id="バックエンド統計仕様-2">バックエンド・統計仕様<a class="heading-anchor" href="#バックエンド統計仕様-2" aria-label="Permalink">#</a></h4>
+<ul>
+<li><strong>エンドポイント / 実行関数</strong>: <code>POST /lm</code> — <code>stats::lm()</code></li>
+<li><strong>推定法</strong>: 通常最小二乗法（OLS: Ordinary Least Squares）</li>
+<li><p><strong>出力内容</strong>:</p>
+<ul>
+<li>回帰係数テーブル（推定値 <code>Estimate</code>、標準誤差 <code>Std. Error</code>、<code>t value</code>、両側有意確率 <code>Pr(&gt;|t|)</code>）</li>
+<li>モデル適合度指標（残差標準誤差 <code>Residual standard error</code>、決定係数 <code>Multiple R-squared</code>、自由度調整済み決定係数 <code>Adjusted R-squared</code>、モデル全体の <code>F-statistic</code> と p 値）</li>
+<li><strong>多重共線性診断 (<code>VIF</code>)</strong>: 説明変数の項が 2 つ以上ある場合、<code>performance::check_collinearity(fit)</code> による VIF テーブルを自動出力（一般に <code>VIF &lt; 5</code> が望ましく、<code>VIF &gt;= 10</code> は深刻な多重共線性を示唆）</li>
+<li><strong>事後検定 (<code>Post-hoc</code>)</strong>: 指定された項に対する <code>emmeans</code> + Holm 補正ペアワイズ比較</li>
+<li><strong>予測値と残差テーブル</strong>: 有効行インデックス <code>Row</code>、当てはめ値 <code>Fitted</code>、残差 <code>Residual</code></li>
+<li><strong>グラフ出力</strong>: 各説明変数の調整済み限界効果プロット（<code>ggeffects::ggpredict</code>）＋ 残差診断図 2 種（LOESS 曲線付き <code>Residuals vs Fitted</code> および <code>Normal Q-Q</code>）</li>
+</ul></li>
+</ul>
+<h4 id="自動前処理安全装置-under-the-hood-2">自動前処理・安全装置 (Under the Hood)<a class="heading-anchor" href="#自動前処理安全装置-under-the-hood-2" aria-label="Permalink">#</a></h4>
+<ul>
+<li><strong>カテゴリ変数の自動因子化と共分散分析（ANCOVA）へのシームレス対応</strong>: 説明変数に文字列の群変数と連続値の共変量を同時に投入するだけで、自動的にダミー変数化が行われ、共分散分析（ANCOVA）や階層的重回帰と同等のモデルが構築されます。</li>
+<li><strong>呼び出し式のクリーンアップ</strong>: <code>fit$call$formula</code> を整形して保持するため、サマリー出力の先頭に内部オブジェクト名ではなく明瞭なモデル式が印字されます。</li>
+</ul>
+<h4 id="応用カスタム構文レシピ-2">応用・カスタム構文レシピ<a class="heading-anchor" href="#応用カスタム構文レシピ-2" aria-label="Permalink">#</a></h4>
+<p><code>Formula</code> 欄を直接編集することで、R の標準 <code>formula</code> 構文をすべて利用できます（日本語列名もそのまま記述可能です）。</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">r</span><button type="button" class="copy-btn" data-copy="コピー" data-copied="✔ コピー済">コピー</button></div><pre><code class="language-r"># 1. 主効果＋交互作用項の一括投入（X1 + X2 + X1:X2 と同義）
+売上 ~ 広告費 * 店舗規模
+
+# 2. 特定の交互作用項のみを追加
+売上 ~ 広告費 + 気温 + 店舗規模 + 広告費:気温
+
+# 3. 多項式回帰（2次曲線・逆U字型関係の検証：I() で算術演算を保護）
+作業効率 ~ 覚醒度 + I(覚醒度^2)
+
+# 4. 対数変換・標準化（Z得点化＝標準偏回帰係数 β の算出）
+log(年収) ~ scale(勤続年数) + scale(教育年数) + 職種
+
+# 5. 数値コード化された群変数をカテゴリとして投入
+得点 ~ factor(群コード) + 事前得点</code></pre></div>
+<ul>
+<li><p><strong><code>Post-hoc</code> タブでの単純傾斜・単純主効果の指定例</strong>:</p>
+<ul>
+<li><code>店舗規模</code> （共変量を平均値に統制した上での店舗規模間の調整済み平均比較）</li>
+<li><code>店舗規模 | 地域</code> （地域ごとの店舗規模間の単純主効果比較）</li>
+</ul></li>
+</ul>
+<hr>
+<h3 id="24-一般化線形モデル順序ロジスティック回帰--glm-glm--masspolr">2.4 一般化線形モデル・順序ロジスティック回帰 — GLM (glm / MASS::polr)<a class="heading-anchor" href="#24-一般化線形モデル順序ロジスティック回帰--glm-glm--masspolr" aria-label="Permalink">#</a></h3>
+<h4 id="バックエンド統計仕様-3">バックエンド・統計仕様<a class="heading-anchor" href="#バックエンド統計仕様-3" aria-label="Permalink">#</a></h4>
+<ul>
+<li><strong>エンドポイント / 実行関数</strong>: <code>POST /glm</code> — <code>stats::glm()</code>（標準分布族）および <strong><code>MASS::polr(..., Hess = TRUE)</code></strong>（<code>cumulative (Ordinal)</code> 選択時）</li>
+<li><strong>対応する確率分布とリンク関数 (<code>Distribution Family</code>)</strong>:</li>
+</ul>
+<div class="table-wrapper"><table><thead><tr><th style="text-align:left">UI 選択肢</th><th style="text-align:left">R 実行関数・分布</th><th style="text-align:left">リンク関数</th><th style="text-align:left">対象となる目的変数 <code>Y</code> の型・用途</th></tr></thead><tbody>
+<tr><td style="text-align:left"><code>gaussian</code></td><td style="text-align:left"><code>glm(..., family = gaussian)</code></td><td style="text-align:left">恒等リンク (<code>identity</code>)</td><td style="text-align:left">連続量（最尤推定による線形モデル）</td></tr>
+<tr><td style="text-align:left"><code>binomial</code></td><td style="text-align:left"><code>glm(..., family = binomial)</code></td><td style="text-align:left">ロジットリンク (<code>logit</code>)</td><td style="text-align:left"><strong>2値データ</strong>（<code>0/1</code>、または <code>"No"/"Yes"</code> 等の2水準文字列／因子）に対する <strong>二項ロジスティック回帰</strong></td></tr>
+<tr><td style="text-align:left"><code>poisson</code></td><td style="text-align:left"><code>glm(..., family = poisson)</code></td><td style="text-align:left">対数リンク (<code>log</code>)</td><td style="text-align:left"><strong>カウントデータ</strong>（<code>0, 1, 2, ...</code> の非負整数：来店回数、エラー件数等）に対する <strong>ポアソン回帰</strong></td></tr>
+<tr><td style="text-align:left"><strong><code>cumulative (Ordinal)</code></strong></td><td style="text-align:left"><strong><code>MASS::polr(..., Hess = TRUE)</code></strong></td><td style="text-align:left"><strong>ロジットリンク (<code>logistic</code>)</strong></td><td style="text-align:left"><strong>順序カテゴリデータ</strong>（5件法リッカート尺度 <code>1〜5</code>、重症度 <code>"軽度"/"中等度"/"重度"</code> 等）に対する <strong>順序ロジスティック回帰（比例オッズモデル / 累積リンクモデル）</strong></td></tr>
+</tbody></table></div>
+<ul>
+<li><p><strong>出力内容</strong>:</p>
+<ul>
+<li>標準 <code>glm</code>: 偏回帰係数（<code>Estimate</code>, <code>Std. Error</code>, <code>z value</code> / <code>t value</code>, <code>p</code> 値）、Null Deviance / Residual Deviance、AIC、<strong>自動 VIF 診断</strong>、Holm 補正事後検定、行番号付き <code>Fitted</code>（応答スケール：確率や期待カウント）および <code>Residual</code>（逸脱度残差）。</li>
+<li><p><strong><code>cumulative (Ordinal)</code> (v1.9.0 新機能)</strong>:</p>
+<ul>
+<li><code>MASS::polr</code> による回帰係数（<code>Coefficients</code>）および各境界の閾値切片（<code>Intercepts</code>: <code>1|2</code>, <code>2|3</code> 等）、Residual Deviance、AIC、<strong>自動 VIF 診断</strong>、および <code>emmeans</code> 事後検定。</li>
+<li><strong>予測クラス・所属確率の完全出力</strong>: <code>[ 予測値と残差 ]</code> テーブルに、欠損行を除外した正確な元データ行番号（<code>Row</code>）、最大確率に基づく予測カテゴリ（<code>Predicted_Class</code>）、および <strong>全カテゴリに対する予測確率（<code>Prob_&lt;水準1&gt;</code>, <code>Prob_&lt;水準2&gt;</code>, ...）</strong> を一括出力します。</li>
+</ul></li>
+</ul></li>
+</ul>
+<h4 id="自動前処理安全装置-under-the-hood-3">自動前処理・安全装置 (Under the Hood)<a class="heading-anchor" href="#自動前処理安全装置-under-the-hood-3" aria-label="Permalink">#</a></h4>
+<ul>
+<li><strong>逆リンク変換による「確率・回数スケール」での限界効果プロット</strong>: ロジスティック回帰や順序ロジスティック回帰の偏回帰係数は対数オッズ比（Log-Odds）であり直感的解釈が困難ですが、DocR は <code>ggeffects::ggpredict()</code> により <strong>自動的に応答スケール（<code>0%〜100%</code> の発生確率や各順序カテゴリの選択確率推移）へ逆変換した曲線と信頼区間</strong> を描画します。</li>
+<li><strong><code>cumulative</code> モードにおける自動順序因子化と診断図制御</strong>: <code>cumulative (Ordinal)</code> 選択時、目的変数 <code>Y</code> は自動的に <code>as.ordered()</code> で順序付き因子へ変換されます（数値なら昇順、文字列なら辞書順）。また <code>polr</code> モデルでは単一スカラー残差が定義されないため、<code>Residuals vs Fitted</code> 等を自動抑制し、カテゴリ別の確率限界効果プロットのみをクリーンに描画します。</li>
+<li><strong>欠損値を含むデータでの行ズレ防止</strong>: <code>MASS::polr</code> で欠損行がリストワイズ除外された際、<code>rownames(fit$fitted.values)</code> から有効行インデックスを厳密に取得して <code>Row</code> 列に記録するため、元データとの照合時に行ズレが発生しません。</li>
+</ul>
+<h4 id="応用カスタム構文レシピ-3">応用・カスタム構文レシピ<a class="heading-anchor" href="#応用カスタム構文レシピ-3" aria-label="Permalink">#</a></h4>
+<ul>
+<li><strong>オッズ比（OR）・発生率比（IRR）の算出</strong>: <code>binomial</code> や <code>cumulative</code> の偏回帰係数 β に対し、Excel 上で <code>=EXP(係数)</code> を計算すると <strong>オッズ比（Odds Ratio）</strong> が得られます。同様に <code>poisson</code> の係数に <code>=EXP(係数)</code> を適用すると <strong>発生率比（Incidence Rate Ratio: IRR）</strong> になります。</li>
+<li><strong>ポアソン回帰でのオフセット項（観察期間や母数の補正）</strong>: 観察時間 <code>time</code> 当たりの発生率をモデル化する場合は、<code>Formula</code> 欄に以下のように <code>offset(log(...))</code> を記述できます。</li>
+</ul>
+<div class="code-block"><div class="code-header"><span class="code-lang">r</span><button type="button" class="copy-btn" data-copy="コピー" data-copied="✔ コピー済">コピー</button></div><pre><code class="language-r">事故件数 ~ 交通量 + 天候 + offset(log(観察時間))</code></pre></div>
+<ul>
+<li><strong>順序ロジスティック回帰でのカテゴリ順序の制御</strong>: 文字列の目的変数（例：<code>"Low"</code>, <code>"Mid"</code>, <code>"High"</code>）は辞書順（<code>High &lt; Low &lt; Mid</code>）になるため、Excel 側で <code>"1_Low"</code>, <code>"2_Mid"</code>, <code>"3_High"</code> または数値 <code>1, 2, 3</code> としておくと意図通りの順序で閾値が推定されます。</li>
+</ul>
+<hr>
+<h3 id="25-分散分析--anova-afex">2.5 分散分析 — ANOVA (afex)<a class="heading-anchor" href="#25-分散分析--anova-afex" aria-label="Permalink">#</a></h3>
+<h4 id="バックエンド統計仕様-4">バックエンド・統計仕様<a class="heading-anchor" href="#バックエンド統計仕様-4" aria-label="Permalink">#</a></h4>
+<ul>
+<li><strong>エンドポイント / 実行関数</strong>: <code>POST /anova</code> — <code>afex::aov_car()</code></li>
+<li><strong>平方和のタイプ</strong>: <strong>Type III 平方和（Type III Sum of Squares）</strong> — 各要因の直交対比（<code>contr.sum</code>）が <code>afex</code> 内部で自動設定され、各群のサンプルサイズが不均等（アンバランスデザイン）なデータでも SPSS 等の商用統計ソフトと一致する不偏な主効果・交互作用検定を提供します。</li>
+<li><p><strong>対応デザイン</strong>:</p>
+<ul>
+<li>被験者間計画（一元配置・多元配置分散分析：<code>Between-Subjects Factors</code> のみ指定）</li>
+<li>被験者内計画（反復測定分散分析：<code>Within-Subjects Factors</code> のみ指定）</li>
+<li>混合計画（スプリット・プロットデザイン：被験者間要因と被験者内要因の両方を指定）</li>
+</ul></li>
+<li><p><strong>効果量と球面性補正の自動出力</strong>:</p>
+<ul>
+<li>効果量指標として <strong>一般化イータ二乗（<code>ges</code>: Generalized Eta-Squared, η²G）</strong> を標準出力します（被験者間デザインと反復測定デザインの間で効果量の大きさを比較可能な推奨指標です）。</li>
+<li>3 水準以上の被験者内要因が含まれる場合、自動的に <strong>Mauchly の球面性検定（<code>Mauchly's Tests for Sphericity</code>）</strong>、および球面性の仮定が崩れた場合の <strong>Greenhouse-Geisser（<code>GG eps</code>, <code>Pr(&gt;F[GG])</code>）</strong> と <strong>Huynh-Feldt（<code>HF eps</code>, <code>Pr(&gt;F[HF])</code>）</strong> の自由度調整済み p 値を一括出力します（<code>print(fit)</code> のメイン ANOVA 表でもデフォルトで GG 補正後の自由度・p 値が表示されます）。</li>
+</ul></li>
+<li><p><strong>事後検定とグラフ出力</strong>:</p>
+<ul>
+<li>「事後検定(Holm法)を行う」チェック時、主効果および交互作用項すべてに対して <code>emmeans</code> + Holm 補正ペアワイズ比較を自動実行します。</li>
+<li>主効果ごとに <code>ggemmeans()</code> による推定周辺平均と 95% 信頼区間プロットを描画します。</li>
+</ul></li>
+</ul>
+<h4 id="自動前処理安全装置-under-the-hood-4">自動前処理・安全装置 (Under the Hood)<a class="heading-anchor" href="#自動前処理安全装置-under-the-hood-4" aria-label="Permalink">#</a></h4>
+<ul>
+<li><strong>全要因の強制 <code>factor</code> 化による回帰誤認の防止</strong>: 群分けコードが <code>1, 2, 3</code> のような数値であっても、右辺に投入されたすべての要因・被験者 ID は API 側で自動的に <code>as.factor()</code> 変換されます。R 標準の <code>aov()</code> で頻発する「3群以上の数値コードを自由度 1 の直線回帰として誤計算してしまう事故」が構造的に防止されています。</li>
+<li><p><strong>被験者間・被験者内に応じた <code>Error()</code> 項の自動構築</strong>: UI で割り当てた要因リストから、VBA が自動的に以下の <code>aov_car</code> 数式を組み立てます：</p>
+<ul>
+<li>被験者間要因のみ：<code>Y ~ A * B + Error(Subject)</code></li>
+<li>被験者内要因を含む場合：<code>Y ~ A * B + Error(Subject / (Within1 * Within2))</code></li>
+</ul></li>
+</ul>
+<h4 id="応用カスタム構文レシピ-4">応用・カスタム構文レシピ<a class="heading-anchor" href="#応用カスタム構文レシピ-4" aria-label="Permalink">#</a></h4>
+<ul>
+<li><p><strong>完全独立サンプル（対応のない分散分析）での <code>被験者ID</code> 指定ルール</strong>:</p>
+<ul>
+<li><code>afex::aov_car</code> は観測の独立性／反復構造を厳密に識別するため、<strong>被験者間要因のみの分析であっても <code>被験者ID</code> 列の指定が必須</strong> です（1 人のデータが誤って複数行に分かれていた場合に平均化または警告するため）。</li>
+<li>ID 列が手元のシートにない場合は、Excel で <code>1, 2, 3, ...</code> の連番列を 1 列作成して <code>被験者ID</code> に指定してください。</li>
+</ul></li>
+<li><strong>欠損値がある反復測定データの対処</strong>: 反復測定デザインで一部の時点に欠損がある場合、<code>ANOVA (afex)</code> は欠損を持つ被験者をリストワイズ除外します。欠損行のみを除外して全データを活かしたい場合は、次節の <strong><code>線形混合モデル (lmer)</code></strong>（例：<code>Y ~ 条件 * 時点 + (1 | 被験者ID)</code>）への切り替えを推奨します。</li>
+</ul>
+<hr>
+<h3 id="26-線形混合モデル--linear-mixed-lmertest">2.6 線形混合モデル — Linear Mixed (lmerTest)<a class="heading-anchor" href="#26-線形混合モデル--linear-mixed-lmertest" aria-label="Permalink">#</a></h3>
+<h4 id="バックエンド統計仕様-5">バックエンド・統計仕様<a class="heading-anchor" href="#バックエンド統計仕様-5" aria-label="Permalink">#</a></h4>
+<ul>
+<li><strong>エンドポイント / 実行関数</strong>: <code>POST /lmer</code> — <code>lme4::lmer()</code> ＋ <strong><code>lmerTest</code> パッケージ拡張</strong></li>
+<li><p><strong>推定法</strong>:</p>
+<ul>
+<li>デフォルト：<strong>制限付き最尤法（REML: Restricted Maximum Likelihood, <code>REML = TRUE</code>）</strong> — 分散成分（変量効果の分散・残差分散）の不偏推定に適した標準設定。</li>
+<li>「最尤法(ML)で推定する(モデル比較のため)」チェック時：<strong>完全最尤法（ML: Maximum Likelihood, <code>REML = FALSE</code>）</strong> — 固定効果の構成が異なるネストモデル間で AIC / BIC や尤度比検定によるモデル比較を行う際に使用。</li>
+</ul></li>
+<li><strong>自由度と p 値の算出法</strong>: 標準の <code>lme4</code> は p 値を出力しませんが、DocR は <strong><code>lmerTest</code></strong> をロードして推定するため、<strong>Satterthwaite の自由度近似法</strong> による有効自由度（<code>df</code>）、<code>t value</code>、および有意確率 <code>Pr(&gt;|t|)</code> が固定効果テーブルに自動出力されます。</li>
+<li><p><strong>診断・事後検定・プロット</strong>:</p>
+<ul>
+<li>固定効果の項が 2 つ以上ある場合、<code>performance::check_collinearity(fit)</code> による <strong>VIF</strong> を自動出力。</li>
+<li><code>Post-hoc</code> タブ指定時、変量効果構造を考慮した <code>emmeans</code> + Holm 補正ペアワイズ比較を実行。</li>
+<li>個体差（変量効果）を統制した固定効果の限界効果プロット（<code>ggeffects::ggpredict</code>）＋ 残差診断図（<code>Residuals vs Fitted</code>, <code>Normal Q-Q</code>）を出力。</li>
+</ul></li>
+</ul>
+<h4 id="自動前処理安全装置-under-the-hood-5">自動前処理・安全装置 (Under the Hood)<a class="heading-anchor" href="#自動前処理安全装置-under-the-hood-5" aria-label="Permalink">#</a></h4>
+<ul>
+<li><strong>縦断・反復測定データの部分欠損に対する高い耐性</strong>: 欠損値が含まれる特定の観測行のみを除外し、同一参加者・同一クラスタの他時点データはすべて推定に利用します。また、参加者ごとだけでなく <strong>刺激（アイテム）ごとのランダム効果も同時に組み込む交差型変量効果（Crossed Random Effects）</strong> にも対応しています。</li>
+<li><strong>関数スコープ評価エラーを回避する環境バインディング</strong>: <code>lmerTest</code> と <code>emmeans</code> / <code>ggeffects</code> の組み合わせで生じやすい R 内部の環境参照エラーを防ぐため、評価時のみ一時的にスコープをクリーンに解決し <code>on.exit()</code> で即時消去する保護処理が実装されています。</li>
+</ul>
+<h4 id="応用カスタム構文レシピ-5">応用・カスタム構文レシピ<a class="heading-anchor" href="#応用カスタム構文レシピ-5" aria-label="Permalink">#</a></h4>
+<p>UI で「変量効果 (グループ化)」に <code>被験者ID</code> や <code>刺激ID</code> を追加するとランダム切片 <code>(1 | ID)</code> が自動生成されます。さらに <code>Formula</code> 欄を直接編集することで、ランダム傾きや階層（ネスト）構造を自在に記述できます。</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">r</span><button type="button" class="copy-btn" data-copy="コピー" data-copied="✔ コピー済">コピー</button></div><pre><code class="language-r"># 1. 交差型変量効果（被験者の個体差と刺激アイテム差の両方を同時統制：心理言語学・実験心理学の標準）
+反応時間 ~ 条件A * 条件B + (1 | 被験者ID) + (1 | 刺激ID)
+
+# 2. ランダム切片＋ランダム傾きモデル（時間変化の傾きの個人差も許容し、切片と傾きの相関も推定）
+スコア ~ 時点 * 介入群 + (1 + 時点 | 被験者ID)
+
+# 3. 収束しない場合の無相関ランダム傾きモデル（|| 演算子でランダム切片と傾きの共分散を 0 に制約）
+スコア ~ 時点 * 介入群 + (1 + 時点 || 被験者ID)
+
+# 4. 階層的（ネスト）クラスタ構造（学校の中にクラスが入れ子になっている多層データ）
+学力得点 ~ 指導法 + 学習時間 + (1 | 学校ID / クラスID)</code></pre></div>
+<hr>
+<h3 id="27-正則化回帰-lasso--ridge--elastic-net--elastic-net-glmnet">2.7 正則化回帰 (Lasso / Ridge / Elastic Net) — Elastic Net (glmnet)<a class="heading-anchor" href="#27-正則化回帰-lasso--ridge--elastic-net--elastic-net-glmnet" aria-label="Permalink">#</a></h3>
+<h4 id="バックエンド統計仕様-6">バックエンド・統計仕様<a class="heading-anchor" href="#バックエンド統計仕様-6" aria-label="Permalink">#</a></h4>
+<ul>
+<li><strong>エンドポイント / 実行関数</strong>: <code>POST /glmnet</code> — <code>glmnet::cv.glmnet()</code></li>
+<li><p><strong>ペナルティ構造とハイパーパラメータ</strong>:</p>
+<ul>
+<li>L1 ペナルティ（Lasso：不要な変数の係数を厳密に <code>0</code> へ縮小して自動変数選択）と L2 ペナルティ（Ridge：強く相関する変数群の係数を安定的に縮小）を混合パラメータ α（<code>0.0〜1.0</code>）で統合します（<code>α = 1</code>: <strong>Lasso 回帰</strong>、<code>α = 0</code>: <strong>Ridge 回帰</strong>、<code>0 &lt; α &lt; 1</code>: <strong>Elastic Net</strong>）。</li>
+<li>正則化強度 λ は <strong>10 分割交差検証（10-fold Cross-Validation）</strong> によって交差検証誤差（<code>cvm</code>）を最小化する <strong><code>lambda.min</code></strong> を自動選択します（※内部で説明変数の標準化 <code>standardize = TRUE</code> が自動適用され、出力係数は元の変数スケールに戻されます）。</li>
+</ul></li>
+<li><p><strong>対応する分布族 (<code>Distribution Family</code>)</strong>:</p>
+<ul>
+<li><code>gaussian</code>（連続量の線形回帰：二乗誤差最小化）</li>
+<li><code>binomial</code>（2値分類：二項逸脱度最小化）</li>
+<li><code>multinomial</code>（3クラス以上の多値分類：多項ロジスティック損失）</li>
+<li><code>poisson</code>（カウントデータ：ポアソン逸脱度最小化）</li>
+</ul></li>
+<li><p><strong>出力内容</strong>:</p>
+<ul>
+<li>選択された α、最適 λ（<code>lambda.min</code>）、自動探索時は各 α（<code>0.0〜1.0</code>）の交差検証誤差一覧表（<code>Alpha Search Results</code>）</li>
+<li><strong>非ゼロ係数一覧（<code>Non-zero Coefficients</code>）</strong>: <code>lambda.min</code> において係数が <code>0</code> にならず生き残った重要な変数のみを抽出表示（<code>multinomial</code> 時はターゲットクラスごとに表示）</li>
+<li>当てはめ値 <code>Fitted</code>（<code>multinomial</code> 時は各クラスの予測確率 <code>Prob_&lt;クラス名&gt;</code>）</li>
+<li><strong>グラフ出力（左右2分割）</strong>: 交差検証誤差曲線（<code>CV Curve</code>）と、赤破線で <code>log(lambda.min)</code> を示した係数パス図（<code>Coefficient Path</code>）</li>
+</ul></li>
+</ul>
+<h4 id="自動前処理安全装置-under-the-hood-6">自動前処理・安全装置 (Under the Hood)<a class="heading-anchor" href="#自動前処理安全装置-under-the-hood-6" aria-label="Permalink">#</a></h4>
+<ul>
+<li><strong>α の 11 段階自動グリッドサーチ (<code>Auto Search: 0.0-1.0</code>)</strong>: デフォルトの「自動探索」を選択すると、API 内部で <code>α = 0.0, 0.1, 0.2, ..., 1.0</code> の 11 通りすべてに対して <code>cv.glmnet()</code> を実行し、最小交差検証誤差を達成した最適 <code>(α, lambda.min)</code> モデルを自動採用します。</li>
+<li><strong><code>model.matrix()</code> による自動ダミー行列変換</strong>: <code>glmnet</code> は本来数値行列しか受け付けませんが、DocR は <code>model.matrix(formula, df)[, -1, drop = FALSE]</code> を介して文字列・カテゴリ変数や交互作用項を自動的にワンホット・デザイン行列へ展開してから投入します。</li>
+<li><strong>多値分類 (<code>multinomial</code>) 時のプロット崩壊防止</strong>: <code>multinomial</code> 指定時は係数パス図を自動的に <code>type.coef = "2norm"</code>（全クラスにわたる係数ベクトルの L2 ノルム表示）へ切り替え、クラスごとのプロット重なりによる描画崩れを防ぎます。</li>
+</ul>
+<h4 id="応用カスタム構文レシピ-6">応用・カスタム構文レシピ<a class="heading-anchor" href="#応用カスタム構文レシピ-6" aria-label="Permalink">#</a></h4>
+<ul>
+<li><strong>純粋な Lasso 変数選択や Ridge 回帰の明示指定</strong>: 「値を指定 (Manual)」を選び、<code>1</code> を入力すれば <strong>Lasso 回帰</strong>（スパースな変数選択）、<code>0</code> を入力すれば全変数を残して多重共線性のみを抑える <strong>Ridge 回帰</strong>、<code>0.5</code> を入力すればバランス型 Elastic Net として実行できます。</li>
+<li><strong>全説明変数の総当たり 2 次交互作用からの自動特徴量選択</strong>: 変数数が中規模のとき、<code>Formula</code> 欄で <code>(X1 + X2 + X3 + X4)^2</code> のように記述すると、すべての主効果＋2要因交互作用項を展開した上で、予測に効く交互作用だけを Lasso / Elastic Net に自動選抜させることができます。</li>
+</ul>
+<hr>
+<h3 id="28-ベイズ階層モデリング--bayesian-brms">2.8 ベイズ階層モデリング — Bayesian (brms)<a class="heading-anchor" href="#28-ベイズ階層モデリング--bayesian-brms" aria-label="Permalink">#</a></h3>
+<h4 id="バックエンド統計仕様-7">バックエンド・統計仕様<a class="heading-anchor" href="#バックエンド統計仕様-7" aria-label="Permalink">#</a></h4>
+<ul>
+<li><strong>エンドポイント / 実行関数</strong>: <code>POST /brms</code> — <code>brms::brm()</code>（Stan 確率的プログラミング言語 / NUTS: No-U-Turn Sampler によるハミルトニアン・モンテカルロ法）</li>
+<li><strong>MCMC デフォルト設定</strong>: <code>Chains = 4</code>、<code>Iter = 2000</code>、<code>Warmup = 1000</code>（事後サンプル合計 <code>(2000 - 1000) × 4 = 4,000</code> ドロー）、並列計算コア数 <code>Cores = 4</code>、再現性確保用の任意乱数シード <code>Seed</code>。</li>
+<li><strong>対応する確率分布族 (<code>Distribution Family</code>)</strong>:</li>
+</ul>
+<div class="table-wrapper"><table><thead><tr><th style="text-align:left">UI 選択肢</th><th style="text-align:left"><code>brms</code> ファミリ（標準リンク）</th><th style="text-align:left">主な用途・特徴</th></tr></thead><tbody>
+<tr><td style="text-align:left"><code>gaussian</code></td><td style="text-align:left">正規分布 (<code>identity</code>)</td><td style="text-align:left">連続量のベイズ重回帰・階層線形モデル</td></tr>
+<tr><td style="text-align:left"><code>bernoulli</code></td><td style="text-align:left">ベルヌーイ分布 (<code>logit</code>)</td><td style="text-align:left"><strong>0/1 の 2 値データ</strong> に対するベイズ・ロジスティック回帰（※2値データは <code>binomial</code> ではなくこちらを使用）</td></tr>
+<tr><td style="text-align:left"><code>binomial</code></td><td style="text-align:left">二項分布 (<code>logit</code>)</td><td style="text-align:left">成功数／試行回数データ（Formula 左辺に <code>成功数 | trials(試行回数)</code> の記述が必須）</td></tr>
+<tr><td style="text-align:left"><code>poisson</code></td><td style="text-align:left">ポアソン分布 (<code>log</code>)</td><td style="text-align:left">非負整数カウントデータのベイズ・ポアソン回帰</td></tr>
+<tr><td style="text-align:left"><strong><code>student</code></strong></td><td style="text-align:left"><strong>Student の t 分布 (<code>identity</code>)</strong></td><td style="text-align:left"><strong>[v1.9.0 追加] 外れ値に頑健なロバストベイズ回帰</strong>（自由度パラメータ <code>nu</code> (ν) も同時推定し、裾の重い誤差分布を吸収）</td></tr>
+<tr><td style="text-align:left"><code>cumulative</code></td><td style="text-align:left">累積順序分布 (<code>logit</code>)</td><td style="text-align:left">リッカート尺度（<code>1〜5</code> 等）に対するベイズ順序ロジスティック回帰（階層モデルも容易に収束）</td></tr>
+<tr><td style="text-align:left"><code>cox</code></td><td style="text-align:left">Cox 比例ハザード (<code>log</code>)</td><td style="text-align:left">ベイズ生存時間解析（セミパラメトリック：<code>時間 | cens(打ち切りフラグ) ~ X</code>）</td></tr>
+<tr><td style="text-align:left"><code>weibull</code></td><td style="text-align:left">ワイブル分布 (<code>log</code>)</td><td style="text-align:left">パラメトリック生存時間解析、または正の歪みを持つ反応時間等のモデリング</td></tr>
+</tbody></table></div>
+<ul>
+<li><p><strong>収束診断と適合度指標</strong>:</p>
+<ul>
+<li>サマリーに各パラメータの事後平均（<code>Estimate</code>）、事後標準偏差（<code>Est.Error</code>）、95% 信用区間（<code>l-95% CI</code>, <code>u-95% CI</code>）、収束指標 <strong><code>Rhat</code></strong>（<code>Rhat &lt; 1.05</code>、理想的には <code>≈ 1.00</code> で収束）、有効サンプルサイズ（<code>Bulk_ESS</code>, <code>Tail_ESS</code>）を出力。</li>
+<li><code>Output R2/LOO</code> チェック時（デフォルト ON）：ベイズ決定係数 <strong><code>bayes_R2(fit)</code></strong> および Pareto Smoothed Importance Sampling による1個抜き交差検証情報量規準 <strong><code>loo(fit)</code></strong>（<code>elpd_loo</code>, <code>p_loo</code>, <code>looic</code>）を算出。</li>
+</ul></li>
+</ul>
+<h4 id="自動前処理安全装置-under-the-hood-7">自動前処理・安全装置 (Under the Hood)<a class="heading-anchor" href="#自動前処理安全装置-under-the-hood-7" aria-label="Permalink">#</a></h4>
+<ul>
+<li><p><strong>16 種類の事前コンパイル済み Stan モデルとセッション内動的キャッシュ</strong>:</p>
+<ul>
+<li>コンテナビルド時に頻出モデル 16 パターン（<code>gaussian</code> 単回帰・重回帰・交互作用・ランダム切片・ランダム傾き・2要因混合、<code>student</code> 単回帰・重回帰、<code>bernoulli</code>、<code>poisson</code>、<code>cumulative</code> 単回帰・重回帰・交互作用、<code>lognormal</code> 等）が C++ コンパイル済み <code>.rds</code> として <code>/app/models</code> に内蔵されています。一致するモデル構造では <code>update()</code> が呼ばれ、コンパイル待ち時間ゼロで直ちに MCMC サンプリングが開始されます。</li>
+<li>未登録の独自モデル式であっても、一度コンパイルされるとコンテナ稼働中はメモリキャッシュ（<code>model_cache</code>）に保持されるため、データを変えた 2 回目以降の実行は即座に開始されます（カスタム引数の MD5 ハッシュもキャッシュキーに反映されるため、事前分布変更時に古いモデルが誤用されることはありません）。</li>
+</ul></li>
+<li><strong><code>binomial</code> 誤選択ガード</strong>: <code>0/1</code> データで誤って <code>binomial</code> を選び <code>trials()</code> を指定しなかった場合、Stan コンパイルに入る前に即座に日本語・英語の案内メッセージを表示して <code>bernoulli</code> への切り替えを促します。</li>
+<li><strong><code>hypothesis()</code> のスマート解釈</strong>: <code>Post-hoc</code> タブの「仮説検定 (<code>hypothesis</code>)」欄では、カテゴリ変数と水準名の間のスペース（例：<code>群 A &gt; 0</code>）を自動整形して <code>brms</code> の係数名に一致させ、<code>r_</code> / <code>b_</code> / <code>sd_</code> / <code>cor_</code> / <code>sigma</code> といったプレフィックスが含まれない限り自動的に固定効果クラス（<code>class = "b"</code>）として評価します。</li>
+</ul>
+<h4 id="応用カスタム構文レシピ-7">応用・カスタム構文レシピ<a class="heading-anchor" href="#応用カスタム構文レシピ-7" aria-label="Permalink">#</a></h4>
+<p><strong>① モデル式 (<code>Formula</code>) の応用例（生存時間・二項試行・平滑化スプライン・多変量・非線形）</strong></p>
+<div class="code-block"><div class="code-header"><span class="code-lang">r</span><button type="button" class="copy-btn" data-copy="コピー" data-copied="✔ コピー済">コピー</button></div><pre><code class="language-r"># 二項分布（trials 指定）：100試行中の成功数モデル
+成功数 | trials(試行回数) ~ 用量 + (1 | 施設ID)
+
+# 生存時間解析（cox または weibull 選択時：cens() で打ち切り 0=イベント発生, 1=右打ち切り を指定）
+生存期間 | cens(打ち切りフラグ) ~ 治療群 + 年齢
+
+# 一般化加法モデル（GAM：非線形スプライン平滑化項 s()）
+反応量 ~ s(経過時間) + 条件 + (1 | 被験者ID)
+
+# 多変量同時回帰モデル（複数の目的変数の残差相関も同時に推定 ※列名は半角英数字推奨）
+mvbind(score_math, score_eng) ~ study_hours + group + (1 | school_id)
+
+# bf() による非線形成長・減衰曲線モデル（※bf() 使用時は列名を必ず半角英数字にしてください）
+bf(y ~ asym * (1 - exp(-rate * time)), asym + rate ~ group + (1 | id), nl = TRUE)</code></pre></div>
+<p><strong>② 仮説検定 (<code>hypothesis</code>) 欄の記述例（1行に1つの論理式、方向付き事後確率 <code>Post.Prob</code> と証拠比 <code>Evid.Ratio</code> を算出）</strong></p>
+<div class="code-block"><div class="code-header"><span class="code-lang">r</span><button type="button" class="copy-btn" data-copy="コピー" data-copied="✔ コピー済">コピー</button></div><pre><code class="language-r"># 説明変数の効果が正である事後確率を算出
+広告費 &gt; 0
+
+# 2つの説明変数の効果の大きさを直接比較
+広告費 - 販促費 &gt; 0
+
+# ランダム効果の標準偏差など b_ 以外のパラメータを含める場合（※式内の全パラメータに接頭辞 b_, sd_ 等を明記）
+sd_被験者ID__Intercept &gt; 0.5</code></pre></div>
+<p><strong>③ <code>brm()</code> カスタム引数 (<code>Custom Arguments</code>) 欄の記述例（GUI 設定を上書き・拡張可能）</strong></p>
+<div class="code-block"><div class="code-header"><span class="code-lang">r</span><button type="button" class="copy-btn" data-copy="コピー" data-copied="✔ コピー済">コピー</button></div><pre><code class="language-r"># Divergent transitions（発散）警告が出る階層モデルでのステップサイズ精緻化と最大木深さの拡張
+control = list(adapt_delta = 0.99, max_treedepth = 15)
+
+# 弱情報事前分布（正則化事前分布）の明示的指定
+prior = c(prior(normal(0, 2.5), class = "b"), prior(exponential(1), class = "sd"))
+
+# プルダウンにない brms ファミリ（負の二項分布 negbinomial や対数正規分布 lognormal 等）で上書き実行
+family = negbinomial()</code></pre></div>
+<hr>
+<h3 id="29-ベイジアン加法回帰木--bart-dbartsbart2">2.9 ベイジアン加法回帰木 — BART (dbarts::bart2)<a class="heading-anchor" href="#29-ベイジアン加法回帰木--bart-dbartsbart2" aria-label="Permalink">#</a></h3>
+<h4 id="バックエンド統計仕様-8">バックエンド・統計仕様<a class="heading-anchor" href="#バックエンド統計仕様-8" aria-label="Permalink">#</a></h4>
+<ul>
+<li><strong>エンドポイント / 実行関数</strong>: <code>POST /bart</code> — <code>dbarts::bart2(..., keepTrees = TRUE)</code>、<code>pdbart()</code>、<code>pd2bart()</code></li>
+<li><strong>統計アルゴリズム</strong>: 多数の浅い決定木（Sum-of-Trees）に正則化事前分布を課し、バックフィッティング MCMC によって非線形効果と高次交互作用をノンパラメトリックに自動学習するベイズ機械学習モデルです（過学習に極めて強く、事後予測分布から不確実性の信用区間も同時に得られます）。</li>
+<li><p><strong>目的変数 <code>Y</code> の自動判別</strong>:</p>
+<ul>
+<li><code>Y</code> が数値列：<strong>連続値回帰 BART</strong> — 適合度として <code>Pseudo R-squared</code>（実測値と事後予測平均の相関係数の二乗）、<code>RMSE</code>、事後誤差標準偏差 <code>Posterior Sigma</code> を出力。</li>
+<li><code>Y</code> が 2 水準の文字／カテゴリ列：<strong>2 値分類プロビット BART</strong> — 内部で <code>0/1</code> に自動変換して分類モデルを構築し、正答率 <code>Accuracy</code>（閾値 0.5）および予測確率を出力（※3 水準以上のカテゴリ目的変数は対象外）。</li>
+</ul></li>
+<li><strong>デフォルト設定</strong>: 決定木数 <code>n.trees = 100</code>（UI 初期値）、<code>Chains = 4</code>、<code>Iter = 2000</code>、<code>Warmup = 1000</code>（各チェインのバーンイン <code>n.burn = 1000</code>、有効サンプル <code>n.samples = Iter - Warmup = 1000</code>）、<code>Cores = 4</code>。</li>
+<li><p><strong>解釈可能な可視化出力</strong>:</p>
+<ul>
+<li><strong>Relative Variable Importance (%)</strong>: 決定木の分岐ルールに各説明変数が採用された平均回数比率（合計 100%）のテーブルと棒グラフ。</li>
+<li><strong>1D Partial Dependence Plots (<code>pdbart</code>)</strong>: 他変数を周辺化した各変数の非線形主効果曲線（事後平均 ± 1.96 SD リボン／エラーバー付き）。</li>
+<li><strong>2D Partial Dependence Plots (<code>pd2bart</code>)</strong>: 重要度上位最大 3 変数の全ペアに対する 2 次元交互作用ヒートマップ。</li>
+</ul></li>
+</ul>
+<h4 id="自動前処理安全装置-under-the-hood-8">自動前処理・安全装置 (Under the Hood)<a class="heading-anchor" href="#自動前処理安全装置-under-the-hood-8" aria-label="Permalink">#</a></h4>
+<ul>
+<li><p><strong>欠損値インジケータ法（Missing Indicator Method：デフォルト）</strong>:</p>
+<ul>
+<li><p>実務データで説明変数 <code>X</code> に欠損がある場合でも行を捨てずに学習できるよう、以下の前処理を自動実行します：</p>
+<ol>
+<li><strong>数値型の説明変数</strong>: 欠損フラグ列 <code>&lt;変数名&gt;_isNA</code>（欠損なら <code>1</code>、観測ありなら <code>0</code>）を新規生成してモデル式に自動追加し、元の列の欠損セルには中央値（<code>median</code>）を代入します。</li>
+<li><strong>文字列／カテゴリ型の説明変数</strong>: 欠損セルを <code>"Missing"</code> という独立した 1 つのカテゴリ水準に変換します。</li>
+</ol></li>
+<li>これによりサンプルサイズを 1 行も失わないだけでなく、「未回答・欠測であること自体が目的変数に対して持つ予測情報（非ランダム欠損：MNAR パターン）」も決定木の分岐条件として活用できます。</li>
+</ul></li>
+<li><strong><code>dbarts</code> のテストデータ削除バグ回避ガード</strong>: <code>dbarts::bart2</code> は本来、<code>test</code> データフレーム内の目的変数列が <code>NA</code> だと内部の <code>model.frame</code> 処理で行ごと削除してしまう仕様上の罠がありますが、DocR では分割後の <code>df_test</code> 側の目的変数列に一時ダミー値 <code>0</code> を注入することで、<code>Y</code> 空白行に対する未知データ予測（事後平均と 95% 信用区間 <code>2.5%</code>〜<code>97.5%</code> 分位点）を確実に完遂させます。</li>
+</ul>
+<h4 id="応用カスタム構文レシピ-8">応用・カスタム構文レシピ<a class="heading-anchor" href="#応用カスタム構文レシピ-8" aria-label="Permalink">#</a></h4>
+<ul>
+<li><strong>パラメトリックモデル（<code>lm</code> / <code>brms</code>）の探索的ベンチマークとして使う</strong>: どの変数に曲線効果（閾値効果・飽和効果）や交互作用が潜んでいるか事前仮説がない場合、まず <code>BART</code> に候補変数を一括投入し、1D PDP で非線形形状を、2D PDP ヒートマップで強い交互作用ペアを特定してから、<code>lm</code> や <code>brms</code> で理論モデルを定式化する 2 段階ワークフローが非常に有効です。</li>
+<li><strong>決定木数 <code>n.trees</code> の調整指針</strong>: 主効果中心で解釈性を高めたい場合や小標本では <code>n.trees</code> を <code>50</code> 前後に減らし、複雑な関数近似と予測精度を最大化したい大標本では <code>200</code> に増やすことで柔軟性を調整できます。</li>
+</ul>
+<hr>
+<h3 id="210-探索的因子分析主成分分析--factor-analysis-efa--pca">2.10 探索的因子分析・主成分分析 — Factor Analysis (EFA / PCA)<a class="heading-anchor" href="#210-探索的因子分析主成分分析--factor-analysis-efa--pca" aria-label="Permalink">#</a></h3>
+<h4 id="バックエンド統計仕様-9">バックエンド・統計仕様<a class="heading-anchor" href="#バックエンド統計仕様-9" aria-label="Permalink">#</a></h4>
+<ul>
+<li><strong>エンドポイント / 実行関数</strong>: <code>POST /fa</code> — <code>psych::fa()</code>（EFA モード）または <code>psych::principal()</code>（PCA モード）、ソート整形 <code>psych::fa.sort()</code>、信頼性分析 <code>psych::alpha()</code></li>
+<li><p><strong>選択パラメータ</strong>:</p>
+<ul>
+<li><strong>分析モード</strong>: 探索的因子分析（<code>EFA</code>：共通因子モデル、デフォルト）／主成分分析（<code>PCA</code>：分散最大化による合成変数の縮約）</li>
+<li><p><strong>因子抽出法 (<code>Factoring Method</code>、EFA のみ)</strong>:</p>
+<ul>
+<li><code>minres</code>（デフォルト）：最小残差法（Minimum Residual / 普通最小二乗法 ULS と同等；正規性の仮定を要さず不適解が起きにくい推奨法）</li>
+<li><code>ml</code>：最尤法（Maximum Likelihood；多変量正規性を仮定し適合度指標を算出）</li>
+<li><code>pa</code>：主因子法（Principal Axis Factoring；反復共通性推定）</li>
+</ul></li>
+<li><p><strong>回転法 (<code>Rotation Method</code>)</strong>:</p>
+<ul>
+<li><code>promax</code>（デフォルト）：プロマックス斜交回転（因子間の相関を許容する心理・社会科学の標準法）</li>
+<li><code>varimax</code>：バリマックス直交回転（因子間無相関を仮定）</li>
+<li><code>none</code>：無回転</li>
+</ul></li>
+<li><strong>欠損値処理</strong>: <code>ペアワイズ削除</code>（<code>use = "pairwise"</code>、デフォルト）／<code>リストワイズ削除</code>（<code>use = "complete.obs"</code>）</li>
+</ul></li>
+<li><p><strong>出力内容</strong>:</p>
+<ul>
+<li><code>psych</code> 標準サマリー（固有値、説明分散比率、因子間相関行列、<code>RMSEA</code> / <code>TLI</code> / <code>BIC</code> 等の適合度 ※EFA 時）</li>
+<li>負荷量サイズ順に並び替え済みの <strong>因子負荷量行列（または主成分負荷量行列）</strong></li>
+<li>各下位尺度の <strong>Cronbach の α 係数テーブル</strong> および <strong>項目別信頼性テーブル</strong>（I-T 相関 <code>r.drop</code>、項目削除時の α 係数 <code>Alpha if dropped</code>）</li>
+<li><strong>因子得点 / 主成分得点テーブル (<code>[ 因子得点 ]</code> / <code>[ 主成分得点 ]</code>)</strong>（※<code>Output Factor Scores</code> チェック時）：EFA は Thurstone の回帰法（<code>scores = "regression"</code>）、PCA は主成分重み付けにより算出し、元データの行インデックス <strong><code>Row</code></strong> 列付きで結果シートに出力します。</li>
+<li><strong>グラフ出力（上下2段）</strong>: 固有値減衰を示す <strong>スクリープロット（<code>Scree Plot</code>：因子分析固有値と主成分固有値の双方を描画）</strong> と <strong>因子構造パス図（<code>Factor Structure</code>：<code>psych::fa.diagram</code>）</strong>。</li>
+</ul></li>
+</ul>
+<h4 id="自動前処理安全装置-under-the-hood-9">自動前処理・安全装置 (Under the Hood)<a class="heading-anchor" href="#自動前処理安全装置-under-the-hood-9" aria-label="Permalink">#</a></h4>
+<ul>
+<li><p><strong>下位尺度ごとの Cronbach's α 自動集計と逆転項目の自動反転 (<code>check.keys = TRUE</code>)</strong>:</p>
+<ul>
+<li>抽出された各因子に対し、絶対値負荷量が最大となる項目群（2 項目以上）を自動的にグルーピングし、<code>psych::alpha(..., check.keys = TRUE)</code> を実行します。</li>
+<li>尺度内に逆転項目（負の負荷量を持つ項目）が未反転のまま混在していても、<code>check.keys = TRUE</code> により <strong>自動的に負相関項目を検知・一時反転した上で正しい α 係数と I-T 相関を算出</strong> します（手動反転忘れによる負の α 算出事故を防ぎます）。</li>
+</ul></li>
+<li><strong>欠損値を含むデータでの因子得点の行整合性維持</strong>: 因子得点（主成分得点）は元データシートを破壊せず結果シートに出力され、<code>Row</code> 列に元のデータ行番号（1行目ヘッダーを除いたデータ行の連番 <code>1, 2, ...</code>）が明示されます。ペアワイズ削除時は全行分の <code>Row</code> が出力され（全項目欠損行は空欄）、リストワイズ削除時は有効行の <code>Row</code> 番号が正確に記録されるため、元シートへの結合時もズレが生じません。</li>
+</ul>
+<h4 id="応用カスタム構文レシピ-9">応用・カスタム構文レシピ<a class="heading-anchor" href="#応用カスタム構文レシピ-9" aria-label="Permalink">#</a></h4>
+<ul>
+<li><strong>最適因子数の決定プロセス</strong>: 初回実行時にスクリープロット（<code>Scree Plot</code>）で固有値が 1.0 を超える数（ガットマン・カイザー基準）および減衰の折れ曲がり点（エルボー基準）を確認し、さらに EFA サマリー内の <code>RMSEA</code>（<code>&lt; 0.08</code> 目安）や <code>TLI</code>（<code>&gt; 0.90</code> 目安）を比較して因子数を決定します。</li>
+<li><strong>尺度精選と後続回帰への連携</strong>: <code>[ 項目ごとの信頼性 ]</code> テーブルで <code>削除時のα係数</code> が現在の因子 α より大幅に上昇する不良項目や、主因子負荷量が <code>&lt; .35</code> かつ他因子にも高く負荷する二重負荷項目を除外して再実行し、<code>Output Factor Scores</code> で得た因子得点をコピーして <code>lm</code> や <code>brms</code> の説明変数・目的変数に投入できます。</li>
+</ul>
+<hr>
+<h3 id="211-共分散構造分析確認的因子分析--sem--cfa-lavaan">2.11 共分散構造分析・確認的因子分析 — SEM / CFA (lavaan)<a class="heading-anchor" href="#211-共分散構造分析確認的因子分析--sem--cfa-lavaan" aria-label="Permalink">#</a></h3>
+<h4 id="バックエンド統計仕様-10">バックエンド・統計仕様<a class="heading-anchor" href="#バックエンド統計仕様-10" aria-label="Permalink">#</a></h4>
+<ul>
+<li><strong>エンドポイント / 実行関数</strong>: <code>POST /sem</code> — <code>lavaan::sem(model = syntax, data = df, missing = ...)</code> および <code>semPlot::semPaths()</code></li>
+<li><p><strong>推定法と欠損値処理</strong>:</p>
+<ul>
+<li>最尤推定法（ML）を標準採用。</li>
+<li>デフォルト欠損値処理：<strong>完全情報最尤法（FIML: Full Information Maximum Likelihood, <code>missing = "fiml"</code>）</strong> — MAR（ランダムな欠損）仮定のもと、欠損を含む行も捨てずに観測されている全セルの尤度を直接最大化します（UI で <code>リストワイズ削除</code> <code>missing = "listwise"</code> への切り替えも可能）。</li>
+</ul></li>
+<li><p><strong>出力内容</strong>:</p>
+<ul>
+<li><code>summary(fit, fit.measures = TRUE, standardized = TRUE)</code> の完全出力：カイ二乗適合度検定（<code>χ²</code>, <code>df</code>, <code>p</code>）、<strong><code>CFI</code></strong>, <strong><code>TLI</code></strong>, <strong><code>RMSEA</code></strong>（および 90% 信頼区間）、<strong><code>SRMR</code></strong>, <strong><code>AIC</code></strong>, <strong><code>BIC</code></strong>。</li>
+<li><strong>パラメータ推定値一覧テーブル (<code>parameterEstimates</code>)</strong>: 非標準化推定値 <code>est</code>、標準誤差 <code>se</code>、<code>z</code>、<code>pvalue</code>、95% 信頼区間 <code>ci.lower</code> / <code>ci.upper</code>、および完全標準化推定値 <strong><code>std.all</code></strong>（潜在変数のみ標準化した <code>std.lv</code> も併記）。</li>
+<li><strong>標準化パス図 (<code>semPaths</code>)</strong>: ツリーレイアウト（LISREL スタイル）上に完全標準化係数（<code>whatLabels = "std"</code>）を印字した SVG パス図。</li>
+</ul></li>
+</ul>
+<h4 id="自動前処理安全装置-under-the-hood-10">自動前処理・安全装置 (Under the Hood)<a class="heading-anchor" href="#自動前処理安全装置-under-the-hood-10" aria-label="Permalink">#</a></h4>
+<ul>
+<li><strong>スパゲッティ化を防ぐクリーンなパス図設定</strong>: 標準の <code>semPaths</code> は全観測変数の誤差分散ループや切片三角形を描画して図が判読不能になりがちですが、DocR では <code>residuals = FALSE, intercepts = FALSE</code> を適用し、<strong>潜在変数・観測変数・主要因果／相関パスと標準化係数のみを明瞭に描画</strong> します（SVG 分解編集と組み合わせることでそのまま論文図表に仕上がります）。</li>
+<li><strong>全角スペース・ノーブレークスペース浄化</strong>: 外部エディタや Web・AI チャットから <code>lavaan</code> シンタックスを貼り付けた際に混入しやすい全角スペース（<code>U+3000</code>）や NBSP（<code>U+00A0</code>）を自動的に半角スペースへ正規化してから <code>lavaan</code> へ渡します。</li>
+</ul>
+<h4 id="応用カスタム構文レシピ-10">応用・カスタム構文レシピ<a class="heading-anchor" href="#応用カスタム構文レシピ-10" aria-label="Permalink">#</a></h4>
+<p>右側の変数リストのダブルクリックと演算子ボタン（<code>=~</code>, <code>~</code>, <code>~~</code>, <code>+</code>）で組み立てられるほか、<code>lavaan</code> の高度な全構文（ラベル付けによる間接効果の定義 <code>:=</code>、等値制約、高次因子モデル等）をそのまま記述できます。</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">r</span><button type="button" class="copy-btn" data-copy="コピー" data-copied="✔ コピー済">コピー</button></div><pre><code class="language-r"># 1. 確認的因子分析（CFA）＋ 構造回帰モデル（SEM）の基本形
+  職場支援 =~ 支援1 + 支援2 + 支援3
+  職務満足 =~ 満足1 + 満足2 + 満足3
+  離職意図 =~ 離職1 + 離職2 + 離職3
+
+  # 構造パス（回帰）
+  職務満足 ~ 職場支援
+  離職意図 ~ 職務満足 + 職場支援
+
+  # 観測変数間の誤差相関の許容（理論的根拠がある場合）
+  支援1 ~~ 支援2</code></pre></div>
+<div class="code-block"><div class="code-header"><span class="code-lang">r</span><button type="button" class="copy-btn" data-copy="コピー" data-copied="✔ コピー済">コピー</button></div><pre><code class="language-r"># 2. 媒介分析（Mediation Analysis）：間接効果（a * b）と総合効果の推定・検定
+  # パスにラベル a, b, c を付与し、:= 演算子で間接効果を定義
+  M ~ a * X
+  Y ~ b * M + c * X
+
+  indirect := a * b
+  total    := c + (a * b)</code></pre></div>
+<hr>
+<h3 id="212-潜在プロファイル分析潜在クラス分析--lpa--lca-tidylpa--polca">2.12 潜在プロファイル分析・潜在クラス分析 — LPA / LCA (tidyLPA / poLCA)<a class="heading-anchor" href="#212-潜在プロファイル分析潜在クラス分析--lpa--lca-tidylpa--polca" aria-label="Permalink">#</a></h3>
+<h4 id="バックエンド統計仕様-11">バックエンド・統計仕様<a class="heading-anchor" href="#バックエンド統計仕様-11" aria-label="Permalink">#</a></h4>
+<ul>
+<li><p><strong>エンドポイント / 実行関数</strong>: <code>POST /latent</code></p>
+<ul>
+<li><strong>連続変数の潜在プロファイル分析 (<code>LPA</code>)</strong>: <code>tidyLPA::estimate_profiles()</code>（オープンソース混合正規分布エンジン <code>mclust</code> による EM アルゴリズム推定）</li>
+<li><strong>カテゴリ変数の潜在クラス分析 (<code>LCA</code>)</strong>: <code>poLCA::poLCA()</code>（多項分布潜在クラスモデル、EM＋Newton-Raphson ハイブリッド推定）</li>
+</ul></li>
+<li><p><strong>クラス数の自動探索と最適モデル選択</strong>:</p>
+<ul>
+<li>指定された最小クラス数 <code>Min</code>（デフォルト <code>2</code>）から最大クラス数 <code>Max</code>（デフォルト <code>5</code>）までの全モデルを一括推定し、全候補の適合度比較テーブル <strong><code>[ 適合度指標 (Fit Indices) ]</code></strong>（LPA は <code>AIC</code>, <code>BIC</code>, <code>Entropy</code>, <code>prob_min</code>, <code>n_min</code> 等；LCA は <code>AIC</code>, <code>BIC</code>, <code>Gsq</code> 尤度比統計量, <code>Entropy</code>）を出力します。</li>
+<li>その中から <strong>ベイズ情報量規準（BIC）が最小となるクラス数 k* を最適モデルとして自動選択</strong> し、その最適モデルに対するクラス別特徴量パラメータ、各被験者の <strong><code>[ 所属クラス一覧 ]</code></strong>（<code>Subject</code>, <code>Class</code>）、およびプロファイル／条件付き応答確率プロットを出力します。</li>
+</ul></li>
+<li><p><strong>LPA の分散・共分散構造モデル番号 (<code>LPA Model</code>)</strong>:</p>
+<ul>
+<li><strong><code>1</code>（デフォルト推奨：<code>EEI</code>）</strong>: クラス間で分散が等しく、クラス内共分散を <code>0</code> に固定（最も安定して収束する標準プロファイルモデル）</li>
+<li><strong><code>2</code>（<code>VVI</code>）</strong>: クラスごとに分散が異なることを許容し、共分散は <code>0</code> に固定</li>
+<li><strong><code>3</code>（<code>EEE</code>）</strong>: クラス間で分散・共分散が等しいモデル</li>
+<li><strong><code>6</code>（<code>VVV</code>）</strong>: クラスごとに分散・共分散が自由に異なる非制約モデル（大標本向け）</li>
+<li><em>(※注：<code>tidyLPA</code> の仕様上、モデル番号 <code>4</code> および <code>5</code> は商用ソフトウェア Mplus 連携専用のため、DocR 内蔵のオープンソース <code>mclust</code> エンジンでは <strong><code>1</code>, <code>2</code>, <code>3</code>, <code>6</code></strong> のいずれかを選択してください。)</em></li>
+</ul></li>
+</ul>
+<h4 id="自動前処理安全装置-under-the-hood-11">自動前処理・安全装置 (Under the Hood)<a class="heading-anchor" href="#自動前処理安全装置-under-the-hood-11" aria-label="Permalink">#</a></h4>
+<ul>
+<li><strong>LCA における文字・0 始まりデータの自動正整数変換</strong>: <code>poLCA</code> は本来 <code>1, 2, 3...</code> の正の整数以外の値（<code>0/1</code> ダミーや文字列 <code>"Yes"/"No"</code>）が入ると即座にエラー停止しますが、DocR は <code>as.numeric(as.factor(x))</code> により任意の文字列や <code>0/1</code> データを自動的に <code>1</code> 始まりのカテゴリ番号へ安全に変換します。</li>
+<li><strong>LCA の局所解回避とエントロピー独自算出</strong>: LCA は初期値依存性（局所最適解）を持つため、各クラス数につき <code>nrep</code> 回（デフォルト <code>10</code> 回）のランダム初期値から反復推定して最大対数尤度解を採用します。さらに <code>poLCA</code> 標準では出力されない分類明確度指標 <strong>相対エントロピー（Relative Entropy）</strong> を事後所属確率行列 <code>P</code>（<em>N</em> 行 × <em>K</em> クラス）から次式（<code>Entropy = 1 - sum(-P * log(P)) / (N * log(K))</code>）で自動算出し、適合度表に付加します（<code>1</code> に近いほどクラス分離が明瞭、<code>&gt; 0.80</code> が高分類精度の目安）。</li>
+<li><strong>LPA の自動 Z 得点標準化オプション</strong>: 「データを標準化する (Z-Score)」（デフォルト ON）により、単位やスケールの異なる連続変数群（例：年収と年齢と満足度スコア）を平均 0・SD 1 に揃えてからプロファイル抽出を行えます。</li>
+</ul>
+<h4 id="応用カスタム構文レシピ-11">応用・カスタム構文レシピ<a class="heading-anchor" href="#応用カスタム構文レシピ-11" aria-label="Permalink">#</a></h4>
+<ul>
+<li><strong>特定のクラス数（例：3クラス解）の結果を固定して取り出したい場合</strong>: BIC 最小解とは異なる理論的クラス数（例：3クラス）の所属リストやプロファイル図を出力したい場合は、<code>最小クラス数 (Min)</code> と <code>最大クラス数 (Max)</code> の両方に同じ数値（<code>Min = 3</code>, <code>Max = 3</code>）を入力して実行してください。</li>
+<li><strong>対象者セグメンテーション後の二次分析</strong>: 出力された <code>[ 所属クラス一覧 ]</code> の <code>Class</code> 列を元のデータシートへ結合すれば、抽出された潜在タイプを独立変数（<code>ANOVA</code> や <code>GLM</code>）や属性列（<code>Text Mining</code>）としてそのまま後続分析に展開できます。</li>
+</ul>
+<hr>
+<h3 id="213-日本語テキストマイニング--text-mining-rmecab">2.13 日本語テキストマイニング — Text Mining (RMeCab)<a class="heading-anchor" href="#213-日本語テキストマイニング--text-mining-rmecab" aria-label="Permalink">#</a></h3>
+<div class="markdown-alert markdown-alert-note" role="note"><div class="markdown-alert-title"><svg class="alert-icon" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8Zm8-6.5a6.5 6.5 0 1 0 0 13 6.5 6.5 0 0 0 0-13ZM6.5 7.75A.75.75 0 0 1 7.25 7h1a.75.75 0 0 1 .75.75v2.75h.25a.75.75 0 0 1 0 1.5h-2a.75.75 0 0 1 0-1.5h.25v-2h-.25a.75.75 0 0 1-.75-.75ZM8 6a1 1 0 1 1 0-2 1 1 0 0 1 0 2Z"></path></svg><span>NOTE / 補足仕様</span></div><div class="markdown-alert-body"><p>本モジュールは日本語形態素解析エンジン <strong>MeCab（<code>mecab-ipadic-utf8</code> 辞書）</strong> 専用に設計されているため、リボンの言語設定が <strong>「日本語 (Japanese)」</strong> のときのみメニューに表示されます。</p></div></div>
+<h4 id="バックエンド統計仕様-12">バックエンド・統計仕様<a class="heading-anchor" href="#バックエンド統計仕様-12" aria-label="Permalink">#</a></h4>
+<ul>
+<li><strong>エンドポイント / 実行関数</strong>: <code>POST /textmining</code> — <code>RMeCab::docDF(..., type = 1)</code>（活用語を基本形・原型に正規化して文書×単語頻度行列を構築）</li>
+<li><strong>抽出対象品詞 (<code>POS Filter</code>)</strong>: デフォルトは <code>名詞</code>・<code>形容詞</code>・<code>形容動詞</code> の 3 品詞（オプションで <code>動詞</code>・<code>副詞</code>・<code>感動詞</code> を追加可能）。最低出現回数フィルタ（デフォルト <code>min_freq = 5</code>）以上の語を集計します。</li>
+<li><p><strong>4 つの解析・可視化機能</strong>:</p>
+<ol>
+<li><strong>出現頻度テーブル ＆ TF-IDF 特徴語スコア</strong>（※<code>属性</code> 列指定かつ <code>TF-IDF</code> ON 時）：属性グループ数 <em>N</em>、語が出現した属性グループ数 <em>df</em> に対し、平滑化逆文書頻度 <code>idf = log(N / df) + 1</code> を乗じた <code>tf * idf</code> を算出し、各単語が最も特徴づける属性（<code>Top_Attribute</code>）と <code>TF-IDF_Score</code> を降順出力します。</li>
+<li><strong>ワードクラウド (<code>wordcloud::wordcloud</code>)</strong>: 上位最大 100 語を出現頻度に応じた文字サイズと <code>RColorBrewer</code> <code>Dark2</code> パレットで水平配置描画します。</li>
+<li><strong>共起ネットワーク (<code>igraph</code>)</strong>: 文書×単語行列 <code>X</code> から共起回数行列 <code>C = t(X) %*% X</code>（対角成分 0）を算出し、正の共起回数の指定分位点（デフォルト閾値 <code>0.90</code> ＝上位 10% の強い共起ペア）以上のエッジを無向重み付きグラフとして描画するとともに、<code>[ 共起ネットワーク 繋がり強さ ]</code> エッジリスト（<code>単語1</code>, <code>単語2</code>, <code>共起回数</code>）を数値出力します。</li>
+<li><strong>対応分析 (<code>ca::ca</code>)</strong>（※<code>属性</code> 列指定かつ <code>対応分析</code> ON 時）：単語×属性クロス集計表に対するコレスポンダンス分析を実行し、慣性（寄与率）サマリーと 2 次元バイプロットを描画します（※2次元プロットの描画には属性水準が <strong>3 水準以上</strong> あることが推奨されます）。</li>
+</ol></li>
+</ul>
+<h4 id="自動前処理安全装置-under-the-hood-12">自動前処理・安全装置 (Under the Hood)<a class="heading-anchor" href="#自動前処理安全装置-under-the-hood-12" aria-label="Permalink">#</a></h4>
+<ul>
+<li><strong>オンデマンド MeCab ユーザー辞書の動的コンパイル</strong>: 複合語や専門用語・固有名詞（例：<code>生成AI</code>、<code>カスタマーサクセス</code>、<code>推し活</code>）が細かく分割されるのを防ぐため、「ユーザー辞書」欄に入力された語に対して生起コスト <code>-30000</code>（<code>名詞,一般</code>）を付与した CSV を生成し、コンテナ内の <code>/usr/lib/mecab/mecab-dict-index</code> をリアルタイム呼び出しして専用バイナリ辞書 <code>user.dic</code> を動的コンパイル・適用したのち即時クリーンアップします。</li>
+<li><strong>1文字かなノイズの自動除去</strong>: 助詞の断片やフィラーに由来する <strong>「ひらがな 1 文字」または「カタカナ 1 文字」の語（正規表現 <code>^[ぁ-んア-ン]$</code>）</strong> は、除外語リストに手動登録しなくてもバックエンドで自動的に除外されます。</li>
+<li><p><strong>「属性」指定有無による共起集計単位の切り替え仕様</strong>:</p>
+<ul>
+<li><strong><code>属性</code> を空欄にした場合</strong>: Excel の <strong>各行（1回答）を1文書</strong> として扱うため、共起ネットワークは「同一回答内で一緒に使われた単語ペア」を表します（通常の自由記述全体の共起構造を見る場合はこちらを推奨）。</li>
+<li><strong><code>属性</code> 列を指定した場合</strong>: テキストが属性水準ごとに結合集約されるため、TF-IDF や対応分析による属性比較が有効化される一方、共起回数も属性グループ単位での集計となります。</li>
+</ul></li>
+</ul>
+<h4 id="応用カスタム構文レシピ-12">応用・カスタム構文レシピ<a class="heading-anchor" href="#応用カスタム構文レシピ-12" aria-label="Permalink">#</a></h4>
+<p>テキストマイニングの前処理ボックス（1行につき1ルール）は以下の構文で記述します。</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">text</span><button type="button" class="copy-btn" data-copy="コピー" data-copied="✔ コピー済">コピー</button></div><pre><code class="language-text"># 【ユーザー辞書】分割させたくない複合語・専門用語を1行に1語ずつ記述
+認知行動療法
+リモートワーク
+ワークライフバランス</code></pre></div>
+<div class="code-block"><div class="code-header"><span class="code-lang">text</span><button type="button" class="copy-btn" data-copy="コピー" data-copied="✔ コピー済">コピー</button></div><pre><code class="language-text"># 【類義語リスト（表記ゆれ統一）】「変換元1=変換元2=統一後の語」のように「=」区切りで記述
+# 左側に並べた語がすべて、一番右側の語へ形態素解析前に一括置換されます
+スマホ=スマートホン=スマートフォン
+PC=パソコン
+AI=人工知能</code></pre></div>
+<div class="code-block"><div class="code-header"><span class="code-lang">text</span><button type="button" class="copy-btn" data-copy="コピー" data-copied="✔ コピー済">コピー</button></div><pre><code class="language-text"># 【除外語リスト（ストップワード）】頻出するが分析上意味を持たない汎用語を1行に1語ずつ記述（基本形で指定）
+こと
+もの
+ため
+思う
+感じる
+特にない</code></pre></div>
+<ul>
+<li><strong>共起ネットワークの密度調整</strong>: 線（エッジ）が多すぎてネットワークが密集する場合は閾値を <code>0.95</code>〜<code>0.98</code> へ引き上げ、逆に「共起の強い単語がありません」と表示される場合や小規模データでは閾値を <code>0.70</code>〜<code>0.85</code> へ引き下げて再実行してください。</li>
+</ul>
+        </main>
+    </div>
+
+    <button type="button" class="back-to-top" id="backToTopBtn" aria-label="↑ トップへ">↑ トップへ</button>
+
+    <footer class="site-footer">
+        <div class="footer-links">
+            <a href="index.html">ホーム</a>
+            <a href="spec_en.html" lang="en">English Specification</a>
+            <a href="files/DemoBook.xlsx">DemoBook.xlsx (チュートリアル)</a>
+        </div>
+        <div class="footer-copyright">
+            &copy; 2026 Soyogu Matsushita. All rights reserved. | DocR v1.9.0
+        </div>
+    </footer>
+
+    <script>
+(function () {
+    'use strict';
+
+    // 1. Mobile TOC Drawer Toggle
+    var sidebar = document.getElementById('tocSidebar');
+    var backdrop = document.getElementById('tocBackdrop');
+    var openBtn = document.getElementById('mobileTocBtn');
+    var closeBtn = document.getElementById('tocCloseBtn');
+
+    function closeDrawer() {
+        if (sidebar) sidebar.classList.remove('open');
+        if (backdrop) backdrop.classList.remove('open');
+        if (openBtn) openBtn.setAttribute('aria-expanded', 'false');
+    }
+
+    function openDrawer() {
+        if (sidebar) sidebar.classList.add('open');
+        if (backdrop) backdrop.classList.add('open');
+        if (openBtn) openBtn.setAttribute('aria-expanded', 'true');
+    }
+
+    if (openBtn) {
+        openBtn.addEventListener('click', function () {
+            if (sidebar && sidebar.classList.contains('open')) {
+                closeDrawer();
+            } else {
+                openDrawer();
+            }
+        });
+    }
+    if (closeBtn) closeBtn.addEventListener('click', closeDrawer);
+    if (backdrop) backdrop.addEventListener('click', closeDrawer);
+
+    var tocLinks = Array.prototype.slice.call(document.querySelectorAll('.toc-link'));
+    tocLinks.forEach(function (link) {
+        link.addEventListener('click', function () {
+            if (window.innerWidth <= 1024) closeDrawer();
+        });
+    });
+
+    // 2. Quick Client-Side TOC Filter
+    var searchInput = document.getElementById('tocSearchInput');
+    var emptyNotice = document.getElementById('tocEmpty');
+    if (searchInput) {
+        searchInput.addEventListener('input', function () {
+            var q = searchInput.value.trim().toLowerCase();
+            var groups = document.querySelectorAll('.toc-group');
+            var anyVisible = false;
+
+            groups.forEach(function (group) {
+                var h2Link = group.querySelector('.toc-h2');
+                var subItems = group.querySelectorAll('.toc-subitem');
+                var h2Match = h2Link && (!q || (h2Link.getAttribute('data-search') || '').indexOf(q) !== -1);
+                var anySubMatch = false;
+
+                subItems.forEach(function (li) {
+                    var a = li.querySelector('.toc-h3');
+                    var subMatch = !q || h2Match || (a && (a.getAttribute('data-search') || '').indexOf(q) !== -1);
+                    li.style.display = subMatch ? '' : 'none';
+                    if (a && q && (a.getAttribute('data-search') || '').indexOf(q) !== -1) {
+                        anySubMatch = true;
+                    }
+                });
+
+                var showGroup = !q || h2Match || anySubMatch;
+                group.style.display = showGroup ? '' : 'none';
+                if (showGroup) anyVisible = true;
+            });
+
+            if (emptyNotice) {
+                emptyNotice.style.display = anyVisible ? 'none' : 'block';
+            }
+        });
+    }
+
+    // 3. Active Section Scroll-Spy
+    var sectionTargets = [];
+    var linkById = {};
+    tocLinks.forEach(function (link) {
+        var href = link.getAttribute('href') || '';
+        if (href.charAt(0) === '#' && href.length > 1) {
+            var rawId = href.slice(1);
+            var decodedId = rawId;
+            try { decodedId = decodeURIComponent(rawId); } catch (e) {}
+            var el = document.getElementById(decodedId) || document.getElementById(rawId);
+            if (el) {
+                sectionTargets.push(el);
+                linkById[el.id] = link;
+            }
+        }
+    });
+
+    var currentActiveLink = null;
+    function updateActiveToc() {
+        if (!sectionTargets.length) return;
+        var threshold = 110;
+        var activeEl = sectionTargets[0];
+        for (var i = 0; i < sectionTargets.length; i++) {
+            var rect = sectionTargets[i].getBoundingClientRect();
+            if (rect.top <= threshold) {
+                activeEl = sectionTargets[i];
+            } else {
+                break;
+            }
+        }
+        var nextLink = activeEl ? linkById[activeEl.id] : null;
+        if (nextLink && nextLink !== currentActiveLink) {
+            if (currentActiveLink) currentActiveLink.classList.remove('active');
+            nextLink.classList.add('active');
+            currentActiveLink = nextLink;
+        }
+    }
+
+    var scrollTick = false;
+    window.addEventListener('scroll', function () {
+        if (!scrollTick) {
+            window.requestAnimationFrame(function () {
+                updateActiveToc();
+                toggleBackToTop();
+                scrollTick = false;
+            });
+            scrollTick = true;
+        }
+    }, { passive: true });
+    updateActiveToc();
+
+    // 4. Copy Button on Code Blocks (works on both HTTPS and offline file://)
+    function fallbackCopyText(text) {
+        var ta = document.createElement('textarea');
+        ta.value = text;
+        ta.setAttribute('readonly', '');
+        ta.style.position = 'fixed';
+        ta.style.top = '-9999px';
+        document.body.appendChild(ta);
+        ta.select();
+        try { document.execCommand('copy'); } catch (e) {}
+        document.body.removeChild(ta);
+    }
+
+    document.querySelectorAll('.copy-btn').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+            var block = btn.closest('.code-block');
+            var codeEl = block ? block.querySelector('pre code') : null;
+            if (!codeEl) return;
+            var text = codeEl.textContent || '';
+            var defaultLabel = btn.getAttribute('data-copy') || 'Copy';
+            var copiedLabel = btn.getAttribute('data-copied') || 'Copied';
+
+            function showDone() {
+                btn.textContent = copiedLabel;
+                btn.classList.add('copied');
+                setTimeout(function () {
+                    btn.textContent = defaultLabel;
+                    btn.classList.remove('copied');
+                }, 1800);
+            }
+
+            if (navigator.clipboard && window.isSecureContext) {
+                navigator.clipboard.writeText(text).then(showDone, function () {
+                    fallbackCopyText(text);
+                    showDone();
+                });
+            } else {
+                fallbackCopyText(text);
+                showDone();
+            }
+        });
+    });
+
+    // 5. Back-to-Top Button
+    var topBtn = document.getElementById('backToTopBtn');
+    function toggleBackToTop() {
+        if (!topBtn) return;
+        if (window.scrollY > 400) {
+            topBtn.classList.add('visible');
+        } else {
+            topBtn.classList.remove('visible');
+        }
+    }
+    if (topBtn) {
+        topBtn.addEventListener('click', function () {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+    }
+})();
+
+    </script>
+</body>
+</html>
