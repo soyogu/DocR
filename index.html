@@ -194,6 +194,11 @@
             border: 1px solid #e2e8f0;
             box-shadow: 0 4px 14px rgba(0,0,0,0.08);
         }
+        .video-card.install-video-card {
+            width: 80%;
+            max-width: 680px;
+            margin: 20px auto 24px auto;
+        }
         .video-card iframe {
             width: 100%;
             aspect-ratio: 16/9;
@@ -526,7 +531,8 @@
         @media (max-width: 640px) {
             h1 { font-size: 3.4em; }
             .title-logo { width: 220px; height: 110px; }
-            .video-card { width: 100%; box-sizing: border-box; }
+            .video-card,
+            .video-card.install-video-card { width: 100%; box-sizing: border-box; }
         }
     </style>
   </head>
@@ -572,14 +578,14 @@
 
     <div class="video-card">
         <iframe
-            src="https://www.youtube.com/embed/cGsTw-73b9M?si=RuBJTit3JATNoOD7&cc_load_policy=1&cc_lang_pref=ja&hl=ja&autoplay=1&mute=1"
+            src="https://www.youtube.com/embed/lLVjzECpgDA?cc_load_policy=1&cc_lang_pref=ja&hl=ja&autoplay=1&mute=1&rel=0"
             title="DocR 操作イメージ動画"
             frameborder="0"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
             referrerpolicy="strict-origin-when-cross-origin"
             allowfullscreen>
         </iframe>
-        <p class="video-caption">▲ Excel上で範囲を選んで実行するだけの操作イメージ動画</p>
+        <p class="video-caption">▲ ベイズ階層モデル（brms）の実行から、Excel上でのグラフ編集までの操作イメージ（45秒）</p>
     </div>
 
     <h2>搭載している分析機能一覧（全13種・Win / Mac 共通）</h2>
@@ -632,6 +638,19 @@
         <a href="https://github.com/soyogu/DocR/releases/download/v1.9.0/DocR_Mac_1_9_0.zip" class="download-btn mac-btn">
             📥 Mac版をダウンロード<small>DocR_Mac_1_9_0.zip (v1.9.0 / Apple Silicon &amp; Intel 対応)</small>
         </a>
+    </div>
+
+    <div class="video-card install-video-card">
+        <iframe
+            src="https://www.youtube.com/embed/YUqlFM9CvNM?cc_load_policy=1&cc_lang_pref=ja&hl=ja&rel=0"
+            title="DocR インストール・初回起動ガイド動画"
+            loading="lazy"
+            frameborder="0"
+            allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            referrerpolicy="strict-origin-when-cross-origin"
+            allowfullscreen>
+        </iframe>
+        <p class="video-caption">▲ 動画で見る：ZIP解凍〜アドイン有効化・初回起動までの流れ（Windows版・約1分）</p>
     </div>
 
     <div class="caution-note">

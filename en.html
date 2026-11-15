@@ -194,6 +194,11 @@
             border: 1px solid #e2e8f0;
             box-shadow: 0 4px 14px rgba(0,0,0,0.08);
         }
+        .video-card.install-video-card {
+            width: 80%;
+            max-width: 680px;
+            margin: 20px auto 24px auto;
+        }
         .video-card iframe {
             width: 100%;
             aspect-ratio: 16/9;
@@ -526,7 +531,8 @@
         @media (max-width: 640px) {
             h1 { font-size: 3.4em; }
             .title-logo { width: 220px; height: 110px; }
-            .video-card { width: 100%; box-sizing: border-box; }
+            .video-card,
+            .video-card.install-video-card { width: 100%; box-sizing: border-box; }
         }
     </style>
   </head>
@@ -572,14 +578,14 @@
 
     <div class="video-card">
         <iframe
-            src="https://www.youtube.com/embed/cGsTw-73b9M?si=RuBJTit3JATNoOD7&cc_load_policy=1&cc_lang_pref=en&hl=en&autoplay=1&mute=1"
+            src="https://www.youtube.com/embed/lLVjzECpgDA?cc_load_policy=1&cc_lang_pref=en&hl=en&autoplay=1&mute=1&rel=0"
             title="DocR Workflow Overview Video"
             frameborder="0"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
             referrerpolicy="strict-origin-when-cross-origin"
             allowfullscreen>
         </iframe>
-        <p class="video-caption">▲ Workflow overview video: simply select a cell range in Excel and click Run</p>
+        <p class="video-caption">▲ Workflow overview: running a Bayesian multilevel model (brms) and editing vector plots in Excel (45 sec)</p>
     </div>
 
     <h2>Analytical Features Included (All 13 Modules — Win &amp; Mac)</h2>
@@ -632,6 +638,19 @@
         <a href="https://github.com/soyogu/DocR/releases/download/v1.9.0/DocR_Mac_1_9_0.zip" class="download-btn mac-btn">
             📥 Download for Mac<small>DocR_Mac_1_9_0.zip (v1.9.0 / Apple Silicon &amp; Intel)</small>
         </a>
+    </div>
+
+    <div class="video-card install-video-card">
+        <iframe
+            src="https://www.youtube.com/embed/YUqlFM9CvNM?cc_load_policy=1&cc_lang_pref=en&hl=en&rel=0"
+            title="DocR Installation &amp; First-Launch Guide Video"
+            loading="lazy"
+            frameborder="0"
+            allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            referrerpolicy="strict-origin-when-cross-origin"
+            allowfullscreen>
+        </iframe>
+        <p class="video-caption">▲ Video guide: unzipping, enabling the Excel add-in, and first-time launch on Windows (~1 min)</p>
     </div>
 
     <div class="caution-note">
