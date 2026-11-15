@@ -1392,7 +1392,7 @@ log(年収) ~ scale(勤続年数) + scale(教育年数) + 職種
 <ul>
 <li><p><strong>16 種類の事前コンパイル済み Stan モデルとセッション内動的キャッシュ</strong>:</p>
 <ul>
-<li>コンテナビルド時に頻出モデル 16 パターン（<code>gaussian</code> 単回帰・重回帰・交互作用・ランダム切片・ランダム傾き・2要因混合、<code>student</code> 単回帰・重回帰、<code>bernoulli</code>、<code>poisson</code>、<code>cumulative</code> 単回帰・重回帰・交互作用、<code>lognormal</code> 等）が C++ コンパイル済み <code>.rds</code> として <code>/app/models</code> に内蔵されています。一致するモデル構造では <code>update()</code> が呼ばれ、コンパイル待ち時間ゼロで直ちに MCMC サンプリングが開始されます。</li>
+<li>コンテナビルド時に頻出モデル 16 パターン（<code>gaussian</code> 単回帰・重回帰・交互作用・ランダム切片・ランダム傾き・2要因混合、<code>student</code> 単回帰・重回帰、<code>bernoulli</code>、<code>poisson</code>、<code>cumulative</code> 単回帰・重回帰・交互作用、<code>lognormal</code> 等）が C++ コンパイル済み <code>.rds</code> として <code>/app/models</code> に内蔵されています。一致するモデル構造では <code>update()</code> が呼ばれ、コンパイル待ち時間ゼロで直ちに MCMC サンプリングが開始されます。また、切片・残差標準偏差・変量効果標準偏差等のデフォルト弱情報事前分布（<code>student_t</code>）は Stan の <code>data</code> ブロック変数（<code>stanvars</code>）としてパラメータ化されており、C++ 再コンパイルを行うことなく各データセットの目的変数 <code>Y</code> のスケールに応じて単体 <code>brms::brm()</code>（<code>default_prior()</code>）と完全に同一の事前分布へ自動適応します。</li>
 <li>未登録の独自モデル式であっても、一度コンパイルされるとコンテナ稼働中はメモリキャッシュ（<code>model_cache</code>）に保持されるため、データを変えた 2 回目以降の実行は即座に開始されます（カスタム引数の MD5 ハッシュもキャッシュキーに反映されるため、事前分布変更時に古いモデルが誤用されることはありません）。</li>
 </ul></li>
 <li><strong><code>binomial</code> 誤選択ガード</strong>: <code>0/1</code> データで誤って <code>binomial</code> を選び <code>trials()</code> を指定しなかった場合、Stan コンパイルに入る前に即座に日本語・英語の案内メッセージを表示して <code>bernoulli</code> への切り替えを促します。</li>
